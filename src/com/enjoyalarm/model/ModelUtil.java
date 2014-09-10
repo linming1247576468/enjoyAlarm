@@ -1,6 +1,7 @@
 package com.enjoyalarm.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -8,7 +9,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
+/**
+ * 
+ * problems may occur: 
+ * 		1.in sql "where ? = ?", if ? is varchar type, should I change the second ? into '?';
+ *      2.in ContentValues.put(String,String), should I change the second String into '..';
+ *
+ */
 public class ModelUtil {
 
 	private static boolean debug = true;
@@ -31,8 +38,10 @@ public class ModelUtil {
 		List<BasicInfoUnit> resultList = new ArrayList<BasicInfoUnit>();
 		DatabaseHelper helper = new DatabaseHelper(context);
 		SQLiteDatabase db = helper.getReadableDatabase();
-		Cursor cursor = db.rawQuery("select * from ?",
-				new String[] { Variable.ALARM_TABLE_NAME });
+		Cursor cursor = db.rawQuery("select ?,?,? from ?", new String[] {
+				Variable.ALARM_COLUMN1_ID, Variable.ALARM_COLUMN2_NAME,
+				Variable.ALARM_COLUMN3_TIME, Variable.ALARM_COLUMN4_DAYS,
+				Variable.ALARM_TABLE_NAME });
 		while (cursor.moveToNext()) {
 			resultList.add(new BasicInfoUnit(cursor.getInt(0), cursor
 					.getString(1), cursor.getString(2), cursor.getString(3)));
@@ -95,27 +104,27 @@ public class ModelUtil {
 	}
 
 	/**
-	 * record text,musicUri,photoUri or videoUri according to the type of
-	 * Variable.MEDIA_TYPE_**
+	 * record text,musicUri, photoUri, videoUri and so on according to the type of
+	 * Variable.DAIA_TYPE_**
 	 */
-	public static void recordMediaData(Context context, String data, String type) {
+	public static void recordData(Context context, String data, String type) {
 		DatabaseHelper helper = new DatabaseHelper(context);
 		SQLiteDatabase db = helper.getWritableDatabase();
 		Cursor cursor = db.rawQuery(
 				"select ? from ? where ? = '?' and ? = '?'", new String[] {
-						Variable.MEDIA_COLUMN3_COUNT,
-						Variable.MEDIA_TABLE_NAME, Variable.MEDIA_COLUMN1_TYPE,
-						type, Variable.MEDIA_COLUMN2_DATA, data });
+						Variable.DATA_COLUMN3_COUNT,
+						Variable.DATA_TABLE_NAME, Variable.DATA_COLUMN1_TYPE,
+						type, Variable.DATA_COLUMN2_DATA, data });
 
 		if (cursor.moveToFirst()) { // update
 			int count = cursor.getInt(0);
 			count++;
 			ContentValues values = new ContentValues();
-			values.put(Variable.MEDIA_COLUMN3_COUNT, count);
-			int result = db.update(Variable.MEDIA_TABLE_NAME, values,
+			values.put(Variable.DATA_COLUMN3_COUNT, count);
+			int result = db.update(Variable.DATA_TABLE_NAME, values,
 					"? = '?' and ? = '?'", new String[] {
-							Variable.MEDIA_COLUMN1_TYPE, type,
-							Variable.MEDIA_COLUMN2_DATA, data });
+							Variable.DATA_COLUMN1_TYPE, type,
+							Variable.DATA_COLUMN2_DATA, data });
 			if (debug) {
 				Log.i("recordMediaData", "type:" + type + "  update result:"
 						+ result);
@@ -123,16 +132,16 @@ public class ModelUtil {
 
 		} else { // insert
 			ContentValues values = new ContentValues();
-			values.put(Variable.MEDIA_COLUMN1_TYPE, type);
-			values.put(Variable.MEDIA_COLUMN2_DATA, data);
-			values.put(Variable.MEDIA_COLUMN3_COUNT, 1);
-			long resultId = db.insert(Variable.MEDIA_TABLE_NAME, null, values);
+			values.put(Variable.DATA_COLUMN1_TYPE, type);
+			values.put(Variable.DATA_COLUMN2_DATA, data);
+			values.put(Variable.DATA_COLUMN3_COUNT, 1);
+			long resultId = db.insert(Variable.DATA_TABLE_NAME, null, values);
 			if (debug) {
 				Log.i("recordMediaData", "type:" + type + "  insert result id:"
 						+ resultId);
 			}
 		}
-		
+
 		cursor.close();
 		db.close();
 	}
@@ -183,25 +192,48 @@ public class ModelUtil {
 	}
 
 	/**
-	 * return the top three media data if possible
+	 * return the top three data if possible
 	 */
-	public static List<String> getSuggestMediaData(Context context, String type) {
+	public static List<String> getSuggestData(Context context, String type) {
 		List<String> resultList = new ArrayList<String>();
 		DatabaseHelper helper = new DatabaseHelper(context);
 		SQLiteDatabase db = helper.getReadableDatabase();
 		Cursor cursor = db.rawQuery(
 				"select ? from ? where ? = ? order by ? desc", new String[] {
-						Variable.MEDIA_COLUMN2_DATA, Variable.MEDIA_TABLE_NAME,
-						Variable.MEDIA_COLUMN1_TYPE, type,
-						Variable.MEDIA_COLUMN3_COUNT });
+						Variable.DATA_COLUMN2_DATA, Variable.DATA_TABLE_NAME,
+						Variable.DATA_COLUMN1_TYPE, type,
+						Variable.DATA_COLUMN3_COUNT });
 		int number = 0;
 		while (number++ < 3 && cursor.moveToNext()) {
 			resultList.add(cursor.getString(0));
 		}
 		cursor.close();
 		db.close();
-		
+
 		return resultList;
 	}
 
+	public static String getFriendNamesString(List<String> names) {
+		StringBuilder result = new StringBuilder();
+		for (String name : names) {
+			result.append(name).append(',');
+		}
+		return result.deleteCharAt(result.length() - 1).toString();
+	}
+
+	public static List<String> getFriendNamesList(String names) {
+		return Arrays.asList(names.split(","));
+	}
+
+	public static String getFriendPhonesString(List<String> phones) {
+		StringBuilder result = new StringBuilder();
+		for (String phone : phones) {
+			result.append(phone).append(',');
+		}
+		return result.deleteCharAt(result.length() - 1).toString();
+	}
+
+	public static List<String> getFriendPhonesList(String phones) {
+		return Arrays.asList(phones.split(","));
+	}
 }

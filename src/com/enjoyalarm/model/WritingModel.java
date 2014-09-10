@@ -18,11 +18,18 @@ public class WritingModel {
 	private String mName;
 	private String mTime;
 	private String mDays;
+	private String mWakeWay;
+	private String mWakeMusicUri;
 	private String mText;
+	private String mMediaWay;
 	private String mMusicUri;
 	private String mPhotoUri;
 	private String mVideoUri;
-	private boolean mRepeated;
+	private String mAppPackageName;
+	private String mFriendNames;
+	private String mFriendPhones;
+	private String mSendText;
+	private boolean mRepeat;
 
 	
 	public WritingModel(Context context) {
@@ -47,7 +54,7 @@ public class WritingModel {
 	/**
 	 * required
 	 */
-	public void setDay(List<Integer> days) {
+	public void setDays(List<Integer> days) {
 		StringBuilder dayString = new StringBuilder();
 		for (Integer day : days) {
 			dayString.append(day);
@@ -55,10 +62,32 @@ public class WritingModel {
 		mDays = dayString.toString();
 	}
 
+	/**
+	 * required
+	 * @param way 
+	 * 		see Variable.ALARM_WAKE_WAY_**
+	 */
+	public void setWakeWay(String way) {
+		mWakeWay = way;
+	}
+
+	public void setWakeMusicUri(String uri) {
+		mWakeMusicUri = uri;
+	}
+	
 	public void setText(String text) {
 		mText = text;
 	}
 
+	/**
+	 * 
+	 * @param way 
+	 * 		see Varaible.ALARM_MEDIA_WAY_**
+	 */
+	public void setMediaWay(String way) {
+		mMediaWay = way;
+	}
+	
 	public void setMusicUri(String uri) {
 		mMusicUri = uri;
 	}
@@ -71,8 +100,21 @@ public class WritingModel {
 		mVideoUri = uri;
 	}
 	
+	public void setAppPackageName(String packageName) {
+		mAppPackageName = packageName;
+	}
+
+	public void setFriendsData(List<String>names, List<String>phones) {
+		mFriendNames = ModelUtil.getFriendNamesString(names);
+		mFriendPhones = ModelUtil.getFriendPhonesString(phones);
+	}
+	
+	public void setSendText(String text) {
+		mSendText = text;
+	}
+	
 	public void setRepeated(boolean repeated) {
-		mRepeated = repeated;
+		mRepeat = repeated;
 	}
 
 	public int save() {
@@ -88,23 +130,43 @@ public class WritingModel {
 		values.put(Variable.ALARM_COLUMN2_NAME, mName);
 		values.put(Variable.ALARM_COLUMN3_TIME, mTime);
 		values.put(Variable.ALARM_COLUMN4_DAYS, mDays);
+		values.put(Variable.ALARM_COLUMN6_WAKE_WAY, mWakeWay);
+		if (mRepeat) {
+			values.put(Variable.ALARM_COLUMN5_REPEAT, Variable.ALARM_REPEAT_YES);
+		} else {
+			values.put(Variable.ALARM_COLUMN5_REPEAT, Variable.ALARM_REPEAT_NO);
+		}
+		if (mWakeMusicUri != null) {
+			values.put(Variable.ALARM_COLUMN7_WAKE_MUSIC_URI, mWakeMusicUri);
+		}
 		if (mText != null) {
-			values.put(Variable.ALARM_COLUMN5_TEXT, mText);
+			values.put(Variable.ALARM_COLUMN8_TEXT, mText);
+		}
+		if (mMediaWay != null) {
+			values.put(Variable.ALARM_COLUMN9_MEDIA_WAY, mMediaWay);
 		}
 		if (mMusicUri != null) {
-			values.put(Variable.ALARM_COLUMN6_MUSIC_URI, mMusicUri);
+			values.put(Variable.ALARM_COLUMN10_MUSIC_URI, mMusicUri);
 		}
 		if (mPhotoUri != null) { 
-			values.put(Variable.ALARM_COLUMN7_PHOTO_URI, mPhotoUri);
+			values.put(Variable.ALARM_COLUMN11_PHOTO_URI, mPhotoUri);
 		}
 		if (mVideoUri != null) {
-			values.put(Variable.ALARM_COLUMN8_VIDEO_URI, mVideoUri);
+			values.put(Variable.ALARM_COLUMN12_VIDEO_URI, mVideoUri);
 		}
-		if (mRepeated) {
-			values.put(Variable.ALARM_COLUMN9_REPEATED, Variable.ALARM_REPEATED_YES);
-		} else {
-			values.put(Variable.ALARM_COLUMN9_REPEATED, Variable.ALARM_REPEATED_NO);
+		if (mAppPackageName != null) {
+			values.put(Variable.ALARM_COLUMN13_APP_PACKAGE_NAME, mAppPackageName);
 		}
+		if (mFriendNames != null) {
+			values.put(Variable.ALARM_COLUMN14_FRIEND_NAMES, mFriendNames);
+		}
+		if (mFriendPhones != null) {
+			values.put(Variable.ALARM_COLUMN15_FRIEND_PHONES, mFriendPhones);
+		}
+		if (mSendText != null) {
+			values.put(Variable.ALARM_COLUMN16_SEND_TEXT, mSendText);
+		}
+		
 		database.insert(Variable.ALARM_TABLE_NAME, null, values);
 		database.close();
 		if (debug) {

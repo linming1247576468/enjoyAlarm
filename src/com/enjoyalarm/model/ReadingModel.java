@@ -1,5 +1,7 @@
 package com.enjoyalarm.model;
 
+import java.util.List;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,11 +16,18 @@ public class ReadingModel {
 	private String mName;
 	private String mTime;
 	private String mDays;
+	private String mWakeWay;
+	private String mWakeMusicUri;
 	private String mText;
+	private String mMediaWay;
 	private String mMusicUri;
 	private String mPhotoUri;
 	private String mVideoUri;
-	private boolean mRepeated;
+	private String mAppPackageName;
+	private String mFriendNames;
+	private String mFriendPhones;
+	private String mSendText;
+	private boolean mRepeat;
 
 	private void readingData() {
 		SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
@@ -29,22 +38,42 @@ public class ReadingModel {
 			mName = cursor.getString(1);
 			mTime = cursor.getString(2);
 			mDays = cursor.getString(3);
+			mWakeWay = cursor.getString(5);
 			
-			if (cursor.isNull(4)) {
-				mText = cursor.getString(4);
-			}
-			if (cursor.isNull(5)) {
-				mMusicUri = cursor.getString(5);
+			if (Variable.ALARM_REPEAT_YES.equals(cursor.getString(4))) {
+				mRepeat = true;
 			}
 			if (cursor.isNull(6)) {
-				mPhotoUri = cursor.getString(6);
+				mWakeMusicUri = cursor.getString(6);
 			}
 			if (cursor.isNull(7)) {
-				mVideoUri = cursor.getString(7);
+				mText = cursor.getString(7);
 			}
-			if (Variable.ALARM_REPEATED_YES.equals(cursor.getString(8))) {
-				mRepeated = true;
+			if (cursor.isNull(8)) {
+				mMediaWay = cursor.getString(8);
 			}
+			if (cursor.isNull(9)) {
+				mMusicUri = cursor.getString(9);
+			}
+			if (cursor.isNull(10)) {
+				mPhotoUri = cursor.getString(10);
+			}
+			if (cursor.isNull(11)) {
+				mVideoUri = cursor.getString(12);
+			}
+			if (cursor.isNull(12)) {
+				mAppPackageName = cursor.getString(12);
+			}
+			if (cursor.isNull(13)) {
+				mFriendNames = cursor.getString(13);
+			}
+			if (cursor.isNull(14)) {
+				mFriendPhones = cursor.getString(14);
+			}
+			if (cursor.isNull(15)) {
+				mSendText = cursor.getString(15);
+			}
+			
 		}
 		cursor.close();
 		database.close();
@@ -69,14 +98,30 @@ public class ReadingModel {
 		return mTime;
 	}
 
-	public String getDay() {
+	public String getDays() {
 		return mDays;
 	}
+	
+	public boolean getRepeated() {
+		return mRepeat;
+	}
 
+	public String getWakeWay() {
+		return mWakeWay;
+	}
+	
+	public String getWakeMusicUri() {
+		return mWakeMusicUri;
+	}
+	
 	public String getText() {
 		return mText;
 	}
 
+	public String getMediaWay() {
+		return mMediaWay;
+	}
+	
 	public String getMusicUri() {
 		return mMusicUri;
 	}
@@ -89,8 +134,19 @@ public class ReadingModel {
 		return mVideoUri;
 	}
 	
-	public boolean getRepeated() {
-		return mRepeated;
+	public String getAppPackageName() {
+		return mAppPackageName;
+	}
+	
+	public List<String> getFriendNames() { 
+		return ModelUtil.getFriendNamesList(mFriendNames);
 	}
 
+	public List<String> getFriendPhones() {
+		return ModelUtil.getFriendPhonesList(mFriendPhones);
+	}
+	
+	public String getSendText() {
+		return mSendText;
+	}
 }
