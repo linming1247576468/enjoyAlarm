@@ -1,25 +1,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:divider="#000"
+    android:orientation="vertical"
+    android:showDividers="middle" >
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:text="TextView" />
+            android:text="@string/init_name" />
 
-        <ImageView
-            android:id="@+id/imageView1"
+        <Button
+            android:id="@+id/rename_bt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
-            android:src="@drawable/ic_launcher" />
+            android:background="@drawable/ic_launcher" />
 
     </FrameLayout>
 
@@ -34,21 +36,20 @@
             android:layout_gravity="center_vertical|center_horizontal" >
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/hour_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="07"
                 android:textSize="80sp" />
 
             <TextView
-                android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=":"
                 android:textSize="80sp" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/minute_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="15"
@@ -66,25 +67,24 @@
                 android:layout_gravity="left|center_vertical" >
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/repeat_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="@string/repeat" />
 
                 <Button
-                    android:id="@+id/button1"
+                    android:id="@+id/repeat_bt"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="y" />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/remain_time_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
-                android:text="TextView" />
+                android:text="@string/remain_time" />
 
         </FrameLayout>
 
@@ -101,60 +101,60 @@
             android:layout_height="wrap_content" >
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/mon_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="一" />
+                android:text="@string/monday" />
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/tue_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="二" />
+                android:text="@string/tuesday" />
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/wed_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="三" />
+                android:text="@string/wednesday" />
 
             <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/thu_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="四" />
+                android:text="@string/thursday" />
 
             <TextView
-                android:id="@+id/textView11"
+                android:id="@+id/fri_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="五" />
+                android:text="@string/friday" />
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/sat_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="六" />
+                android:text="@string/saturday" />
 
             <TextView
-                android:id="@+id/textView12"
+                android:id="@+id/sun_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="日" />
+                android:text="@string/sunday" />
 
         </TableRow>
     </TableLayout>
@@ -192,24 +192,66 @@
             </TableRow>
         </TableLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:text="Button" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <Button
+                        android:id="@+id/wake_way_bt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:id="@+id/sound_way_bt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sound_way" />
+
+                    <Button
+                        android:id="@+id/shake_way_bt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/shake_way" />
+
+                    <Button
+                        android:id="@+id/wake_again_bt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/wake_again" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/wake_music_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:text="TextView" />
+            </FrameLayout>
 
             <TextView
-                android:id="@+id/textView14"
-                android:layout_width="wrap_content"
+                android:id="@+id/encourage_words_tv"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
-                android:text="TextView" />
-        </FrameLayout>
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="@string/init_encourage_words" />
+
+            <Button
+                android:id="@+id/media_add_bt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="+" />
+        </LinearLayout>
 
     </FrameLayout>
 
