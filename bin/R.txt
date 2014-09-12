@@ -4,6 +4,8 @@ int anim abc_slide_in_bottom 0x7f040002
 int anim abc_slide_in_top 0x7f040003
 int anim abc_slide_out_bottom 0x7f040004
 int anim abc_slide_out_top 0x7f040005
+int attr Checked Drawable 0x7f01006e
+int attr UnChecked Drawable 0x7f01006f
 int attr actionBarDivider 0x7f01000f
 int attr actionBarItemBackground 0x7f010010
 int attr actionBarSize 0x7f01000e
@@ -249,6 +251,7 @@ int id action_mode_close_button 0x7f050024
 int id activity_chooser_view_content 0x7f050025
 int id always 0x7f05000b
 int id beginning 0x7f050011
+int id checkBox1 0x7f050055
 int id checkbox 0x7f05002d
 int id collapseActionView 0x7f05000d
 int id default_activity_button 0x7f050028
@@ -256,11 +259,11 @@ int id dialog 0x7f05000e
 int id disableHome 0x7f050008
 int id dropdown 0x7f05000f
 int id edit_query 0x7f050030
-int id encourage_words_tv 0x7f050054
+int id encourage_words_tv 0x7f050053
 int id end 0x7f050013
 int id expand_activities_button 0x7f050026
 int id expanded_menu 0x7f05002c
-int id fri_tv 0x7f050048
+int id fri_cb 0x7f050047
 int id home 0x7f050014
 int id homeAsUp 0x7f050005
 int id hour_tv 0x7f05003e
@@ -269,10 +272,10 @@ int id ifRoom 0x7f05000a
 int id image 0x7f050027
 int id listMode 0x7f050001
 int id list_item 0x7f050029
-int id media_add_bt 0x7f050055
+int id media_add_bt 0x7f050054
 int id middle 0x7f050012
 int id minute_tv 0x7f05003f
-int id mon_tv 0x7f050044
+int id mon_cb 0x7f050043
 int id name_tv 0x7f05003c
 int id never 0x7f050009
 int id none 0x7f050010
@@ -280,11 +283,10 @@ int id normal 0x7f050000
 int id progress_circular 0x7f050018
 int id progress_horizontal 0x7f050019
 int id radio 0x7f05002f
-int id remain_time_tv 0x7f050042
+int id remain_time_tv 0x7f050041
 int id rename_bt 0x7f05003d
-int id repeat_bt 0x7f050041
-int id repeat_tv 0x7f050040
-int id sat_tv 0x7f050049
+int id repeat_cb 0x7f050040
+int id sat_cb 0x7f050048
 int id search_badge 0x7f050032
 int id search_bar 0x7f050031
 int id search_button 0x7f050033
@@ -295,31 +297,31 @@ int id search_mag_icon 0x7f050035
 int id search_plate 0x7f050036
 int id search_src_text 0x7f050037
 int id search_voice_btn 0x7f05003b
-int id shake_way_bt 0x7f050051
+int id shake_way_bt 0x7f050050
 int id shortcut 0x7f05002e
 int id showCustom 0x7f050007
 int id showHome 0x7f050004
 int id showTitle 0x7f050006
-int id sound_way_bt 0x7f050050
+int id sound_way_bt 0x7f05004f
 int id split_action_bar 0x7f05001e
 int id submit_area 0x7f050039
-int id sun_tv 0x7f05004a
+int id sun_cb 0x7f050049
 int id tabMode 0x7f050002
-int id tableRow1 0x7f050043
-int id tableRow3 0x7f05004b
-int id tableRow4 0x7f05004c
-int id tableRow5 0x7f05004d
-int id tableRow6 0x7f05004e
-int id thu_tv 0x7f050047
+int id tableRow1 0x7f050042
+int id tableRow3 0x7f05004a
+int id tableRow4 0x7f05004b
+int id tableRow5 0x7f05004c
+int id tableRow6 0x7f05004d
+int id thu_cb 0x7f050046
 int id title 0x7f05002b
 int id top_action_bar 0x7f050020
-int id tue_tv 0x7f050045
+int id tue_cb 0x7f050044
 int id up 0x7f050021
 int id useLogo 0x7f050003
-int id wake_again_bt 0x7f050052
-int id wake_music_tv 0x7f050053
-int id wake_way_bt 0x7f05004f
-int id wed_tv 0x7f050046
+int id wake_again_bt 0x7f050051
+int id wake_music_tv 0x7f050052
+int id wake_way_bt 0x7f05004e
+int id wed_cb 0x7f050045
 int id withText 0x7f05000c
 int integer abc_max_action_buttons 0x7f090000
 int layout abc_action_bar_decor 0x7f030000
@@ -346,7 +348,7 @@ int layout abc_popup_menu_item_layout 0x7f030014
 int layout abc_search_dropdown_item_icons_2line 0x7f030015
 int layout abc_search_view 0x7f030016
 int layout abc_simple_decor 0x7f030017
-int layout activity_main 0x7f030018
+int layout alarm_setting_layout 0x7f030018
 int layout support_simple_spinner_dropdown_item 0x7f030019
 int string abc_action_bar_home_description 0x7f0a0001
 int string abc_action_bar_up_description 0x7f0a0002
@@ -623,6 +625,9 @@ int styleable Theme_listChoiceBackgroundIndicator 5
 int styleable Theme_panelMenuListTheme 4
 int styleable Theme_panelMenuListWidth 3
 int styleable Theme_popupMenuStyle 2
+int[] styleable ToggleView { 0x7f01006e, 0x7f01006f }
+int styleable ToggleView_Checked Drawable 0
+int styleable ToggleView_UnChecked Drawable 1
 int[] styleable View { 0x010100da, 0x7f010038, 0x7f010039 }
 int styleable View_android_focusable 0
 int styleable View_paddingEnd 2

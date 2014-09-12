@@ -213,6 +213,32 @@ public class ModelUtil {
 		return resultList;
 	}
 
+	public static List<String> getAlarmNames(Context context) {
+		DatabaseHelper helper = new DatabaseHelper(context);
+		SQLiteDatabase db = helper.getReadableDatabase();
+		Cursor cursor = db.rawQuery("select ? from ?", new String[]{Variable.ALARM_COLUMN2_NAME, Variable.ALARM_TABLE_NAME});
+		List<String> result = new ArrayList<String>();
+		while (cursor.moveToNext()) {
+			result.add(cursor.getString(0));
+		}
+		cursor.close();
+		db.close();
+		return result;
+	}
+	
+	
+	public static int getHourFromTime(String time) {
+		return Integer.parseInt(time.substring(0, time.indexOf(':')));
+	}
+	
+	public static int getMinuteFromTime(String time) {
+		return Integer.parseInt(time.substring(time.indexOf(':') + 1));
+	}
+	
+	public static String generateTime(int hour, int minute) {
+		return hour + ":" + minute;
+	}
+	
 	public static String getFriendNamesString(List<String> names) {
 		StringBuilder result = new StringBuilder();
 		for (String name : names) {
