@@ -1,5 +1,6 @@
 package com.enjoyalarm.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -40,7 +41,7 @@ public class ReadingModel {
 			mDays = cursor.getString(3);
 			mWakeWay = cursor.getString(5);
 			
-			if (Variable.ALARM_REPEAT_YES.equals(cursor.getString(4))) {
+			if (Variable.ALARM_YES.equals(cursor.getString(4))) {
 				mRepeat = true;
 			}
 			if (cursor.isNull(6)) {
@@ -98,11 +99,20 @@ public class ReadingModel {
 		return mTime;
 	}
 
-	public String getDays() {
-		return mDays;
+	/**
+	 * 
+	 * @return days like 0123456,146 and so on
+	 */
+	public List<Integer> getDays() {
+		List<Integer> result = new ArrayList<Integer>();
+		char[] chars = mDays.toCharArray();
+		for (char c: chars) {
+			result.add(c - 48);
+		}
+		return result;
 	}
 	
-	public boolean getRepeated() {
+	public boolean getRepeat() {
 		return mRepeat;
 	}
 

@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 					+ Variable.ALARM_COLUMN2_NAME + " varchar,"
 					+ Variable.ALARM_COLUMN3_TIME + " varchar,"
 					+ Variable.ALARM_COLUMN4_DAYS + " varchar,"
-					+ Variable.ALARM_COLUMN5_REPEAT + " varchar,"
+					+ Variable.ALARM_COLUMN5_IS_REPEAT + " varchar,"
 					+ Variable.ALARM_COLUMN6_WAKE_WAY + " varvhar,"
 					+ Variable.ALARM_COLUMN7_WAKE_MUSIC_URI + " varchar,"
 					+ Variable.ALARM_COLUMN8_TEXT + " varchar,"

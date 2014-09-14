@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical" xmlns:app="http://schemas.android.com/apk/res/com.scut.enjoyalarm">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -61,7 +61,6 @@
                 android:id="@+id/repeat_cb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:button="@android:color/transparent"
                 android:text="@string/repeat" />
 
             <TextView
@@ -69,84 +68,87 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:text="@string/remain_time" />
+                android:text="@string/remain_time_dh" />
         </FrameLayout>
     </LinearLayout>
 
-    <TableLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp" >
-
-        <TableRow
-            android:id="@+id/tableRow1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <CheckBox
-                android:id="@+id/mon_cb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/monday" />
-
-            <CheckBox
-                android:id="@+id/tue_cb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/tuesday" />
-
-            <CheckBox
-                android:id="@+id/wed_cb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/wednesday" />
-
-            <CheckBox
-                android:id="@+id/thu_cb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/thursday" />
-
-            <CheckBox
-                android:id="@+id/fri_cb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/friday" />
-
-            <CheckBox
-                android:id="@+id/sat_cb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/saturday" />
-
-            <CheckBox
-                android:id="@+id/sun_cb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/sunday" />
-        </TableRow>
-    </TableLayout>
+        android:layout_margin="10dp"
+        android:orientation="horizontal" >
+        
+        <com.enjoyalarm.view.ToggleView
+            android:id="@+id/mon_tgv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/monday"
+            app:CheckedDrawable="@drawable/ic_launcher"
+            app:UnCheckedDrawable="@drawable/ic_launcher" />
+        
+        <com.enjoyalarm.view.ToggleView
+            android:id="@+id/tue_tgv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="@string/tuesday"
+            app:CheckedDrawable="@drawable/ic_launcher"
+            app:UnCheckedDrawable="@drawable/ic_launcher" />
+        
+        <com.enjoyalarm.view.ToggleView
+            android:id="@+id/wed_tgv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="@string/wednesday"
+            app:CheckedDrawable="@drawable/ic_launcher"
+            app:UnCheckedDrawable="@drawable/ic_launcher" />
+        
+        <com.enjoyalarm.view.ToggleView
+            android:id="@+id/thu_tgv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="@string/thursday"
+            app:CheckedDrawable="@drawable/ic_launcher"
+            app:UnCheckedDrawable="@drawable/ic_launcher" />
+        
+        <com.enjoyalarm.view.ToggleView
+            android:id="@+id/fri_tgv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="@string/friday"
+            app:CheckedDrawable="@drawable/ic_launcher"
+            app:UnCheckedDrawable="@drawable/ic_launcher" />
+        
+        <com.enjoyalarm.view.ToggleView
+            android:id="@+id/sat_tgv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="@string/saturday"
+            app:CheckedDrawable="@drawable/ic_launcher"
+            app:UnCheckedDrawable="@drawable/ic_launcher" />
+        
+        <com.enjoyalarm.view.ToggleView
+            android:id="@+id/sun_tgv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/sunday"
+            app:CheckedDrawable="@drawable/ic_launcher"
+            app:UnCheckedDrawable="@drawable/ic_launcher" />
+        
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -191,31 +193,20 @@
                 android:layout_height="wrap_content" >
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content" >
 
-                    <Button
-                        android:id="@+id/wake_way_bt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <Button
-                        android:id="@+id/sound_way_bt"
+                    <com.enjoyalarm.view.ToggleView
+                        android:id="@+id/sound_way_tgv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/sound_way" />
 
-                    <Button
-                        android:id="@+id/shake_way_bt"
+                    <com.enjoyalarm.view.ToggleView
+                        android:id="@+id/shake_way_tgv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/shake_way" />
-
-                    <Button
-                        android:id="@+id/wake_again_bt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/wake_again" />
                 </LinearLayout>
 
                 <TextView
@@ -241,11 +232,5 @@
                 android:text="+" />
         </LinearLayout>
     </FrameLayout>
-
-    <CheckBox
-        android:id="@+id/checkBox1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox" />
 
 </LinearLayout>

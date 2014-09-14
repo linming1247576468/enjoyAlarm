@@ -12,7 +12,7 @@ public class Variable {
 	final static String ALARM_COLUMN2_NAME = "name";
 	final static String ALARM_COLUMN3_TIME = "time";
 	final static String ALARM_COLUMN4_DAYS = "days";
-	final static String ALARM_COLUMN5_REPEAT = "repeat";
+	final static String ALARM_COLUMN5_IS_REPEAT = "repeat";
 	final static String ALARM_COLUMN6_WAKE_WAY = "wake_way";
 	final static String ALARM_COLUMN7_WAKE_MUSIC_URI = "wake_music_uri";
 	final static String ALARM_COLUMN8_TEXT = "text";
@@ -25,15 +25,15 @@ public class Variable {
 	final static String ALARM_COLUMN15_FRIEND_PHONES = "friend_phones";
 	final static String ALARM_COLUMN16_SEND_TEXT = "send_text";
 	
-	final static String ALARM_REPEAT_YES = "1";
-	final static String ALARM_REPEAT_NO = "2";
-	final static String ALARM_WAKE_WAY_SOUND = "1";
-	final static String ALARM_WAKE_WAY_SHAKE = "2";
-	final static String ALARM_WAKE_WAY_SOUND_SHAKE = "3";
-	final static String ALARM_MEDIA_WAY_PHOTO = "1";
-	final static String ALARM_MEDIA_WAY_VIDEO = "2";
-	final static String ALARM_MEDIA_WAY_APP = "3";
-	final static String ALARM_MEDIA_WAY_SOCIAL = "4";
+	public final static String ALARM_YES = "1";
+	public final static String ALARM_NO = "2";
+	public final static String ALARM_WAKE_WAY_SOUND = "1";
+	public final static String ALARM_WAKE_WAY_SHAKE = "2";
+	public final static String ALARM_WAKE_WAY_SOUND_SHAKE = "3";
+	public final static String ALARM_MEDIA_WAY_PHOTO = "1";
+	public final static String ALARM_MEDIA_WAY_VIDEO = "2";
+	public final static String ALARM_MEDIA_WAY_APP = "3";
+	public final static String ALARM_MEDIA_WAY_SOCIAL = "4";
 
 	
 	//time table
@@ -48,13 +48,13 @@ public class Variable {
 	final static String DATA_COLUMN2_DATA = "data";
 	final static String DATA_COLUMN3_COUNT = "count";
 	
-	final static String DATA_TYPE_WAKE_MUSIC_URI = "1";
-	final static String DATA_TYPE_TEXT = "2";
-	final static String DATA_TYPE_MUSIC_URI = "3";
-	final static String DATA_TYPE_PHOTO_URI = "4";
-	final static String DATA_TYPE_VIDEO_URI = "5";
-	final static String DATA_TYPE_APP_PACKAGE_NAME = "6";
-	final static String DATA_TYPE_FRIEND_NAME = "7";
-	final static String DATA_TYPE_SEND_TEXT = "8";
+	public final static String DATA_TYPE_WAKE_MUSIC_URI = "1";
+	public final static String DATA_TYPE_TEXT = "2";
+	public final static String DATA_TYPE_MUSIC_URI = "3";
+	public final static String DATA_TYPE_PHOTO_URI = "4";
+	public final static String DATA_TYPE_VIDEO_URI = "5";
+	public final static String DATA_TYPE_APP_PACKAGE_NAME = "6";
+	public final static String DATA_TYPE_FRIEND_NAME = "7";
+	public final static String DATA_TYPE_SEND_TEXT = "8";
 	
 }

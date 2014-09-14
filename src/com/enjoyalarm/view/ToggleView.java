@@ -1,6 +1,7 @@
 package com.enjoyalarm.view;
 
-import android.R;
+import com.scut.enjoyalarm.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -12,26 +13,32 @@ public class ToggleView extends TextView {
 	private boolean mChecked;
 	private Drawable mCheckedDrawable;
 	private Drawable mUnCheckedDrawable;
-	
-	
-	public ToggleView(Context context) {
+
+	/**
+	 * default background is unCheckedDrawable
+	 */
+	public ToggleView(Context context, Drawable checkedDrawable, Drawable unCheckedDrawable) {
 		super(context);
+		
+		mCheckedDrawable = checkedDrawable;
+		mUnCheckedDrawable = unCheckedDrawable;
+		setChecked(false);
 	}
-	
+
 	public ToggleView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
-		TypedArray typedArray = context.obtainStyledAttributes(attrs, R.style.ToggleView);
+
+		TypedArray typedArray = context.obtainStyledAttributes(attrs,
+				R.styleable.ToggleView, 0, 0);
+		mCheckedDrawable = typedArray
+				.getDrawable(R.styleable.ToggleView_CheckedDrawable);
+		mUnCheckedDrawable = typedArray
+				.getDrawable(R.styleable.ToggleView_UnCheckedDrawable);
+		typedArray.recycle();
+
+		setChecked(false);
 	}
-	
-	public void setCheckedDrawable(Drawable drawable) {
-		mCheckedDrawable = drawable;
-	}
-	
-	public void setUnCheckedDrawable(Drawable drawable) {
-		mUnCheckedDrawable = drawable;
-	}
-	
+
 	public void setChecked(boolean checked) {
 		mChecked = checked;
 		if (mChecked) {
