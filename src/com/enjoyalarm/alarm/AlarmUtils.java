@@ -10,12 +10,15 @@ import android.content.Intent;
 
 public class AlarmUtils {
 
-	public static void settingAlarm(Context context, String time, int alarmId) {
+	public final static String ALARM_ID_INTENT = "alarm_id_intent";
+	
+	public static void settingAlarm(Context context, int alarmId, int year, int month, int day, int hour, int minute) {
 		AlarmManager alarmManager = (AlarmManager) context
 				.getSystemService(Service.ALARM_SERVICE);
 		Calendar calendar = Calendar.getInstance();//setting time
-		Intent intent = new Intent(context, AlarmUtils.class);
-		intent.putExtra("", alarmId);
+		calendar.set(year, month, day, hour, minute);
+		Intent intent = new Intent(context, AlarmUtils.class);//launch activity
+		intent.putExtra(AlarmUtils.ALARM_ID_INTENT, alarmId);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context,
 				alarmId, intent, 0);// same request id will not set multi-alarm
 									// for same intent
