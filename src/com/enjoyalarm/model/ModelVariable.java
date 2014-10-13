@@ -1,6 +1,6 @@
 package com.enjoyalarm.model;
 
-public class Variable {
+public class ModelVariable {
 
 	//sharedPreference
 	static final String PREFERENCE_NAME = "enjoy_alarm_preference";

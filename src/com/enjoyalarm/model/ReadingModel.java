@@ -33,15 +33,15 @@ public class ReadingModel {
 	private void readingData() {
 		SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
 		Cursor cursor = database.rawQuery("select * from ? where ? = ?",
-				new String[] { Variable.ALARM_TABLE_NAME,
-						Variable.ALARM_COLUMN1_ID, String.valueOf(mId) });
+				new String[] { ModelVariable.ALARM_TABLE_NAME,
+						ModelVariable.ALARM_COLUMN1_ID, String.valueOf(mId) });
 		if (cursor.moveToFirst()) {
 			mName = cursor.getString(1);
 			mTime = cursor.getString(2);
 			mDays = cursor.getString(3);
 			mWakeWay = cursor.getString(5);
 			
-			if (Variable.ALARM_YES.equals(cursor.getString(4))) {
+			if (ModelVariable.ALARM_YES.equals(cursor.getString(4))) {
 				mRepeat = true;
 			}
 			if (cursor.isNull(6)) {

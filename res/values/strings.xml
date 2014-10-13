@@ -15,8 +15,33 @@
     <string name="sunday">日</string>
     <string name="sound_way">响铃</string>
     <string name="shake_way">震动</string>
-    <string name="wake_again">再响</string>
     <string name="init_encourage_words">今天是个好日子！</string>
     <string name="init_wake_music_words">请设置闹钟铃声</string>
 
+    <!-- input -->
+    <string name="input0">0</string>
+    <string name="input1">1</string>
+    <string name="input2">2</string>
+    <string name="input3">3</string>
+    <string name="input4">4</string>
+    <string name="input5">5</string>
+    <string name="input6">6</string>
+    <string name="input7">7</string>
+    <string name="input8">8</string>
+    <string name="input9">9</string>
+    <string name="input_back">back</string>
+    <string name="input_done">done</string>
+    <string name="tag0">0</string>
+    <string name="tag1">1</string>
+    <string name="tag2">2</string>
+    <string name="tag3">3</string>
+    <string name="tag4">4</string>
+    <string name="tag5">5</string>
+    <string name="tag6">6</string>
+    <string name="tag7">7</string>
+    <string name="tag8">8</string>
+    <string name="tag9">9</string>
+    <string name="tag_back">b</string>
+    <string name="tag_done">d</string>
+    
 </resources>

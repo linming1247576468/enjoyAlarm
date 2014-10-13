@@ -51,4 +51,8 @@ public class ToggleView extends TextView {
 	public boolean isChecked() {
 		return mChecked;
 	}
+	
+	public void toggle() {
+		setChecked(!mChecked);
+	}
 }

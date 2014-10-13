@@ -17,34 +17,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		try {
-			String sqlString = "create table " + Variable.ALARM_TABLE_NAME + "("
-					+ Variable.ALARM_COLUMN1_ID + " integer primary key,"
-					+ Variable.ALARM_COLUMN2_NAME + " varchar,"
-					+ Variable.ALARM_COLUMN3_TIME + " varchar,"
-					+ Variable.ALARM_COLUMN4_DAYS + " varchar,"
-					+ Variable.ALARM_COLUMN5_IS_REPEAT + " varchar,"
-					+ Variable.ALARM_COLUMN6_WAKE_WAY + " varvhar,"
-					+ Variable.ALARM_COLUMN7_WAKE_MUSIC_URI + " varchar,"
-					+ Variable.ALARM_COLUMN8_TEXT + " varchar,"
-					+ Variable.ALARM_COLUMN9_MEDIA_WAY + " varchar,"
-					+ Variable.ALARM_COLUMN10_MUSIC_URI + " varchar,"
-					+ Variable.ALARM_COLUMN11_PHOTO_URI + " varchar,"
-					+ Variable.ALARM_COLUMN12_VIDEO_URI + " varchar,"
-					+ Variable.ALARM_COLUMN13_APP_PACKAGE_NAME + " varchar,"
-					+ Variable.ALARM_COLUMN14_FRIEND_NAMES + " varchar,"
-					+ Variable.ALARM_COLUMN15_FRIEND_PHONES + " varchar,"
-					+ Variable.ALARM_COLUMN16_SEND_TEXT + " varchar)";
+			String sqlString = "create table " + ModelVariable.ALARM_TABLE_NAME + "("
+					+ ModelVariable.ALARM_COLUMN1_ID + " integer primary key,"
+					+ ModelVariable.ALARM_COLUMN2_NAME + " varchar,"
+					+ ModelVariable.ALARM_COLUMN3_TIME + " varchar,"
+					+ ModelVariable.ALARM_COLUMN4_DAYS + " varchar,"
+					+ ModelVariable.ALARM_COLUMN5_IS_REPEAT + " varchar,"
+					+ ModelVariable.ALARM_COLUMN6_WAKE_WAY + " varvhar,"
+					+ ModelVariable.ALARM_COLUMN7_WAKE_MUSIC_URI + " varchar,"
+					+ ModelVariable.ALARM_COLUMN8_TEXT + " varchar,"
+					+ ModelVariable.ALARM_COLUMN9_MEDIA_WAY + " varchar,"
+					+ ModelVariable.ALARM_COLUMN10_MUSIC_URI + " varchar,"
+					+ ModelVariable.ALARM_COLUMN11_PHOTO_URI + " varchar,"
+					+ ModelVariable.ALARM_COLUMN12_VIDEO_URI + " varchar,"
+					+ ModelVariable.ALARM_COLUMN13_APP_PACKAGE_NAME + " varchar,"
+					+ ModelVariable.ALARM_COLUMN14_FRIEND_NAMES + " varchar,"
+					+ ModelVariable.ALARM_COLUMN15_FRIEND_PHONES + " varchar,"
+					+ ModelVariable.ALARM_COLUMN16_SEND_TEXT + " varchar)";
 			db.execSQL(sqlString);
 
-			sqlString = "create table " + Variable.TIME_TABLE_NAME + "("
-					+ Variable.TIME_COLUMN1_NOW_HOUR + " varchar,"
-					+ Variable.TIME_COLUMN2_SET_TIME + " varchar)";
+			sqlString = "create table " + ModelVariable.TIME_TABLE_NAME + "("
+					+ ModelVariable.TIME_COLUMN1_NOW_HOUR + " varchar,"
+					+ ModelVariable.TIME_COLUMN2_SET_TIME + " varchar)";
 			db.execSQL(sqlString);
 
-			sqlString = "create table " + Variable.DATA_TABLE_NAME + "("
-					+ Variable.DATA_COLUMN1_TYPE + " varchar,"
-					+ Variable.DATA_COLUMN2_DATA + " varchar,"
-					+ Variable.DATA_COLUMN3_COUNT + " integer)";
+			sqlString = "create table " + ModelVariable.DATA_TABLE_NAME + "("
+					+ ModelVariable.DATA_COLUMN1_TYPE + " varchar,"
+					+ ModelVariable.DATA_COLUMN2_DATA + " varchar,"
+					+ ModelVariable.DATA_COLUMN3_COUNT + " integer)";
 			db.execSQL(sqlString);
 			
 		} catch (SQLException exception) {
@@ -56,8 +56,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		try {
-			db.execSQL("drop table if exists " + Variable.ALARM_TABLE_NAME + ","
-					+ Variable.TIME_TABLE_NAME + "," + Variable.DATA_TABLE_NAME);
+			db.execSQL("drop table if exists " + ModelVariable.ALARM_TABLE_NAME + ","
+					+ ModelVariable.TIME_TABLE_NAME + "," + ModelVariable.DATA_TABLE_NAME);
 			
 		} catch (SQLException exception) {
 			exception.printStackTrace();

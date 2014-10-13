@@ -71,14 +71,27 @@ public class WritingModel {
 		mWakeWay = way;
 	}
 
+	/**
+	 * required
+	 */
 	public void setWakeMusicUri(String uri) {
 		mWakeMusicUri = uri;
 	}
 
+	/**
+	 * required
+	 */
 	public void setText(String text) {
 		mText = text;
 	}
 
+	/**
+	 * required
+	 */
+	public void setRepeated(boolean repeated) {
+		mRepeat = repeated;
+	}
+	
 	/**
 	 * 
 	 * @param way
@@ -113,10 +126,6 @@ public class WritingModel {
 		mSendText = text;
 	}
 
-	public void setRepeated(boolean repeated) {
-		mRepeat = repeated;
-	}
-
 	/**
 	 * create a new alarm and save
 	 * 
@@ -125,62 +134,62 @@ public class WritingModel {
 	public int createAndSave() {
 		// get the next id
 		SharedPreferences preference = mContext.getSharedPreferences(
-				Variable.PREFERENCE_NAME, 0);
-		mId = preference.getInt(Variable.PREFERENCE_NEXT_ID, 0);
+				ModelVariable.PREFERENCE_NAME, 0);
+		mId = preference.getInt(ModelVariable.PREFERENCE_NEXT_ID, 0);
 
 		// write to database
 		SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put(Variable.ALARM_COLUMN1_ID, mId);
-		values.put(Variable.ALARM_COLUMN2_NAME, mName);
-		values.put(Variable.ALARM_COLUMN3_TIME, mTime);
-		values.put(Variable.ALARM_COLUMN4_DAYS, mDays);
-		values.put(Variable.ALARM_COLUMN6_WAKE_WAY, mWakeWay);
+		values.put(ModelVariable.ALARM_COLUMN1_ID, mId);
+		values.put(ModelVariable.ALARM_COLUMN2_NAME, mName);
+		values.put(ModelVariable.ALARM_COLUMN3_TIME, mTime);
+		values.put(ModelVariable.ALARM_COLUMN4_DAYS, mDays);
+		values.put(ModelVariable.ALARM_COLUMN6_WAKE_WAY, mWakeWay);
 		if (mRepeat) {
-			values.put(Variable.ALARM_COLUMN5_IS_REPEAT, Variable.ALARM_YES);
+			values.put(ModelVariable.ALARM_COLUMN5_IS_REPEAT, ModelVariable.ALARM_YES);
 		} else {
-			values.put(Variable.ALARM_COLUMN5_IS_REPEAT, Variable.ALARM_NO);
+			values.put(ModelVariable.ALARM_COLUMN5_IS_REPEAT, ModelVariable.ALARM_NO);
 		}
 		if (mWakeMusicUri != null) {
-			values.put(Variable.ALARM_COLUMN7_WAKE_MUSIC_URI, mWakeMusicUri);
+			values.put(ModelVariable.ALARM_COLUMN7_WAKE_MUSIC_URI, mWakeMusicUri);
 		}
 		if (mText != null) {
-			values.put(Variable.ALARM_COLUMN8_TEXT, mText);
+			values.put(ModelVariable.ALARM_COLUMN8_TEXT, mText);
 		}
 		if (mMediaWay != null) {
-			values.put(Variable.ALARM_COLUMN9_MEDIA_WAY, mMediaWay);
+			values.put(ModelVariable.ALARM_COLUMN9_MEDIA_WAY, mMediaWay);
 		}
 		if (mMusicUri != null) {
-			values.put(Variable.ALARM_COLUMN10_MUSIC_URI, mMusicUri);
+			values.put(ModelVariable.ALARM_COLUMN10_MUSIC_URI, mMusicUri);
 		}
 		if (mPhotoUri != null) {
-			values.put(Variable.ALARM_COLUMN11_PHOTO_URI, mPhotoUri);
+			values.put(ModelVariable.ALARM_COLUMN11_PHOTO_URI, mPhotoUri);
 		}
 		if (mVideoUri != null) {
-			values.put(Variable.ALARM_COLUMN12_VIDEO_URI, mVideoUri);
+			values.put(ModelVariable.ALARM_COLUMN12_VIDEO_URI, mVideoUri);
 		}
 		if (mAppPackageName != null) {
-			values.put(Variable.ALARM_COLUMN13_APP_PACKAGE_NAME,
+			values.put(ModelVariable.ALARM_COLUMN13_APP_PACKAGE_NAME,
 					mAppPackageName);
 		}
 		if (mFriendNames != null) {
-			values.put(Variable.ALARM_COLUMN14_FRIEND_NAMES, mFriendNames);
+			values.put(ModelVariable.ALARM_COLUMN14_FRIEND_NAMES, mFriendNames);
 		}
 		if (mFriendPhones != null) {
-			values.put(Variable.ALARM_COLUMN15_FRIEND_PHONES, mFriendPhones);
+			values.put(ModelVariable.ALARM_COLUMN15_FRIEND_PHONES, mFriendPhones);
 		}
 		if (mSendText != null) {
-			values.put(Variable.ALARM_COLUMN16_SEND_TEXT, mSendText);
+			values.put(ModelVariable.ALARM_COLUMN16_SEND_TEXT, mSendText);
 		}
 
-		database.insert(Variable.ALARM_TABLE_NAME, null, values);
+		database.insert(ModelVariable.ALARM_TABLE_NAME, null, values);
 		database.close();
 		if (debug) {
 			Log.i(debugTag, "insert: " + values.toString());
 		}
 
 		// update the next id
-		preference.edit().putInt(Variable.PREFERENCE_NEXT_ID, mId + 1).commit();
+		preference.edit().putInt(ModelVariable.PREFERENCE_NEXT_ID, mId + 1).commit();
 
 		return mId;
 	}
@@ -191,49 +200,49 @@ public class WritingModel {
 	public void update(int alarmId) {
 		SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put(Variable.ALARM_COLUMN1_ID, mId);
-		values.put(Variable.ALARM_COLUMN2_NAME, mName);
-		values.put(Variable.ALARM_COLUMN3_TIME, mTime);
-		values.put(Variable.ALARM_COLUMN4_DAYS, mDays);
-		values.put(Variable.ALARM_COLUMN6_WAKE_WAY, mWakeWay);
+		values.put(ModelVariable.ALARM_COLUMN1_ID, mId);
+		values.put(ModelVariable.ALARM_COLUMN2_NAME, mName);
+		values.put(ModelVariable.ALARM_COLUMN3_TIME, mTime);
+		values.put(ModelVariable.ALARM_COLUMN4_DAYS, mDays);
+		values.put(ModelVariable.ALARM_COLUMN6_WAKE_WAY, mWakeWay);
 		if (mRepeat) {
-			values.put(Variable.ALARM_COLUMN5_IS_REPEAT, Variable.ALARM_YES);
+			values.put(ModelVariable.ALARM_COLUMN5_IS_REPEAT, ModelVariable.ALARM_YES);
 		} else {
-			values.put(Variable.ALARM_COLUMN5_IS_REPEAT, Variable.ALARM_NO);
+			values.put(ModelVariable.ALARM_COLUMN5_IS_REPEAT, ModelVariable.ALARM_NO);
 		}
 		if (mWakeMusicUri != null) {
-			values.put(Variable.ALARM_COLUMN7_WAKE_MUSIC_URI, mWakeMusicUri);
+			values.put(ModelVariable.ALARM_COLUMN7_WAKE_MUSIC_URI, mWakeMusicUri);
 		}
 		if (mText != null) {
-			values.put(Variable.ALARM_COLUMN8_TEXT, mText);
+			values.put(ModelVariable.ALARM_COLUMN8_TEXT, mText);
 		}
 		if (mMediaWay != null) {
-			values.put(Variable.ALARM_COLUMN9_MEDIA_WAY, mMediaWay);
+			values.put(ModelVariable.ALARM_COLUMN9_MEDIA_WAY, mMediaWay);
 		}
 		if (mMusicUri != null) {
-			values.put(Variable.ALARM_COLUMN10_MUSIC_URI, mMusicUri);
+			values.put(ModelVariable.ALARM_COLUMN10_MUSIC_URI, mMusicUri);
 		}
 		if (mPhotoUri != null) {
-			values.put(Variable.ALARM_COLUMN11_PHOTO_URI, mPhotoUri);
+			values.put(ModelVariable.ALARM_COLUMN11_PHOTO_URI, mPhotoUri);
 		}
 		if (mVideoUri != null) {
-			values.put(Variable.ALARM_COLUMN12_VIDEO_URI, mVideoUri);
+			values.put(ModelVariable.ALARM_COLUMN12_VIDEO_URI, mVideoUri);
 		}
 		if (mAppPackageName != null) {
-			values.put(Variable.ALARM_COLUMN13_APP_PACKAGE_NAME,
+			values.put(ModelVariable.ALARM_COLUMN13_APP_PACKAGE_NAME,
 					mAppPackageName);
 		}
 		if (mFriendNames != null) {
-			values.put(Variable.ALARM_COLUMN14_FRIEND_NAMES, mFriendNames);
+			values.put(ModelVariable.ALARM_COLUMN14_FRIEND_NAMES, mFriendNames);
 		}
 		if (mFriendPhones != null) {
-			values.put(Variable.ALARM_COLUMN15_FRIEND_PHONES, mFriendPhones);
+			values.put(ModelVariable.ALARM_COLUMN15_FRIEND_PHONES, mFriendPhones);
 		}
 		if (mSendText != null) {
-			values.put(Variable.ALARM_COLUMN16_SEND_TEXT, mSendText);
+			values.put(ModelVariable.ALARM_COLUMN16_SEND_TEXT, mSendText);
 		}
-		database.update(Variable.ALARM_TABLE_NAME, values,
-				Variable.ALARM_COLUMN1_ID + "=?",
+		database.update(ModelVariable.ALARM_TABLE_NAME, values,
+				ModelVariable.ALARM_COLUMN1_ID + "=?",
 				new String[] { String.valueOf(alarmId) });
 		database.close();
 	}
