@@ -8,6 +8,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteProgram;
 import android.util.Log;
 /**
  * 
@@ -219,7 +220,7 @@ public class ModelUtil {
 		Cursor cursor = db.rawQuery("select ? from ?", new String[]{ModelVariable.ALARM_COLUMN2_NAME, ModelVariable.ALARM_TABLE_NAME});
 		List<String> result = new ArrayList<String>();
 		while (cursor.moveToNext()) {
-			result.add(cursor.getString(0));
+			result.add(cursor.getString(1));
 		}
 		cursor.close();
 		db.close();

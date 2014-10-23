@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.text.format.Time;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -40,6 +41,7 @@ public class AlarmSettingView extends ScrollView {
 	private ToggleView mSoundWayToggleView;
 	private ToggleView mShakeWayToggleView;
 	private ToggleView[] mDaysViews;
+	private Button[] mInputViews;
 	private int editHourOrMinute; //0.none 1.hour 2.minute
 	private boolean clearWhenClickInput;
 	
@@ -56,151 +58,16 @@ public class AlarmSettingView extends ScrollView {
 	}
 
 	/**
-	 * alarmId = -1 for setting a new alarm instead of reading from database
+	 * setting a new alarm
 	 */
-	public AlarmSettingView(Context context, int alarmId, AttributeSet attrs) {
+	public AlarmSettingView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mContext = context;
-		mAlarmId = alarmId;
+		mAlarmId = -1;
 
 		init();
 	}
 
-	//maybe there is no results
-	public void rename(View view) {
-		isChanged = true;
-		if (!mNameEditText.isFocused()) {
-			mNameEditText.requestFocusFromTouch();
-		}
-	}
-	
-	//done
-	public void editHour(View view) {
-		isChanged = true;
-		if (editHourOrMinute != 1) {//first edit
-			editHourOrMinute = 1;
-			mHourTextView.setTextSize(ViewVariable.EDIT_TIME_TEXT_SIZE);
-			changeToInputMode();
-		}
-		clearWhenClickInput = true;
-		mHourTextView.setBackgroundColor(ViewVariable.TIME_TEXT_BG_COLOR_CLICK);
-	}
-	
-	//done
-	public void editMinute(View view) {
-		isChanged = true;
-		if (editHourOrMinute != 2) {//first edit
-			editHourOrMinute = 2;
-			mMinuteTextView.setTextSize(ViewVariable.EDIT_TIME_TEXT_SIZE);
-			changeToInputMode();
-		}
-		clearWhenClickInput = true;
-		mMinuteTextView.setBackgroundColor(ViewVariable.TIME_TEXT_BG_COLOR_CLICK);
-	}
-	
-	//done
-	public void clickDays(View view) {
-		isChanged = true;
-		boolean oneSelected = false;
-		for (ToggleView t: mDaysViews) {
-			if (t != view && t.isSelected()) {
-				oneSelected = true;
-				break;
-			}
-		}
-		
-		if (oneSelected) {
-			((ToggleView)view).toggle();
-		}
-		
-		updateRemainTime();
-	}
-	
-	//done
-	public void clickInput(View view) {
-		TextView timeView;
-		int maxNumber;
-		if (editHourOrMinute == 1) {//hour
-			timeView = mHourTextView;
-			maxNumber = 24;
-			
-		} else {//minute
-			timeView = mMinuteTextView;
-			maxNumber = 60;
-		}
-		
-		String nowText = timeView.getText().toString();
-		String tag = (String)view.getTag();
-		if (clearWhenClickInput) {
-			clearWhenClickInput = false;
-			timeView.setBackgroundColor(ViewVariable.TIME_TEXT_BG_COLOR_UNCLICK);
-			if (!getResources().getString(R.string.tag_done).equals(tag)) {
-				nowText = "";//clear
-			}
-		}
-		StringBuilder text = new StringBuilder(nowText);
-		
-		if (getResources().getString(R.string.tag_done).equals(tag)) {//done
-			if (text.length() == 0) {
-				text.append("00");
-				
-			} else if (text.length() == 1) {
-				text.insert(0, '0');
-			}
-			timeView.setTextSize(ViewVariable.UNEDIT_TIME_TEXT_SIZE);
-			timeView.setText(text);
-			changeToMediaMode();//close input layoute
-			editHourOrMinute = 0;
-			
-		} else if (getResources().getString(R.string.tag_back).equals(tag)) {//back
-			if (text.length() > 0) {
-				text.deleteCharAt(text.length() - 1);
-			}
-			timeView.setText(text);
-			
-		} else {//number
-			if (text.length() < 2) {
-				int number = Integer.parseInt(text.toString() + tag);
-				if (number <= maxNumber) {
-					text.append(tag);
-					timeView.setText(text);
-				}
-			}
-		}
-		
-		updateRemainTime();
-	}
-	
-	//done
-	public void clickSoundWay(View view) {
-		isChanged = true;
-		if (mShakeWayToggleView.isSelected()) {
-			mSoundWayToggleView.toggle();
-			enableWakeMusic(mSoundWayToggleView.isSelected());
-		}
-	}
-	
-	//done
-	public void clickShakeWay(View view) {
-		isChanged = true;
-		if (mSoundWayToggleView.isSelected()) {
-			mShakeWayToggleView.toggle();
-			shake();
-		}
-	}
-	
-	public void clickWakeMusic(View view) {
-		isChanged = true;
-	}
-	
-	public void clickWords(View view) {
-		isChanged = true;
-	}
-	
-	public void clickAddMedia(View view) {
-		isChanged = true;
-	}
-	
 	public TimeEntry getRemainTime() {
 		// get data from views
 		String hourString = mHourTextView.getText().toString();
@@ -331,18 +198,204 @@ public class AlarmSettingView extends ScrollView {
 		for (int i = 0; i < 7; i++) {
 			mDaysViews[i] = (ToggleView) mainLayout.findViewById(ids[i]);
 		}
+		mInputViews = new Button[12];
+		ids = new int[] { R.id.input0, R.id.input1, R.id.input2, R.id.input3, R.id.input4,
+				R.id.input5, R.id.input6, R.id.input7, R.id.input8, R.id.input9,
+				R.id.input_back, R.id.input_done
+		};
+		for (int i = 0; i < 12; i++) {
+			mInputViews[i] = (Button) mainLayout.findViewById(ids[i]);
+		}
 		
 		//set something
-		viewSettings();
+		setViewAttrs();
+		setViewListeners();
 	}
 	
-	private void viewSettings() {
+	private void setViewAttrs() {
 		mInputLayout.setVisibility(View.GONE);
 		mNameEditText.setFocusable(false);
 		mHourTextView.setTextSize(ViewVariable.UNEDIT_TIME_TEXT_SIZE);
 		mMinuteTextView.setTextSize(ViewVariable.UNEDIT_TIME_TEXT_SIZE);
 	}
 
+	private void setViewListeners() {
+		mRenameButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				isChanged = true;
+				if (!mNameEditText.isFocused()) {
+					mNameEditText.requestFocusFromTouch();
+				}
+			}
+		});
+		
+		mHourTextView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Log.e("input visiable",mInputLayout.getVisibility()==View.VISIBLE?"visible":"gone");
+				isChanged = true;
+				if (editHourOrMinute != 1) {//first edit
+					editHourOrMinute = 1;
+					mHourTextView.setTextSize(ViewVariable.EDIT_TIME_TEXT_SIZE);
+					changeToInputMode();
+				}
+				clearWhenClickInput = true;
+				mHourTextView.setBackgroundColor(ViewVariable.TIME_TEXT_BG_COLOR_CLICK);
+			}
+		});
+		
+		mMinuteTextView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				isChanged = true;
+				if (editHourOrMinute != 2) {//first edit
+					editHourOrMinute = 2;
+					mMinuteTextView.setTextSize(ViewVariable.EDIT_TIME_TEXT_SIZE);
+					changeToInputMode();
+				}
+				clearWhenClickInput = true;
+				mMinuteTextView.setBackgroundColor(ViewVariable.TIME_TEXT_BG_COLOR_CLICK);
+			}
+		});
+		
+		OnClickListener daysListener = new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				isChanged = true;
+				boolean oneSelected = false;
+				for (ToggleView t: mDaysViews) {
+					if (t != v && t.isSelected()) {
+						oneSelected = true;
+						break;
+					}
+				}
+				
+				if (oneSelected) {
+					((ToggleView)v).toggle();
+				}
+				
+				updateRemainTime();
+			}
+		};
+		for(View dayView: mDaysViews) {
+			dayView.setOnClickListener(daysListener);
+		}
+		
+		OnClickListener inputListener = new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				TextView timeView;
+				int maxNumber;
+				if (editHourOrMinute == 1) {//hour
+					timeView = mHourTextView;
+					maxNumber = 24;
+					
+				} else {//minute
+					timeView = mMinuteTextView;
+					maxNumber = 60;
+				}
+				
+				String nowText = timeView.getText().toString();
+				String tag = (String)v.getTag();
+				if (clearWhenClickInput) {
+					clearWhenClickInput = false;
+					timeView.setBackgroundColor(ViewVariable.TIME_TEXT_BG_COLOR_UNCLICK);
+					if (!getResources().getString(R.string.tag_done).equals(tag)) {
+						nowText = "";//clear
+					}
+				}
+				StringBuilder text = new StringBuilder(nowText);
+				
+				if (getResources().getString(R.string.tag_done).equals(tag)) {//done
+					if (text.length() == 0) {
+						text.append("00");
+						
+					} else if (text.length() == 1) {
+						text.insert(0, '0');
+					}
+					timeView.setTextSize(ViewVariable.UNEDIT_TIME_TEXT_SIZE);
+					timeView.setText(text);
+					changeToMediaMode();//close input layoute
+					editHourOrMinute = 0;
+					
+				} else if (getResources().getString(R.string.tag_back).equals(tag)) {//back
+					if (text.length() > 0) {
+						text.deleteCharAt(text.length() - 1);
+					}
+					timeView.setText(text);
+					
+				} else {//number
+					if (text.length() < 2) {
+						int number = Integer.parseInt(text.toString() + tag);
+						if (number <= maxNumber) {
+							text.append(tag);
+							timeView.setText(text);
+						}
+					}
+				}
+				
+				updateRemainTime();
+			}
+		};
+		for (View inputView: mInputViews) {
+			inputView.setOnClickListener(inputListener);
+		}
+		
+		mSoundWayToggleView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				isChanged = true;
+				if (mShakeWayToggleView.isSelected()) {
+					mSoundWayToggleView.toggle();
+					enableWakeMusic(mSoundWayToggleView.isSelected());
+				}
+			}
+		});
+		
+		mShakeWayToggleView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				isChanged = true;
+				if (mSoundWayToggleView.isSelected()) {
+					mShakeWayToggleView.toggle();
+					shake();
+				}
+			}
+		});
+		
+		mWakeMusicTextView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				isChanged = true;
+			}
+		});
+		
+		mEncourageWordsTextView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				isChanged = true;
+			}
+		});
+		
+		mAddMediaButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				isChanged = true;
+			}
+		});
+	}
+	
 	private void alarmSettings() {
 		if (mAlarmId == -1) {// setting suggest data
 			settingFromSuggestion();

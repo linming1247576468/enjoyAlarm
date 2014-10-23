@@ -8,6 +8,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 
+import com.enjoyalarm.AlarmWakeActivity;
+
 public class AlarmUtils {
 
 	public final static String ALARM_ID_INTENT = "alarm_id_intent";
@@ -17,7 +19,7 @@ public class AlarmUtils {
 				.getSystemService(Service.ALARM_SERVICE);
 		Calendar calendar = Calendar.getInstance();//setting time
 		calendar.set(year, month, day, hour, minute);
-		Intent intent = new Intent(context, AlarmUtils.class);//launch activity
+		Intent intent = new Intent(context, AlarmWakeActivity.class);//launch activity
 		intent.putExtra(AlarmUtils.ALARM_ID_INTENT, alarmId);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context,
 				alarmId, intent, 0);// same request id will not set multi-alarm

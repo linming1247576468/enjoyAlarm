@@ -4,7 +4,7 @@ import android.graphics.Color;
 
 public class ViewVariable {
 
-	final static int EDIT_TIME_TEXT_SIZE = 85;
+	final static int EDIT_TIME_TEXT_SIZE = 100;
 	final static int UNEDIT_TIME_TEXT_SIZE = 80;
 	
 	/**
