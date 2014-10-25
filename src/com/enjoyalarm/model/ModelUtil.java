@@ -10,11 +10,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteProgram;
 import android.util.Log;
+
 /**
  * 
- * problems may occur: 
- * 		1.in sql "where ? = ?", if ? is varchar type, should I change the second ? into '?';
- *      2.in ContentValues.put(String,String), should I change the second String into '..';
+ * problems may occur: 1.in sql "where ? = ?", if ? is varchar type, should I
+ * change the second ? into '?'; 2.in ContentValues.put(String,String), should I
+ * change the second String into '..';
  *
  */
 public class ModelUtil {
@@ -39,10 +40,12 @@ public class ModelUtil {
 		List<BasicInfoUnit> resultList = new ArrayList<BasicInfoUnit>();
 		DatabaseHelper helper = new DatabaseHelper(context);
 		SQLiteDatabase db = helper.getReadableDatabase();
-		Cursor cursor = db.rawQuery("select ?,?,? from ?", new String[] {
-				ModelVariable.ALARM_COLUMN1_ID, ModelVariable.ALARM_COLUMN2_NAME,
-				ModelVariable.ALARM_COLUMN3_TIME, ModelVariable.ALARM_COLUMN4_DAYS,
-				ModelVariable.ALARM_TABLE_NAME });
+		Cursor cursor = db.query(ModelVariable.ALARM_TABLE_NAME, new String[] {
+				ModelVariable.ALARM_COLUMN1_ID,
+				ModelVariable.ALARM_COLUMN2_NAME,
+				ModelVariable.ALARM_COLUMN3_TIME,
+				ModelVariable.ALARM_COLUMN4_DAYS, }, null, null, null, null,
+				null);
 		while (cursor.moveToNext()) {
 			resultList.add(new BasicInfoUnit(cursor.getInt(0), cursor
 					.getString(1), cursor.getString(2), cursor.getString(3)));
@@ -73,11 +76,10 @@ public class ModelUtil {
 
 		DatabaseHelper helper = new DatabaseHelper(context);
 		SQLiteDatabase db = helper.getWritableDatabase();
-		Cursor cursor = db
-				.rawQuery("select ? from ? where ? = ?", new String[] {
-						ModelVariable.TIME_COLUMN1_NOW_HOUR,
-						ModelVariable.TIME_TABLE_NAME,
-						ModelVariable.TIME_COLUMN1_NOW_HOUR, String.valueOf(hour), });
+		Cursor cursor = db.query(ModelVariable.TIME_TABLE_NAME,
+				new String[] { ModelVariable.TIME_COLUMN1_NOW_HOUR },
+				ModelVariable.TIME_COLUMN1_NOW_HOUR + "=?",
+				new String[] { String.valueOf(hour) }, null, null, null);
 
 		if (cursor.moveToFirst()) { // update
 			ContentValues values = new ContentValues();
@@ -94,7 +96,8 @@ public class ModelUtil {
 			ContentValues values = new ContentValues();
 			values.put(ModelVariable.TIME_COLUMN1_NOW_HOUR, hour);
 			values.put(ModelVariable.TIME_COLUMN2_SET_TIME, time);
-			long resultId = db.insert(ModelVariable.TIME_TABLE_NAME, null, values);
+			long resultId = db.insert(ModelVariable.TIME_TABLE_NAME, null,
+					values);
 			if (debug) {
 				Log.i("recordTime", "insert result id:" + resultId);
 			}
@@ -105,17 +108,17 @@ public class ModelUtil {
 	}
 
 	/**
-	 * record text,musicUri, photoUri, videoUri and so on according to the type of
-	 * Variable.DAIA_TYPE_**
+	 * record text,musicUri, photoUri, videoUri and so on according to the type
+	 * of Variable.DAIA_TYPE_**
 	 */
 	public static void recordData(Context context, String data, String type) {
 		DatabaseHelper helper = new DatabaseHelper(context);
 		SQLiteDatabase db = helper.getWritableDatabase();
-		Cursor cursor = db.rawQuery(
-				"select ? from ? where ? = '?' and ? = '?'", new String[] {
-						ModelVariable.DATA_COLUMN3_COUNT,
-						ModelVariable.DATA_TABLE_NAME, ModelVariable.DATA_COLUMN1_TYPE,
-						type, ModelVariable.DATA_COLUMN2_DATA, data });
+		Cursor cursor = db.query(ModelVariable.DATA_TABLE_NAME,
+				new String[] { ModelVariable.DATA_COLUMN3_COUNT },
+				ModelVariable.DATA_COLUMN1_TYPE + "=? and "
+						+ ModelVariable.DATA_COLUMN2_DATA + "=?", new String[] {
+						type, data }, null, null, null);
 
 		if (cursor.moveToFirst()) { // update
 			int count = cursor.getInt(0);
@@ -123,9 +126,9 @@ public class ModelUtil {
 			ContentValues values = new ContentValues();
 			values.put(ModelVariable.DATA_COLUMN3_COUNT, count);
 			int result = db.update(ModelVariable.DATA_TABLE_NAME, values,
-					"? = '?' and ? = '?'", new String[] {
-							ModelVariable.DATA_COLUMN1_TYPE, type,
-							ModelVariable.DATA_COLUMN2_DATA, data });
+					ModelVariable.DATA_COLUMN1_TYPE + "=? and "
+							+ ModelVariable.DATA_COLUMN2_DATA + "=?",
+					new String[] { type, data });
 			if (debug) {
 				Log.i("recordMediaData", "type:" + type + "  update result:"
 						+ result);
@@ -136,7 +139,8 @@ public class ModelUtil {
 			values.put(ModelVariable.DATA_COLUMN1_TYPE, type);
 			values.put(ModelVariable.DATA_COLUMN2_DATA, data);
 			values.put(ModelVariable.DATA_COLUMN3_COUNT, 1);
-			long resultId = db.insert(ModelVariable.DATA_TABLE_NAME, null, values);
+			long resultId = db.insert(ModelVariable.DATA_TABLE_NAME, null,
+					values);
 			if (debug) {
 				Log.i("recordMediaData", "type:" + type + "  insert result id:"
 						+ resultId);
@@ -154,10 +158,11 @@ public class ModelUtil {
 		// find records equal to hour
 		DatabaseHelper helper = new DatabaseHelper(context);
 		SQLiteDatabase db = helper.getReadableDatabase();
-		Cursor cursor = db.rawQuery("select ? from ? where ? = ?",
-				new String[] { ModelVariable.TIME_COLUMN2_SET_TIME,
-						ModelVariable.TIME_TABLE_NAME,
-						ModelVariable.TIME_COLUMN1_NOW_HOUR, String.valueOf(hour) });
+		Cursor cursor = db.query(ModelVariable.TIME_TABLE_NAME,
+				new String[] { ModelVariable.TIME_COLUMN2_SET_TIME },
+				ModelVariable.TIME_COLUMN1_NOW_HOUR + "=?",
+				new String[] { String.valueOf(hour) }, null, null, null);
+
 		if (cursor.moveToFirst()) {
 			String time = cursor.getString(0);
 			cursor.close();
@@ -167,9 +172,10 @@ public class ModelUtil {
 
 		// find records equal to hour-1
 		int preHour = (hour - 1 + 24) % 24;
-		cursor = db.rawQuery("select ? from ? where ? = ?", new String[] {
-				ModelVariable.TIME_COLUMN2_SET_TIME, ModelVariable.TIME_TABLE_NAME,
-				ModelVariable.TIME_COLUMN1_NOW_HOUR, String.valueOf(preHour) });
+		cursor = db.query(ModelVariable.TIME_TABLE_NAME,
+				new String[] { ModelVariable.TIME_COLUMN2_SET_TIME },
+				ModelVariable.TIME_COLUMN1_NOW_HOUR + "=?",
+				new String[] { String.valueOf(preHour) }, null, null, null);
 		if (cursor.moveToFirst()) {
 			String time = cursor.getString(0);
 			cursor.close();
@@ -179,9 +185,10 @@ public class ModelUtil {
 
 		// find records equal to hour+1
 		int nextHour = (hour + 1) % 24;
-		cursor = db.rawQuery("select ? from ? where ? = ?", new String[] {
-				ModelVariable.TIME_COLUMN2_SET_TIME, ModelVariable.TIME_TABLE_NAME,
-				ModelVariable.TIME_COLUMN1_NOW_HOUR, String.valueOf(nextHour) });
+		cursor = db.query(ModelVariable.TIME_TABLE_NAME,
+				new String[] { ModelVariable.TIME_COLUMN2_SET_TIME },
+				ModelVariable.TIME_COLUMN1_NOW_HOUR + "=?",
+				new String[] { String.valueOf(nextHour) }, null, null, null);
 		if (cursor.moveToFirst()) {
 			String time = cursor.getString(0);
 			cursor.close();
@@ -199,11 +206,10 @@ public class ModelUtil {
 		List<String> resultList = new ArrayList<String>();
 		DatabaseHelper helper = new DatabaseHelper(context);
 		SQLiteDatabase db = helper.getReadableDatabase();
-		Cursor cursor = db.rawQuery(
-				"select ? from ? where ? = ? order by ? desc", new String[] {
-						ModelVariable.DATA_COLUMN2_DATA, ModelVariable.DATA_TABLE_NAME,
-						ModelVariable.DATA_COLUMN1_TYPE, type,
-						ModelVariable.DATA_COLUMN3_COUNT });
+		Cursor cursor = db.query(ModelVariable.DATA_TABLE_NAME,
+				new String[] { ModelVariable.DATA_COLUMN2_DATA },
+				ModelVariable.DATA_COLUMN1_TYPE + "=?", new String[] { type },
+				null, null, ModelVariable.DATA_COLUMN3_COUNT + " desc");
 		int number = 0;
 		while (number++ < 3 && cursor.moveToNext()) {
 			resultList.add(cursor.getString(0));
@@ -217,29 +223,30 @@ public class ModelUtil {
 	public static List<String> getAlarmNames(Context context) {
 		DatabaseHelper helper = new DatabaseHelper(context);
 		SQLiteDatabase db = helper.getReadableDatabase();
-		Cursor cursor = db.rawQuery("select ? from ?", new String[]{ModelVariable.ALARM_COLUMN2_NAME, ModelVariable.ALARM_TABLE_NAME});
+		Cursor cursor = db.query(ModelVariable.ALARM_TABLE_NAME,
+				new String[] { ModelVariable.ALARM_COLUMN2_NAME }, null, null,
+				null, null, null);
 		List<String> result = new ArrayList<String>();
 		while (cursor.moveToNext()) {
-			result.add(cursor.getString(1));
+			result.add(cursor.getString(0));
 		}
 		cursor.close();
 		db.close();
 		return result;
 	}
-	
-	
+
 	public static int getHourFromTime(String time) {
 		return Integer.parseInt(time.substring(0, time.indexOf(':')));
 	}
-	
+
 	public static int getMinuteFromTime(String time) {
 		return Integer.parseInt(time.substring(time.indexOf(':') + 1));
 	}
-	
+
 	public static String generateTime(int hour, int minute) {
 		return hour + ":" + minute;
 	}
-	
+
 	public static String getFriendNamesString(List<String> names) {
 		StringBuilder result = new StringBuilder();
 		for (String name : names) {

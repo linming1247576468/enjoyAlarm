@@ -86,8 +86,7 @@
 			android:layout_weight="1"
 			android:gravity="center"
 			android:text="@string/monday"
-			app:CheckedDrawable="@drawable/ic_launcher"
-			app:UnCheckedDrawable="@drawable/ic_launcher" />
+			app:CheckedDrawable="@drawable/day_circle" />
 
 		<com.enjoyalarm.view.ToggleView
 			android:id="@+id/tue_tgv"
@@ -96,8 +95,7 @@
 			android:layout_weight="1"
 			android:gravity="center"
 			android:text="@string/tuesday"
-			app:CheckedDrawable="@drawable/ic_launcher"
-			app:UnCheckedDrawable="@drawable/ic_launcher" />
+			app:CheckedDrawable="@drawable/day_circle" />
 
 		<com.enjoyalarm.view.ToggleView
 			android:id="@+id/wed_tgv"
@@ -106,8 +104,7 @@
 			android:layout_weight="1"
 			android:gravity="center"
 			android:text="@string/wednesday"
-			app:CheckedDrawable="@drawable/ic_launcher"
-			app:UnCheckedDrawable="@drawable/ic_launcher" />
+			app:CheckedDrawable="@drawable/day_circle" />
 
 		<com.enjoyalarm.view.ToggleView
 			android:id="@+id/thu_tgv"
@@ -116,8 +113,7 @@
 			android:layout_weight="1"
 			android:gravity="center"
 			android:text="@string/thursday"
-			app:CheckedDrawable="@drawable/ic_launcher"
-			app:UnCheckedDrawable="@drawable/ic_launcher" />
+			app:CheckedDrawable="@drawable/day_circle" />
 
 		<com.enjoyalarm.view.ToggleView
 			android:id="@+id/fri_tgv"
@@ -126,8 +122,7 @@
 			android:layout_weight="1"
 			android:gravity="center"
 			android:text="@string/friday"
-			app:CheckedDrawable="@drawable/ic_launcher"
-			app:UnCheckedDrawable="@drawable/ic_launcher" />
+			app:CheckedDrawable="@drawable/day_circle" />
 
 		<com.enjoyalarm.view.ToggleView
 			android:id="@+id/sat_tgv"
@@ -136,8 +131,7 @@
 			android:layout_weight="1"
 			android:gravity="center"
 			android:text="@string/saturday"
-			app:CheckedDrawable="@drawable/ic_launcher"
-			app:UnCheckedDrawable="@drawable/ic_launcher" />
+			app:CheckedDrawable="@drawable/day_circle" />
 
 		<com.enjoyalarm.view.ToggleView
 			android:id="@+id/sun_tgv"
@@ -146,8 +140,7 @@
 			android:layout_weight="1"
 			android:gravity="center"
 			android:text="@string/sunday"
-			app:CheckedDrawable="@drawable/ic_launcher"
-			app:UnCheckedDrawable="@drawable/ic_launcher" />
+			app:CheckedDrawable="@drawable/day_circle"/>
 	</LinearLayout>
 
 	<FrameLayout

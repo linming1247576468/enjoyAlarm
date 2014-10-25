@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.text.format.Time;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -44,7 +46,8 @@ public class AlarmSettingView extends ScrollView {
 	private Button[] mInputViews;
 	private int editHourOrMinute; //0.none 1.hour 2.minute
 	private boolean clearWhenClickInput;
-	
+	private Handler mHandler;
+	private int whatMessage;
 
 	/**
 	 * alarmId = -1 for setting a new alarm instead of reading from database
@@ -55,6 +58,7 @@ public class AlarmSettingView extends ScrollView {
 		mAlarmId = alarmId;
 
 		init();
+		startUpdatingRemainTime();
 	}
 
 	/**
@@ -66,8 +70,9 @@ public class AlarmSettingView extends ScrollView {
 		mAlarmId = -1;
 
 		init();
+		startUpdatingRemainTime();
 	}
-
+	
 	public TimeEntry getRemainTime() {
 		// get data from views
 		String hourString = mHourTextView.getText().toString();
@@ -79,7 +84,7 @@ public class AlarmSettingView extends ScrollView {
 		int minute = Integer.parseInt(minuteString);
 		List<Integer> days = new ArrayList<Integer>();
 		for (int i = 0; i < 7; i++) {
-			if (mDaysViews[i].isSelected()) {
+			if (mDaysViews[i].isChecked()) {
 				days.add(i);
 			}
 		}
@@ -119,7 +124,7 @@ public class AlarmSettingView extends ScrollView {
 		//days
 		List<Integer> days = new ArrayList<Integer>();
 		for (int i = 0; i < 7; i++) {
-			if (mDaysViews[i].isSelected()) {
+			if (mDaysViews[i].isChecked()) {
 				days.add(i);
 			}
 		}
@@ -162,6 +167,32 @@ public class AlarmSettingView extends ScrollView {
 		startAlarm();
 	}
 
+	
+	private void startUpdatingRemainTime() {
+		whatMessage = 0;
+		mHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				if (msg.what == whatMessage) {
+					updateRemainTime();
+				}
+			}
+		};
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				while(true) {
+					mHandler.obtainMessage(whatMessage).sendToTarget();
+					try {
+						Thread.sleep(15000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}).start();
+	}
 	
 	private void init() {
 		initViews();
@@ -219,6 +250,59 @@ public class AlarmSettingView extends ScrollView {
 		mMinuteTextView.setTextSize(ViewVariable.UNEDIT_TIME_TEXT_SIZE);
 	}
 
+	/**
+	 * 
+	 * @param mode 0.hour first  1.hour  2.minute first  3.minute  4.not editting
+	 */
+	private void changeEditTimeMode(int mode) {
+		if (editHourOrMinute == 0) {//the input is hidden
+			changeToInputMode();
+		}
+		
+		switch (mode) {
+		case 0: {
+			editHourOrMinute = 1;
+			clearWhenClickInput = true;
+			mHourTextView.setBackgroundResource(R.drawable.time_circle_full);
+			mMinuteTextView.setBackgroundDrawable(null);
+			break;
+		}
+
+		case 1: {
+			editHourOrMinute = 1;
+			clearWhenClickInput = false;
+			mHourTextView.setBackgroundResource(R.drawable.time_circle);
+			mMinuteTextView.setBackgroundDrawable(null);
+			break;
+		}
+
+		case 2: {
+			editHourOrMinute = 2;
+			clearWhenClickInput = true;
+			mHourTextView.setBackgroundDrawable(null);
+			mMinuteTextView.setBackgroundResource(R.drawable.time_circle_full);
+			break;
+		}
+
+		case 3: {
+			editHourOrMinute = 2;
+			clearWhenClickInput = false;
+			mHourTextView.setBackgroundDrawable(null);
+			mMinuteTextView.setBackgroundResource(R.drawable.time_circle);
+			break;
+		}
+		
+		case 4: {
+			editHourOrMinute = 0;
+			clearWhenClickInput = false;
+			mHourTextView.setBackgroundDrawable(null);
+			mMinuteTextView.setBackgroundDrawable(null);
+			changeToMediaMode();
+			break;
+		}
+		}
+	}
+	
 	private void setViewListeners() {
 		mRenameButton.setOnClickListener(new OnClickListener() {
 			
@@ -235,15 +319,8 @@ public class AlarmSettingView extends ScrollView {
 			
 			@Override
 			public void onClick(View v) {
-				Log.e("input visiable",mInputLayout.getVisibility()==View.VISIBLE?"visible":"gone");
 				isChanged = true;
-				if (editHourOrMinute != 1) {//first edit
-					editHourOrMinute = 1;
-					mHourTextView.setTextSize(ViewVariable.EDIT_TIME_TEXT_SIZE);
-					changeToInputMode();
-				}
-				clearWhenClickInput = true;
-				mHourTextView.setBackgroundColor(ViewVariable.TIME_TEXT_BG_COLOR_CLICK);
+				changeEditTimeMode(0);
 			}
 		});
 		
@@ -252,13 +329,7 @@ public class AlarmSettingView extends ScrollView {
 			@Override
 			public void onClick(View v) {
 				isChanged = true;
-				if (editHourOrMinute != 2) {//first edit
-					editHourOrMinute = 2;
-					mMinuteTextView.setTextSize(ViewVariable.EDIT_TIME_TEXT_SIZE);
-					changeToInputMode();
-				}
-				clearWhenClickInput = true;
-				mMinuteTextView.setBackgroundColor(ViewVariable.TIME_TEXT_BG_COLOR_CLICK);
+				changeEditTimeMode(2);
 			}
 		});
 		
@@ -269,7 +340,7 @@ public class AlarmSettingView extends ScrollView {
 				isChanged = true;
 				boolean oneSelected = false;
 				for (ToggleView t: mDaysViews) {
-					if (t != v && t.isSelected()) {
+					if (t != v && t.isChecked()) {
 						oneSelected = true;
 						break;
 					}
@@ -304,8 +375,11 @@ public class AlarmSettingView extends ScrollView {
 				String nowText = timeView.getText().toString();
 				String tag = (String)v.getTag();
 				if (clearWhenClickInput) {
-					clearWhenClickInput = false;
-					timeView.setBackgroundColor(ViewVariable.TIME_TEXT_BG_COLOR_UNCLICK);
+					if (editHourOrMinute == 1) {
+						changeEditTimeMode(1);
+					} else {
+						changeEditTimeMode(3);
+					}
 					if (!getResources().getString(R.string.tag_done).equals(tag)) {
 						nowText = "";//clear
 					}
@@ -319,10 +393,9 @@ public class AlarmSettingView extends ScrollView {
 					} else if (text.length() == 1) {
 						text.insert(0, '0');
 					}
-					timeView.setTextSize(ViewVariable.UNEDIT_TIME_TEXT_SIZE);
+					
 					timeView.setText(text);
-					changeToMediaMode();//close input layoute
-					editHourOrMinute = 0;
+					changeEditTimeMode(4);//close input
 					
 				} else if (getResources().getString(R.string.tag_back).equals(tag)) {//back
 					if (text.length() > 0) {
@@ -336,6 +409,9 @@ public class AlarmSettingView extends ScrollView {
 						if (number <= maxNumber) {
 							text.append(tag);
 							timeView.setText(text);
+						}
+						if (editHourOrMinute == 1 && text.length() == 2) {
+							changeEditTimeMode(2);
 						}
 					}
 				}
@@ -440,7 +516,7 @@ public class AlarmSettingView extends ScrollView {
 		// set remainTime
 		int suggestDay;
 		if ((suggestHour > time.hour)
-				|| (suggestHour == time.hour && suggestMinute > time.minute)) {// today
+				|| (suggestHour == time.hour && suggestMinute >= time.minute)) {// today
 			suggestDay = time.weekDay;
 		} else {// tomorrow
 			suggestDay = (time.weekDay + 1) % 7;
