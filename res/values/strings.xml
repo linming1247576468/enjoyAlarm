@@ -17,6 +17,8 @@
 	<string name="shake_way">震动</string>
 	<string name="init_encourage_words">今天是个好日子！</string>
 	<string name="init_wake_music_words">请设置闹钟铃声</string>
+	<string name="dialog_yes">确定</string>
+	<string name="dialog_no">取消</string>
 
 	<!-- input -->
 	<string name="input0">0</string>

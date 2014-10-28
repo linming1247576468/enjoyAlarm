@@ -200,7 +200,6 @@ public class WritingModel {
 	public void update(int alarmId) {
 		SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put(ModelVariable.ALARM_COLUMN1_ID, mId);
 		values.put(ModelVariable.ALARM_COLUMN2_NAME, mName);
 		values.put(ModelVariable.ALARM_COLUMN3_TIME, mTime);
 		values.put(ModelVariable.ALARM_COLUMN4_DAYS, mDays);

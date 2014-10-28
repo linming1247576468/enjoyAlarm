@@ -7,6 +7,9 @@
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="21" />
+    
+    <uses-permission 
+        android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -21,10 +24,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.enjoyalarm.AlarmWakeActivity"
-            android:label="@string/title_activity_alarm_wake" >
         </activity>
         <activity
             android:name="com.enjoyalarm.AlarmWakeActivity"

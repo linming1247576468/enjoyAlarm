@@ -3,12 +3,15 @@ package com.enjoyalarm.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.text.format.Time;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -31,7 +34,7 @@ public class AlarmSettingView extends ScrollView {
 	private Context mContext;
 	private View mMediaLayout;
 	private View mInputLayout;
-	private EditText mNameEditText;
+	private TextView mNameTextView;
 	private TextView mHourTextView;
 	private TextView mMinuteTextView;
 	private TextView mRemainTextView;
@@ -92,10 +95,11 @@ public class AlarmSettingView extends ScrollView {
 		// calculate time
 		Time time = new Time();
 		time.setToNow();
+		int nowDay = (time.weekDay + 6) % 7;
 		int nextDay = -1;
 		for (int day : days) {
-			if (((day == time.weekDay) && ((hour > time.hour) || (hour == time.hour && minute > time.minute)))
-					|| (day > time.weekDay)) {
+			if (((day == nowDay) && ((hour > time.hour) || (hour == time.hour && minute > time.minute)))
+					|| (day > nowDay)) {
 				nextDay = day;
 				break;
 			}
@@ -104,7 +108,7 @@ public class AlarmSettingView extends ScrollView {
 			nextDay = days.get(0);
 		}
 		return ViewUtil.getRemainTime(nextDay, hour, minute,
-				time.weekDay, time.hour, time.minute);
+				nowDay, time.hour, time.minute);
 	}
 	
 	/**
@@ -117,7 +121,7 @@ public class AlarmSettingView extends ScrollView {
 	public void save() {
 		WritingModel model = new WritingModel(mContext);
 		//name
-		model.setName(mNameEditText.getText().toString());
+		model.setName(mNameTextView.getText().toString());
 		//time
 		model.setTime(Integer.parseInt(mHourTextView.getText().toString()),
 				Integer.parseInt(mMinuteTextView.getText().toString()));
@@ -207,7 +211,7 @@ public class AlarmSettingView extends ScrollView {
 		//find view
 		mMediaLayout = mainLayout.findViewById(R.id.media_layout);
 		mInputLayout = mainLayout.findViewById(R.id.input_layout);
-		mNameEditText = (EditText) mainLayout.findViewById(R.id.name_et);
+		mNameTextView = (TextView) mainLayout.findViewById(R.id.name_tv);
 		mHourTextView = (TextView) mainLayout.findViewById(R.id.hour_tv);
 		mMinuteTextView = (TextView) mainLayout.findViewById(R.id.minute_tv);
 		mRemainTextView = (TextView) mainLayout
@@ -245,7 +249,6 @@ public class AlarmSettingView extends ScrollView {
 	
 	private void setViewAttrs() {
 		mInputLayout.setVisibility(View.GONE);
-		mNameEditText.setFocusable(false);
 		mHourTextView.setTextSize(ViewVariable.UNEDIT_TIME_TEXT_SIZE);
 		mMinuteTextView.setTextSize(ViewVariable.UNEDIT_TIME_TEXT_SIZE);
 	}
@@ -308,10 +311,7 @@ public class AlarmSettingView extends ScrollView {
 			
 			@Override
 			public void onClick(View v) {
-				isChanged = true;
-				if (!mNameEditText.isFocused()) {
-					mNameEditText.requestFocusFromTouch();
-				}
+				showRenameDialog();
 			}
 		});
 		
@@ -365,11 +365,11 @@ public class AlarmSettingView extends ScrollView {
 				int maxNumber;
 				if (editHourOrMinute == 1) {//hour
 					timeView = mHourTextView;
-					maxNumber = 24;
+					maxNumber = 23;
 					
 				} else {//minute
 					timeView = mMinuteTextView;
-					maxNumber = 60;
+					maxNumber = 59;
 				}
 				
 				String nowText = timeView.getText().toString();
@@ -428,7 +428,7 @@ public class AlarmSettingView extends ScrollView {
 			@Override
 			public void onClick(View v) {
 				isChanged = true;
-				if (mShakeWayToggleView.isSelected()) {
+				if (mShakeWayToggleView.isChecked()) {
 					mSoundWayToggleView.toggle();
 					enableWakeMusic(mSoundWayToggleView.isSelected());
 				}
@@ -440,7 +440,7 @@ public class AlarmSettingView extends ScrollView {
 			@Override
 			public void onClick(View v) {
 				isChanged = true;
-				if (mSoundWayToggleView.isSelected()) {
+				if (mSoundWayToggleView.isChecked()) {
 					mShakeWayToggleView.toggle();
 					shake();
 				}
@@ -492,7 +492,7 @@ public class AlarmSettingView extends ScrollView {
 				noNameAlarmsNumber++;
 			}
 		}
-		mNameEditText.setText(initNameString.replace("##",
+		mNameTextView.setText(initNameString.replace("##",
 				String.valueOf(noNameAlarmsNumber + 1)));
 
 		// set time
@@ -515,14 +515,15 @@ public class AlarmSettingView extends ScrollView {
 
 		// set remainTime
 		int suggestDay;
+		int nowDay = (time.weekDay + 6) % 7;//Monday is considered first
 		if ((suggestHour > time.hour)
 				|| (suggestHour == time.hour && suggestMinute >= time.minute)) {// today
-			suggestDay = time.weekDay;
+			suggestDay = nowDay;
 		} else {// tomorrow
-			suggestDay = (time.weekDay + 1) % 7;
+			suggestDay = (nowDay + 1) % 7;
 		}
 		TimeEntry timeEntry = ViewUtil.getRemainTime(suggestDay, suggestHour,
-				suggestMinute, time.weekDay, time.hour, time.minute);
+				suggestMinute, nowDay, time.hour, time.minute);
 		String remainTimeString;
 		if (timeEntry.day == 0) {
 			remainTimeString = getResources()
@@ -577,7 +578,7 @@ public class AlarmSettingView extends ScrollView {
 		ReadingModel model = new ReadingModel(mContext, mAlarmId);
 
 		// set name
-		mNameEditText.setText(model.getName());
+		mNameTextView.setText(model.getName());
 
 		// set time
 		String settingTime = model.getTime();
@@ -673,7 +674,8 @@ public class AlarmSettingView extends ScrollView {
 	}
 
 	private void shake() {
-		
+		Vibrator vibrator = (Vibrator) mContext.getSystemService(Service.VIBRATOR_SERVICE);
+		vibrator.vibrate(500);
 	}
 	
 	private void enableRemainTime(boolean enable) {
@@ -708,5 +710,32 @@ public class AlarmSettingView extends ScrollView {
 			}
 			mRemainTextView.setText(remainTimeString);
 		}
+	}
+
+	/**
+	 * show dialog to rename the alarm
+	 */
+	private void showRenameDialog() {
+		final EditText et = new EditText(mContext);
+		AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+										.setView(et)
+										 .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+											
+											@Override
+											public void onClick(DialogInterface dialog, int which) {
+												String newName = et.getText().toString();
+												if (newName.length() > 0 && !newName.equals(mNameTextView.getText())) {
+													isChanged = true;
+													mNameTextView.setText(newName);
+												}
+											}
+										})
+										  .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+											
+											@Override
+											public void onClick(DialogInterface dialog, int which) {
+											}
+										});
+		builder.show();
 	}
 }
