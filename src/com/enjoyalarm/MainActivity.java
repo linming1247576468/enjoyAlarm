@@ -12,7 +12,6 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         AlarmSettingView settingView = new AlarmSettingView(this, -1);
         setContentView(settingView);

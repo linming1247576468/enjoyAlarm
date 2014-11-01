@@ -3,10 +3,9 @@ package com.enjoyalarm.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
@@ -16,10 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.enjoyalarm.GetTextActivity;
 import com.enjoyalarm.model.ModelUtil;
 import com.enjoyalarm.model.ModelVariable;
 import com.enjoyalarm.model.ReadingModel;
@@ -716,26 +715,29 @@ public class AlarmSettingView extends ScrollView {
 	 * show dialog to rename the alarm
 	 */
 	private void showRenameDialog() {
-		final EditText et = new EditText(mContext);
-		AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
-										.setView(et)
-										 .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
-											
-											@Override
-											public void onClick(DialogInterface dialog, int which) {
-												String newName = et.getText().toString();
-												if (newName.length() > 0 && !newName.equals(mNameTextView.getText())) {
-													isChanged = true;
-													mNameTextView.setText(newName);
-												}
-											}
-										})
-										  .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
-											
-											@Override
-											public void onClick(DialogInterface dialog, int which) {
-											}
-										});
-		builder.show();
+		mContext.startActivity(new Intent(mContext, GetTextActivity.class));
+//		final EditText et = new EditText(mContext);
+//		AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+//										.setView(et)
+//										 .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+//											
+//											@Override
+//											public void onClick(DialogInterface dialog, int which) {
+//												String newName = et.getText().toString();
+//												if (newName.length() > 0 && !newName.equals(mNameTextView.getText())) {
+//													isChanged = true;
+//													mNameTextView.setText(newName);
+//												}
+//											}
+//										})
+//										  .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+//											
+//											@Override
+//											public void onClick(DialogInterface dialog, int which) {
+//											}
+//										});
+//		AlertDialog dialog = builder.create();
+//		dialog.getWindow().getAttributes().windowAnimations = R.style.GetTextStyle;
+//		dialog.show();
 	}
 }
