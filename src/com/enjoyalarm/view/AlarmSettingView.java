@@ -13,8 +13,13 @@ import android.text.format.Time;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -33,12 +38,16 @@ public class AlarmSettingView extends ScrollView {
 	private Context mContext;
 	private View mMediaLayout;
 	private View mInputLayout;
+	private View mGetTextLayout;
+	private View mLayerView;
+	private EditText mGetTextEditText;
 	private TextView mNameTextView;
 	private TextView mHourTextView;
 	private TextView mMinuteTextView;
 	private TextView mRemainTextView;
 	private TextView mWakeMusicTextView;
 	private TextView mEncourageWordsTextView;
+	private Button mGetTextConfirmButton;
 	private Button mRenameButton;
 	private Button mAddMediaButton;
 	private CheckBox mRepeatCheckBox;
@@ -46,7 +55,7 @@ public class AlarmSettingView extends ScrollView {
 	private ToggleView mShakeWayToggleView;
 	private ToggleView[] mDaysViews;
 	private Button[] mInputViews;
-	private int editHourOrMinute; //0.none 1.hour 2.minute
+	private int editHourOrMinute; // 0.none 1.hour 2.minute
 	private boolean clearWhenClickInput;
 	private Handler mHandler;
 	private int whatMessage;
@@ -74,12 +83,13 @@ public class AlarmSettingView extends ScrollView {
 		init();
 		startUpdatingRemainTime();
 	}
-	
+
 	public TimeEntry getRemainTime() {
 		// get data from views
 		String hourString = mHourTextView.getText().toString();
 		String minuteString = mMinuteTextView.getText().toString();
-		if (hourString.length() == 0 || minuteString.length() == 0) {// hadn't completed
+		if (hourString.length() == 0 || minuteString.length() == 0) {// hadn't
+																		// completed
 			return null;
 		}
 		int hour = Integer.parseInt(hourString);
@@ -106,25 +116,25 @@ public class AlarmSettingView extends ScrollView {
 		if (nextDay == -1) {// the closely next day is in next week
 			nextDay = days.get(0);
 		}
-		return ViewUtil.getRemainTime(nextDay, hour, minute,
-				nowDay, time.hour, time.minute);
+		return ViewUtil.getRemainTime(nextDay, hour, minute, nowDay, time.hour,
+				time.minute);
 	}
-	
+
 	/**
 	 * @return if user had touch the settings
 	 */
 	public boolean isChanged() {
 		return isChanged;
 	}
-	
+
 	public void save() {
 		WritingModel model = new WritingModel(mContext);
-		//name
+		// name
 		model.setName(mNameTextView.getText().toString());
-		//time
+		// time
 		model.setTime(Integer.parseInt(mHourTextView.getText().toString()),
 				Integer.parseInt(mMinuteTextView.getText().toString()));
-		//days
+		// days
 		List<Integer> days = new ArrayList<Integer>();
 		for (int i = 0; i < 7; i++) {
 			if (mDaysViews[i].isChecked()) {
@@ -132,9 +142,9 @@ public class AlarmSettingView extends ScrollView {
 			}
 		}
 		model.setDays(days);
-		//repeated
+		// repeated
 		model.setRepeated(mRepeatCheckBox.isChecked());
-		//wake way
+		// wake way
 		String wakeWay;
 		if (mSoundWayToggleView.isSelected()) {
 			if (mShakeWayToggleView.isSelected()) {
@@ -146,14 +156,13 @@ public class AlarmSettingView extends ScrollView {
 			wakeWay = ModelVariable.ALARM_WAKE_WAY_SHAKE;
 		}
 		model.setWakeWay(wakeWay);
-		//wake music
+		// wake music
 		model.setWakeMusicUri(mWakeMusicTextView.getText().toString());
-		//encourage words
+		// encourage words
 		model.setText(mEncourageWordsTextView.getText().toString());
-		//media
-		
-		
-		//save
+		// media
+
+		// save
 		if (mAlarmId == -1) {
 			model.createAndSave();
 		} else {
@@ -162,15 +171,14 @@ public class AlarmSettingView extends ScrollView {
 	}
 
 	public void startAlarm() {
-		
+
 	}
-	
+
 	public void saveAndStartAlarm() {
 		save();
 		startAlarm();
 	}
 
-	
 	private void startUpdatingRemainTime() {
 		whatMessage = 0;
 		mHandler = new Handler() {
@@ -182,10 +190,10 @@ public class AlarmSettingView extends ScrollView {
 			}
 		};
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				while(true) {
+				while (true) {
 					mHandler.obtainMessage(whatMessage).sendToTarget();
 					try {
 						Thread.sleep(15000);
@@ -196,7 +204,7 @@ public class AlarmSettingView extends ScrollView {
 			}
 		}).start();
 	}
-	
+
 	private void init() {
 		initViews();
 		alarmSettings();
@@ -206,8 +214,9 @@ public class AlarmSettingView extends ScrollView {
 		ViewGroup mainLayout = (ViewGroup) inflate(mContext,
 				R.layout.alarm_setting_layout, null);
 		addView(mainLayout);
+		setFillViewport(true);
 
-		//find view
+		// find view
 		mMediaLayout = mainLayout.findViewById(R.id.media_layout);
 		mInputLayout = mainLayout.findViewById(R.id.input_layout);
 		mNameTextView = (TextView) mainLayout.findViewById(R.id.name_tv);
@@ -233,34 +242,47 @@ public class AlarmSettingView extends ScrollView {
 			mDaysViews[i] = (ToggleView) mainLayout.findViewById(ids[i]);
 		}
 		mInputViews = new Button[12];
-		ids = new int[] { R.id.input0, R.id.input1, R.id.input2, R.id.input3, R.id.input4,
-				R.id.input5, R.id.input6, R.id.input7, R.id.input8, R.id.input9,
-				R.id.input_back, R.id.input_done
-		};
+		ids = new int[] { R.id.input0, R.id.input1, R.id.input2, R.id.input3,
+				R.id.input4, R.id.input5, R.id.input6, R.id.input7,
+				R.id.input8, R.id.input9, R.id.input_back, R.id.input_done };
 		for (int i = 0; i < 12; i++) {
 			mInputViews[i] = (Button) mainLayout.findViewById(ids[i]);
 		}
-		
-		//set something
+		mGetTextLayout = mainLayout.findViewById(R.id.get_text_layout);
+		mLayerView = mainLayout.findViewById(R.id.layer);
+		mGetTextEditText = (EditText) mainLayout.findViewById(R.id.get_text_et);
+		mGetTextConfirmButton = (Button) mainLayout
+				.findViewById(R.id.get_text_confirm_bt);
+
+		// set something
 		setViewAttrs();
 		setViewListeners();
 	}
+
+	public void hideGetTextView() {
+		mGetTextLayout.setVisibility(View.GONE);
+		mLayerView.setVisibility(View.GONE);
+	}
+	
 	
 	private void setViewAttrs() {
+		
 		mInputLayout.setVisibility(View.GONE);
+		mLayerView.setBackgroundColor(ViewVariable.ARGB_GET_TEXT_LAYER);
 		mHourTextView.setTextSize(ViewVariable.UNEDIT_TIME_TEXT_SIZE);
 		mMinuteTextView.setTextSize(ViewVariable.UNEDIT_TIME_TEXT_SIZE);
 	}
 
 	/**
 	 * 
-	 * @param mode 0.hour first  1.hour  2.minute first  3.minute  4.not editting
+	 * @param mode
+	 *            0.hour first 1.hour 2.minute first 3.minute 4.not editting
 	 */
 	private void changeEditTimeMode(int mode) {
-		if (editHourOrMinute == 0) {//the input is hidden
+		if (editHourOrMinute == 0) {// the input is hidden
 			changeToInputMode();
 		}
-		
+
 		switch (mode) {
 		case 0: {
 			editHourOrMinute = 1;
@@ -293,7 +315,7 @@ public class AlarmSettingView extends ScrollView {
 			mMinuteTextView.setBackgroundResource(R.drawable.time_circle);
 			break;
 		}
-		
+
 		case 4: {
 			editHourOrMinute = 0;
 			clearWhenClickInput = false;
@@ -304,105 +326,228 @@ public class AlarmSettingView extends ScrollView {
 		}
 		}
 	}
-	
-	private void setViewListeners() {
-		mRenameButton.setOnClickListener(new OnClickListener() {
-			
+
+	private int getTextMode;
+
+	/**
+	 * 
+	 * @param mode
+	 *            0.hidden 1.get text for name 2.get text for encourage words
+	 */
+	private void changeGetTextMode(int mode) {
+		getTextMode = mode;
+
+		switch (mode) {
+		case 0: {
+			closeGetTextWindow();
+			break;
+		}
+
+		case 1: {
+			openGetTextWindow();
+			String name = mNameTextView.getText().toString();
+			mGetTextEditText.setText(name);
+			mGetTextEditText.setSelection(0, name.length());
+			break;
+		}
+
+		case 2: {
+			openGetTextWindow();
+			String word = mEncourageWordsTextView.getText().toString();
+			mGetTextEditText.setText(word);
+			mGetTextEditText.setSelection(0, word.length());
+			break;
+		}
+		}
+	}
+
+	private void handleGetTextResult(String result) {
+		switch (getTextMode) {
+		// set name
+		case 1: {
+			if (result.length() > 0) {// if input nothing, then remain the old
+										// name
+				mNameTextView.setText(result);
+			}
+			break;
+		}
+
+		// set encourage words
+		case 2: {
+			mEncourageWordsTextView.setText(result);
+			break;
+		}
+		}
+	}
+
+	private void openGetTextWindow() {
+		mGetTextEditText.requestFocus();
+		mGetTextLayout.setVisibility(View.VISIBLE);
+		mLayerView.setVisibility(View.VISIBLE);
+		Animation animation1 = AnimationUtils.loadAnimation(mContext,
+				R.anim.get_text_slide_in);
+		Animation animation2 = AnimationUtils.loadAnimation(mContext,
+				R.anim.get_text_layer_in);
+		animation1.setAnimationListener(new AnimationListener() {
+
 			@Override
-			public void onClick(View v) {
-				showRenameDialog();
+			public void onAnimationStart(Animation animation) {
+
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				
 			}
 		});
-		
+		mGetTextLayout.startAnimation(animation1);
+		mLayerView.startAnimation(animation2);
+
+		// open im
+		InputMethodManager im = (InputMethodManager) mContext
+				.getSystemService(Service.INPUT_METHOD_SERVICE);
+		im.showSoftInput(mGetTextEditText, InputMethodManager.SHOW_IMPLICIT);
+	}
+
+	private void closeGetTextWindow() {
+		mGetTextLayout.setVisibility(View.GONE);
+		mLayerView.setVisibility(View.GONE);
+		mGetTextEditText.clearFocus();
+		Animation animation1 = AnimationUtils.loadAnimation(mContext,
+				R.anim.get_text_slide_out);
+		Animation animation2 = AnimationUtils.loadAnimation(mContext,
+				R.anim.get_text_layer_out);
+		animation1.setAnimationListener(new AnimationListener() {
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				
+			}
+		});
+		mGetTextLayout.startAnimation(animation1);
+		mLayerView.startAnimation(animation2);
+
+		// close im
+		InputMethodManager im = (InputMethodManager) mContext
+				.getSystemService(Service.INPUT_METHOD_SERVICE);
+		im.hideSoftInputFromWindow(mGetTextEditText.getWindowToken(),
+				InputMethodManager.HIDE_NOT_ALWAYS);
+	}
+
+	private void setViewListeners() {
+		mRenameButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+//				changeGetTextMode(1);
+				//TODO
+				mContext.startActivity(new Intent(mContext,GetTextActivity.class));
+			}
+		});
+
 		mHourTextView.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				isChanged = true;
 				changeEditTimeMode(0);
 			}
 		});
-		
+
 		mMinuteTextView.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				isChanged = true;
 				changeEditTimeMode(2);
 			}
 		});
-		
+
 		OnClickListener daysListener = new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				isChanged = true;
 				boolean oneSelected = false;
-				for (ToggleView t: mDaysViews) {
+				for (ToggleView t : mDaysViews) {
 					if (t != v && t.isChecked()) {
 						oneSelected = true;
 						break;
 					}
 				}
-				
+
 				if (oneSelected) {
-					((ToggleView)v).toggle();
+					((ToggleView) v).toggle();
 				}
-				
+
 				updateRemainTime();
 			}
 		};
-		for(View dayView: mDaysViews) {
+		for (View dayView : mDaysViews) {
 			dayView.setOnClickListener(daysListener);
 		}
-		
+
 		OnClickListener inputListener = new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				TextView timeView;
 				int maxNumber;
-				if (editHourOrMinute == 1) {//hour
+				if (editHourOrMinute == 1) {// hour
 					timeView = mHourTextView;
 					maxNumber = 23;
-					
-				} else {//minute
+
+				} else {// minute
 					timeView = mMinuteTextView;
 					maxNumber = 59;
 				}
-				
+
 				String nowText = timeView.getText().toString();
-				String tag = (String)v.getTag();
+				String tag = (String) v.getTag();
 				if (clearWhenClickInput) {
 					if (editHourOrMinute == 1) {
 						changeEditTimeMode(1);
 					} else {
 						changeEditTimeMode(3);
 					}
-					if (!getResources().getString(R.string.tag_done).equals(tag)) {
-						nowText = "";//clear
+					if (!getResources().getString(R.string.tag_done)
+							.equals(tag)) {
+						nowText = "";// clear
 					}
 				}
 				StringBuilder text = new StringBuilder(nowText);
-				
-				if (getResources().getString(R.string.tag_done).equals(tag)) {//done
+
+				if (getResources().getString(R.string.tag_done).equals(tag)) {// done
 					if (text.length() == 0) {
 						text.append("00");
-						
+
 					} else if (text.length() == 1) {
 						text.insert(0, '0');
 					}
-					
+
 					timeView.setText(text);
-					changeEditTimeMode(4);//close input
-					
-				} else if (getResources().getString(R.string.tag_back).equals(tag)) {//back
+					changeEditTimeMode(4);// close input
+
+				} else if (getResources().getString(R.string.tag_back).equals(
+						tag)) {// back
 					if (text.length() > 0) {
 						text.deleteCharAt(text.length() - 1);
 					}
 					timeView.setText(text);
-					
-				} else {//number
+
+				} else {// number
 					if (text.length() < 2) {
 						int number = Integer.parseInt(text.toString() + tag);
 						if (number <= maxNumber) {
@@ -414,63 +559,82 @@ public class AlarmSettingView extends ScrollView {
 						}
 					}
 				}
-				
+
 				updateRemainTime();
 			}
 		};
-		for (View inputView: mInputViews) {
+		for (View inputView : mInputViews) {
 			inputView.setOnClickListener(inputListener);
 		}
-		
+
 		mSoundWayToggleView.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				isChanged = true;
 				if (mShakeWayToggleView.isChecked()) {
+					isChanged = true;
 					mSoundWayToggleView.toggle();
 					enableWakeMusic(mSoundWayToggleView.isSelected());
 				}
 			}
 		});
-		
+
 		mShakeWayToggleView.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				isChanged = true;
 				if (mSoundWayToggleView.isChecked()) {
+					isChanged = true;
 					mShakeWayToggleView.toggle();
 					shake();
 				}
 			}
 		});
-		
+
 		mWakeMusicTextView.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				isChanged = true;
 			}
 		});
-		
+
 		mEncourageWordsTextView.setOnClickListener(new OnClickListener() {
-			
+
+			@Override
+			public void onClick(View v) {
+				isChanged = true;
+				changeGetTextMode(2);
+			}
+		});
+
+		mAddMediaButton.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				isChanged = true;
 			}
 		});
-		
-		mAddMediaButton.setOnClickListener(new OnClickListener() {
-			
+
+		mGetTextConfirmButton.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				isChanged = true;
+				String result = mGetTextEditText.getText().toString();
+				handleGetTextResult(result);
+				changeGetTextMode(0);
+			}
+		});
+
+		mLayerView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				changeGetTextMode(0);
 			}
 		});
 	}
-	
+
 	private void alarmSettings() {
 		if (mAlarmId == -1) {// setting suggest data
 			settingFromSuggestion();
@@ -514,7 +678,7 @@ public class AlarmSettingView extends ScrollView {
 
 		// set remainTime
 		int suggestDay;
-		int nowDay = (time.weekDay + 6) % 7;//Monday is considered first
+		int nowDay = (time.weekDay + 6) % 7;// Monday is considered first
 		if ((suggestHour > time.hour)
 				|| (suggestHour == time.hour && suggestMinute >= time.minute)) {// today
 			suggestDay = nowDay;
@@ -560,7 +724,8 @@ public class AlarmSettingView extends ScrollView {
 		mWakeMusicTextView.setText(musicName);
 
 		// set encourage words
-		datas = ModelUtil.getSuggestData(mContext, ModelVariable.DATA_TYPE_TEXT);
+		datas = ModelUtil
+				.getSuggestData(mContext, ModelVariable.DATA_TYPE_TEXT);
 		String text;
 		if (datas.size() == 0) {
 			text = getResources().getString(R.string.init_encourage_words);
@@ -627,38 +792,38 @@ public class AlarmSettingView extends ScrollView {
 
 		// set wake buttons
 		String wakeWay = model.getWakeWay();
-		if (ModelVariable.ALARM_WAKE_WAY_SOUND.equals(wakeWay)) {//sound
+		if (ModelVariable.ALARM_WAKE_WAY_SOUND.equals(wakeWay)) {// sound
 			mSoundWayToggleView.setChecked(true);
 			enableWakeMusic(true);
-			
-		} else if (ModelVariable.ALARM_WAKE_WAY_SHAKE.equals(wakeWay)) {//shake
+
+		} else if (ModelVariable.ALARM_WAKE_WAY_SHAKE.equals(wakeWay)) {// shake
 			mShakeWayToggleView.setChecked(true);
 			enableWakeMusic(false);
-			
-		} else {//both
+
+		} else {// both
 			mSoundWayToggleView.setChecked(true);
 			mShakeWayToggleView.setChecked(true);
 			enableWakeMusic(true);
 		}
-		
-		//set wake music
+
+		// set wake music
 		String musicUri = model.getMusicUri();
 		String musicName = ViewUtil.getMusicName(musicUri);
 		mWakeMusicTextView.setText(musicName);
-		
-		//set text
+
+		// set text
 		String text = model.getText();
 		mEncourageWordsTextView.setText(text);
-		
-		//extra data
+
+		// extra data
 
 	}
 
 	private void enableWakeMusic(boolean enable) {
 		if (enable) {
-			
+
 		} else {
-			
+
 		}
 	}
 
@@ -666,25 +831,26 @@ public class AlarmSettingView extends ScrollView {
 		mMediaLayout.setVisibility(View.VISIBLE);
 		mInputLayout.setVisibility(View.GONE);
 	}
-	
+
 	private void changeToInputMode() {
 		mMediaLayout.setVisibility(View.GONE);
 		mInputLayout.setVisibility(View.VISIBLE);
 	}
 
 	private void shake() {
-		Vibrator vibrator = (Vibrator) mContext.getSystemService(Service.VIBRATOR_SERVICE);
+		Vibrator vibrator = (Vibrator) mContext
+				.getSystemService(Service.VIBRATOR_SERVICE);
 		vibrator.vibrate(500);
 	}
-	
+
 	private void enableRemainTime(boolean enable) {
 		if (enable) {
-			
+
 		} else {
-			
+
 		}
 	}
-	
+
 	/**
 	 * update time according to hour,minute and day views
 	 */
@@ -692,7 +858,7 @@ public class AlarmSettingView extends ScrollView {
 		TimeEntry timeEntry = getRemainTime();
 		if (timeEntry == null) {
 			enableRemainTime(false);
-			
+
 		} else {
 			enableRemainTime(true);
 			String remainTimeString;
@@ -711,33 +877,4 @@ public class AlarmSettingView extends ScrollView {
 		}
 	}
 
-	/**
-	 * show dialog to rename the alarm
-	 */
-	private void showRenameDialog() {
-		mContext.startActivity(new Intent(mContext, GetTextActivity.class));
-//		final EditText et = new EditText(mContext);
-//		AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
-//										.setView(et)
-//										 .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
-//											
-//											@Override
-//											public void onClick(DialogInterface dialog, int which) {
-//												String newName = et.getText().toString();
-//												if (newName.length() > 0 && !newName.equals(mNameTextView.getText())) {
-//													isChanged = true;
-//													mNameTextView.setText(newName);
-//												}
-//											}
-//										})
-//										  .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
-//											
-//											@Override
-//											public void onClick(DialogInterface dialog, int which) {
-//											}
-//										});
-//		AlertDialog dialog = builder.create();
-//		dialog.getWindow().getAttributes().windowAnimations = R.style.GetTextStyle;
-//		dialog.show();
-	}
 }

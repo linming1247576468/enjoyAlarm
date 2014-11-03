@@ -12,4 +12,6 @@ public class ViewVariable {
 	 */
 	final static int TIME_TEXT_BG_COLOR_CLICK = Color.BLUE;
 	final static int TIME_TEXT_BG_COLOR_UNCLICK = Color.WHITE;
+	
+	final static int ARGB_GET_TEXT_LAYER = Color.parseColor("#77000000");
 }
