@@ -1,29 +1,28 @@
 package com.enjoyalarm;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.ViewGroup.LayoutParams;
 
-import com.enjoyalarm.view.AlarmSettingView;
+import com.enjoyalarm.view.AlarmSettingViewManager;
 
 public class MainActivity extends Activity {
 	
-	AlarmSettingView settingView;
+	AlarmSettingViewManager alarmSettingViewManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		settingView = new AlarmSettingView(this, -1);
-		setContentView(settingView);
+		alarmSettingViewManager = new AlarmSettingViewManager(this, -1);
+		setContentView(alarmSettingViewManager.getMainView());
 		
-		
-	}
-
-	@Override
-	public void onAttachedToWindow() {
-		// TODO Auto-generated method stub
-		super.onAttachedToWindow();
-		settingView.hideGetTextView();
 	}
 	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		alarmSettingViewManager.onActivityResult(requestCode, resultCode, data);
+	}
+
 }

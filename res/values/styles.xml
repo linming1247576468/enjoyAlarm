@@ -19,13 +19,13 @@
 		<item name="android:windowNoTitle">true</item>
 	</style>
 
-	<style name="MyTheme" parent="android:Theme.Translucent">
+	<style name="GetTextTheme" parent="android:Theme.Translucent">
 		<item name="android:windowNoTitle">true</item>
 	</style>
 
-	<style name="GetTextStyle">
-		<item name="@android:activityOpenEnterAnimation">@anim/get_text_slide_in</item>
-		<item name="@android:activityCloseExitAnimation">@anim/get_text_slide_out</item>
+	<style name="GetTextEmptyAnim">
+		<item name="@android:activityOpenEnterAnimation">@null</item>
+		<item name="@android:activityCloseExitAnimation">@null</item>
 	</style>
 
 </resources>

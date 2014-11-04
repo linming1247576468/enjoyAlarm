@@ -29,7 +29,8 @@
             android:label="@string/title_activity_alarm_wake" >
         </activity>
         <activity
-            android:theme="@style/MyTheme"
+            android:windowSoftInputMode="stateVisible"
+            android:theme="@style/GetTextTheme"
             android:name="com.enjoyalarm.GetTextActivity"
             android:label="@string/title_activity_get_text" >
         </activity>
