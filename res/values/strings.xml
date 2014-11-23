@@ -6,6 +6,8 @@
     <string name="repeat">每周重复</string>
     <string name="remain_time_dh">剩余##天**小时</string>
     <string name="remain_time_hm">剩余##小时**分钟</string>
+    <string name="toast_show_remain_time_dh">闹钟将在##天**小时后叫醒您</string>
+    <string name="toast_show_remain_time_hm">闹钟将在##小时**分钟后叫醒您</string>
     <string name="monday">一</string>
     <string name="tuesday">二</string>
     <string name="wednesday">三</string>
@@ -19,6 +21,20 @@
     <string name="init_wake_music_words">请设置闹钟铃声</string>
     <string name="dialog_yes">确定</string>
     <string name="dialog_no">取消</string>
+    <string-array name="exit_words1">
+        <item>保</item>
+        <item>存</item>
+        <item>并</item>
+        <item>退</item>
+        <item>出</item>
+    </string-array>
+    <string-array name="exit_words2">
+        <item>退</item>
+        <item>出</item>
+        <item>并</item>
+        <item>保</item>
+        <item>存</item>
+    </string-array>
 
     <!-- input -->
     <string name="input0">0</string>

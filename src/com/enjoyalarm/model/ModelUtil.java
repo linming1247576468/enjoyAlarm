@@ -19,7 +19,7 @@ import android.util.Log;
  */
 public class ModelUtil {
 
-	private static boolean debug = true;
+	private static boolean debug = false;
 
 	static class BasicInfoUnit {
 		int id;
@@ -194,7 +194,9 @@ public class ModelUtil {
 			db.close();
 			return time;
 		}
-
+		
+		cursor.close();
+		db.close();
 		return null;
 	}
 

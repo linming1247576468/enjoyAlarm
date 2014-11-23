@@ -31,10 +31,10 @@ public class AlarmSettingViewManager {
 	public static final int REQUEST_CODE_GET_TEXT = 1;
 	public static final String GET_TEXT_EXTRA_SOURCE = "GET_TEXT_EXTRA_SOURCE";
 	public static final String GET_TEXT_EXTRA_RESULT = "GET_TEXT_EXTRA_RESULT";
-	private int getTextType;
+	private int mGetTextType;
 	private Activity mActivity;
 	private ViewGroup mMainView;
-	private boolean isChanged;
+	private boolean mIsChanged;
 	private int mAlarmId;
 	private View mMediaLayout;
 	private View mInputLayout;
@@ -51,10 +51,10 @@ public class AlarmSettingViewManager {
 	private ToggleView mShakeWayToggleView;
 	private ToggleView[] mDaysViews;
 	private Button[] mInputViews;
-	private int editHourOrMinute; // 0.none 1.hour 2.minute
-	private boolean clearWhenClickInput;
+	private int mEditHourOrMinute; // 0.none 1.hour 2.minute
+	private boolean mClearWhenClickInput;
 	private Handler mHandler;
-	private int whatMessage;
+	private int mWhatMessage;
 
 	
 	/**
@@ -95,7 +95,7 @@ public class AlarmSettingViewManager {
 		int nowDay = (time.weekDay + 6) % 7;
 		int nextDay = -1;
 		for (int day : days) {
-			if (((day == nowDay) && ((hour > time.hour) || (hour == time.hour && minute > time.minute)))
+			if (((day == nowDay) && ((hour > time.hour) || (hour == time.hour && minute >= time.minute)))
 					|| (day > nowDay)) {
 				nextDay = day;
 				break;
@@ -111,8 +111,8 @@ public class AlarmSettingViewManager {
 	/**
 	 * @return if user had touch the settings
 	 */
-	public boolean isChanged() {
-		return isChanged;
+	public boolean mIsChanged() {
+		return mIsChanged;
 	}
 
 	public void save() {
@@ -173,31 +173,40 @@ public class AlarmSettingViewManager {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_CODE_GET_TEXT && resultCode == Activity.RESULT_OK) {
 			String result = data.getStringExtra(GET_TEXT_EXTRA_RESULT);
-			if (getTextType == 0) {// set name
+			if (mGetTextType == 0) {// set name
 				if (result.length() > 0 ) {// if input nothing, then remain the old name
 					if (!mNameTextView.getText().toString().equals(result)) {
 						mNameTextView.setText(result);
-						isChanged = true;
+						mIsChanged = true;
 					}
 				}
 				
-			} else if (getTextType == 1) {//set encourage words
+			} else if (mGetTextType == 1) {//set encourage words
 				if (!mEncourageWordsTextView.getText().toString().equals(result)) {
 					mEncourageWordsTextView.setText(result);
-					isChanged = true;
+					mIsChanged = true;
 				}
 			}
 		}
 	}
 	
+	/**
+	 * replace all data for alarm from an existing alarmId
+	 * @param newId
+	 */
+	public void replaceAlarm(int newId) {
+		mAlarmId = newId;
+		settingFromDatabase();
+	}
+	
 	
 	
 	private void startUpdatingRemainTime() {
-		whatMessage = 0;
+		mWhatMessage = 0;
 		mHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				if (msg.what == whatMessage) {
+				if (msg.what == mWhatMessage) {
 					updateRemainTime();
 				}
 			}
@@ -207,7 +216,7 @@ public class AlarmSettingViewManager {
 			@Override
 			public void run() {
 				while (true) {
-					mHandler.obtainMessage(whatMessage).sendToTarget();
+					mHandler.obtainMessage(mWhatMessage).sendToTarget();
 					try {
 						Thread.sleep(15000);
 					} catch (InterruptedException e) {
@@ -276,46 +285,46 @@ public class AlarmSettingViewManager {
 	 *            0.hour first 1.hour 2.minute first 3.minute 4.not editting
 	 */
 	private void changeEditTimeState(int state) {
-		if (editHourOrMinute == 0) {// the input is hidden
+		if (mEditHourOrMinute == 0) {// the input is hidden
 			changeToInputMode();
 		}
 
 		switch (state) {
 		case 0: {
-			editHourOrMinute = 1;
-			clearWhenClickInput = true;
+			mEditHourOrMinute = 1;
+			mClearWhenClickInput = true;
 			mHourTextView.setBackgroundResource(R.drawable.time_circle_full);
 			mMinuteTextView.setBackgroundDrawable(null);
 			break;
 		}
 
 		case 1: {
-			editHourOrMinute = 1;
-			clearWhenClickInput = false;
+			mEditHourOrMinute = 1;
+			mClearWhenClickInput = false;
 			mHourTextView.setBackgroundResource(R.drawable.time_circle);
 			mMinuteTextView.setBackgroundDrawable(null);
 			break;
 		}
 
 		case 2: {
-			editHourOrMinute = 2;
-			clearWhenClickInput = true;
+			mEditHourOrMinute = 2;
+			mClearWhenClickInput = true;
 			mHourTextView.setBackgroundDrawable(null);
 			mMinuteTextView.setBackgroundResource(R.drawable.time_circle_full);
 			break;
 		}
 
 		case 3: {
-			editHourOrMinute = 2;
-			clearWhenClickInput = false;
+			mEditHourOrMinute = 2;
+			mClearWhenClickInput = false;
 			mHourTextView.setBackgroundDrawable(null);
 			mMinuteTextView.setBackgroundResource(R.drawable.time_circle);
 			break;
 		}
 
 		case 4: {
-			editHourOrMinute = 0;
-			clearWhenClickInput = false;
+			mEditHourOrMinute = 0;
+			mClearWhenClickInput = false;
 			mHourTextView.setBackgroundDrawable(null);
 			mMinuteTextView.setBackgroundDrawable(null);
 			changeToMediaMode();
@@ -345,7 +354,7 @@ public class AlarmSettingViewManager {
 	 * @param type   0.get text for name 1.get text for encourage words
 	 */
 	private void openGetTextActivity(int type) {
-		getTextType = type;
+		mGetTextType = type;
 		String data = null;
 		if (type == 0) {
 			data = mNameTextView.getText().toString();
@@ -372,7 +381,7 @@ public class AlarmSettingViewManager {
 
 			@Override
 			public void onClick(View v) {
-				isChanged = true;
+				mIsChanged = true;
 				changeEditTimeState(0);
 			}
 		});
@@ -381,7 +390,7 @@ public class AlarmSettingViewManager {
 
 			@Override
 			public void onClick(View v) {
-				isChanged = true;
+				mIsChanged = true;
 				changeEditTimeState(2);
 			}
 		});
@@ -390,7 +399,7 @@ public class AlarmSettingViewManager {
 
 			@Override
 			public void onClick(View v) {
-				isChanged = true;
+				mIsChanged = true;
 				boolean oneSelected = false;
 				for (ToggleView t : mDaysViews) {
 					if (t != v && t.isChecked()) {
@@ -416,7 +425,7 @@ public class AlarmSettingViewManager {
 			public void onClick(View v) {
 				TextView timeView;
 				int maxNumber;
-				if (editHourOrMinute == 1) {// hour
+				if (mEditHourOrMinute == 1) {// hour
 					timeView = mHourTextView;
 					maxNumber = 23;
 
@@ -427,8 +436,8 @@ public class AlarmSettingViewManager {
 
 				String nowText = timeView.getText().toString();
 				String tag = (String) v.getTag();
-				if (clearWhenClickInput) {
-					if (editHourOrMinute == 1) {
+				if (mClearWhenClickInput) {
+					if (mEditHourOrMinute == 1) {
 						changeEditTimeState(1);
 					} else {
 						changeEditTimeState(3);
@@ -458,7 +467,7 @@ public class AlarmSettingViewManager {
 							text.append(tag);
 							timeView.setText(text);
 						}
-						if (editHourOrMinute == 1 && text.length() == 2) {
+						if (mEditHourOrMinute == 1 && text.length() == 2) {
 							changeEditTimeState(2);
 						}
 					}
@@ -476,7 +485,7 @@ public class AlarmSettingViewManager {
 			@Override
 			public void onClick(View v) {
 				if (mShakeWayToggleView.isChecked()) {
-					isChanged = true;
+					mIsChanged = true;
 					mSoundWayToggleView.toggle();
 					enableWakeMusic(mSoundWayToggleView.isSelected());
 				}
@@ -488,7 +497,7 @@ public class AlarmSettingViewManager {
 			@Override
 			public void onClick(View v) {
 				if (mSoundWayToggleView.isChecked()) {
-					isChanged = true;
+					mIsChanged = true;
 					mShakeWayToggleView.toggle();
 					shake();
 				}
@@ -499,7 +508,7 @@ public class AlarmSettingViewManager {
 
 			@Override
 			public void onClick(View v) {
-				isChanged = true;
+				mIsChanged = true;
 			}
 		});
 
@@ -515,7 +524,7 @@ public class AlarmSettingViewManager {
 
 			@Override
 			public void onClick(View v) {
-				isChanged = true;
+				mIsChanged = true;
 			}
 		});
 

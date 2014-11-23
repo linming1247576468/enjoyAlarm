@@ -1,5 +1,9 @@
 package com.enjoyalarm.view;
 
+import android.content.Context;
+
+import com.scut.enjoyalarm.R;
+
 public class ViewUtil {
 
 	/**
@@ -41,4 +45,22 @@ public class ViewUtil {
 	public static String getCallingMusicName() {
 		return null;
 	}
+
+	public static String getRemainTimeForToast(Context context, TimeEntry timeEntry) {
+		String remainTimeString;
+		if (timeEntry.day == 0) {
+			remainTimeString = context.getResources()
+					.getString(R.string.toast_show_remain_time_hm)
+					.replace("##", String.valueOf(timeEntry.hour))
+					.replace("**", String.valueOf(timeEntry.minute));
+		} else {
+			remainTimeString = context.getResources()
+					.getString(R.string.toast_show_remain_time_dh)
+					.replace("##", String.valueOf(timeEntry.day))
+					.replace("**", String.valueOf(timeEntry.hour));
+		}
+		
+		return remainTimeString;
+	}
+	
 }
