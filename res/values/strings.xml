@@ -21,6 +21,7 @@
     <string name="init_wake_music_words">请设置闹钟铃声</string>
     <string name="dialog_yes">确定</string>
     <string name="dialog_no">取消</string>
+    <string name="has_save">已保存</string>
     <string-array name="exit_words1">
         <item>保</item>
         <item>存</item>

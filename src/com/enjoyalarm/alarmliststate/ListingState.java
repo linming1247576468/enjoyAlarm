@@ -42,6 +42,27 @@ public class ListingState extends State {
 		initComponents();
 	}
 
+	/**
+	 * 
+	 * @param initPositionY		must be relative
+	 * @param components	top,bottom
+	 */
+	public ListingState(ViewControlInterface controlInterface,
+			Bitmap foregroundBitmap, float initPositionY, Component[] components) {
+		super(controlInterface);
+
+		mBitmap = foregroundBitmap;
+		mY = -1;
+		mPositionY = initPositionY;
+		mViewWidth = controlInterface.getViewWidth();
+		mViewHeight = controlInterface.getViewHeight();
+		mListingLimit = mViewHeight * StatePeriod.LIST_LIMIT;
+		mPositionYLimit = mViewHeight * StatePeriod.LIST_FACTOR2;
+
+		mTopBitmapComponent = components[0];
+		mBottomBitmapComponent = components[1];
+	}
+	
 	private void initComponents() {
 		mTopBitmapComponent = new BitmapComponent(mBitmap, mViewWidth,
 				mViewHeight, mViewWidth, mViewHeight);

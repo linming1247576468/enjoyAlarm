@@ -17,7 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		try {
-			String sqlString = "create table " + ModelVariable.ALARM_TABLE_NAME + "("
+			String baseString = "("
 					+ ModelVariable.ALARM_COLUMN1_ID + " integer primary key,"
 					+ ModelVariable.ALARM_COLUMN2_NAME + " varchar,"
 					+ ModelVariable.ALARM_COLUMN3_TIME + " varchar,"
@@ -34,7 +34,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 					+ ModelVariable.ALARM_COLUMN14_FRIEND_NAMES + " varchar,"
 					+ ModelVariable.ALARM_COLUMN15_FRIEND_PHONES + " varchar,"
 					+ ModelVariable.ALARM_COLUMN16_SEND_TEXT + " varchar)";
+			
+			String sqlString = "create table " + ModelVariable.ALARM_TABLE_NAME + baseString;
 			db.execSQL(sqlString);
+			
+			sqlString = "create table " + ModelVariable.TEMP_ALARM_TABLE_NAME + baseString;
+			db.execSQL(sqlString);
+			db.execSQL("insert into " + ModelVariable.TEMP_ALARM_TABLE_NAME
+					+ " (" + ModelVariable.ALARM_COLUMN1_ID + ")"
+					+ "values(-1)");
 
 			sqlString = "create table " + ModelVariable.TIME_TABLE_NAME + "("
 					+ ModelVariable.TIME_COLUMN1_NOW_HOUR + " varchar,"

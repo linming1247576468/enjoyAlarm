@@ -23,6 +23,7 @@ import com.enjoyalarm.model.ModelUtil;
 import com.enjoyalarm.model.ModelVariable;
 import com.enjoyalarm.model.ReadingModel;
 import com.enjoyalarm.model.WritingModel;
+import com.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
 import com.enjoyalarm.view.ViewUtil.TimeEntry;
 import com.scut.enjoyalarm.R;
 
@@ -34,7 +35,6 @@ public class AlarmSettingViewManager {
 	private int mGetTextType;
 	private Activity mActivity;
 	private ViewGroup mMainView;
-	private boolean mIsChanged;
 	private int mAlarmId;
 	private View mMediaLayout;
 	private View mInputLayout;
@@ -55,6 +55,8 @@ public class AlarmSettingViewManager {
 	private boolean mClearWhenClickInput;
 	private Handler mHandler;
 	private int mWhatMessage;
+	private AlarmDataKeeper mDataKeeper;
+	
 
 	
 	/**
@@ -63,9 +65,11 @@ public class AlarmSettingViewManager {
 	public AlarmSettingViewManager(Activity activity, int alarmId) {
 		mActivity = activity;
 		mAlarmId = alarmId;
+		mDataKeeper = new AlarmDataKeeper();
 
 		init();
 		startUpdatingRemainTime();
+		mDataKeeper.keepCurrentData();
 	}
 
 	public View getMainView() {
@@ -108,51 +112,41 @@ public class AlarmSettingViewManager {
 				time.minute);
 	}
 
-	/**
-	 * @return if user had touch the settings
-	 */
-	public boolean mIsChanged() {
-		return mIsChanged;
+	public boolean getIsChanged() {
+		return mDataKeeper.isChangedCompareCurrentWithDataKeeped();
 	}
 
-	public void save() {
+	/**
+	 * if you just want to save the data in the temp table, you should call this
+	 * instead of save() which will make a new id for this temp alarm
+	 */
+	public void saveTemp() {
+		mDataKeeper.keepCurrentData();
 		WritingModel model = new WritingModel(mActivity);
-		// name
-		model.setName(mNameTextView.getText().toString());
-		// time
-		model.setTime(Integer.parseInt(mHourTextView.getText().toString()),
-				Integer.parseInt(mMinuteTextView.getText().toString()));
-		// days
-		List<Integer> days = new ArrayList<Integer>();
-		for (int i = 0; i < 7; i++) {
-			if (mDaysViews[i].isChecked()) {
-				days.add(i);
-			}
-		}
-		model.setDays(days);
-		// repeated
-		model.setRepeated(mRepeatCheckBox.isChecked());
-		// wake way
-		String wakeWay;
-		if (mSoundWayToggleView.isSelected()) {
-			if (mShakeWayToggleView.isSelected()) {
-				wakeWay = ModelVariable.ALARM_WAKE_WAY_SOUND_SHAKE;
-			} else {
-				wakeWay = ModelVariable.ALARM_WAKE_WAY_SOUND;
-			}
-		} else {
-			wakeWay = ModelVariable.ALARM_WAKE_WAY_SHAKE;
-		}
-		model.setWakeWay(wakeWay);
-		// wake music
-		model.setWakeMusicUri(mWakeMusicTextView.getText().toString());
-		// encourage words
-		model.setText(mEncourageWordsTextView.getText().toString());
-		// media
+		model.setName(mDataKeeper.name);
+		model.setTime(mDataKeeper.hour, mDataKeeper.minute);
+		model.setDays(mDataKeeper.days);
+		model.setRepeated(mDataKeeper.repeated);
+		model.setWakeWay(mDataKeeper.wakeWay);
+		model.setWakeMusicUri(mDataKeeper.wakeUrl);
+		model.setText(mDataKeeper.encourageWords);
+		model.update(-1);
+	}
+	
+	public void save() {
+		mDataKeeper.keepCurrentData();
+		WritingModel model = new WritingModel(mActivity);
+		model.setName(mDataKeeper.name);
+		model.setTime(mDataKeeper.hour, mDataKeeper.minute);
+		model.setDays(mDataKeeper.days);
+		model.setRepeated(mDataKeeper.repeated);
+		model.setWakeWay(mDataKeeper.wakeWay);
+		model.setWakeMusicUri(mDataKeeper.wakeUrl);
+		model.setText(mDataKeeper.encourageWords);
 
 		// save
 		if (mAlarmId == -1) {
-			model.createAndSave();
+			mAlarmId = model.createAndSave();
 		} else {
 			model.update(mAlarmId);
 		}
@@ -177,26 +171,41 @@ public class AlarmSettingViewManager {
 				if (result.length() > 0 ) {// if input nothing, then remain the old name
 					if (!mNameTextView.getText().toString().equals(result)) {
 						mNameTextView.setText(result);
-						mIsChanged = true;
 					}
 				}
 				
 			} else if (mGetTextType == 1) {//set encourage words
 				if (!mEncourageWordsTextView.getText().toString().equals(result)) {
 					mEncourageWordsTextView.setText(result);
-					mIsChanged = true;
 				}
 			}
 		}
 	}
 	
 	/**
-	 * replace all data for alarm from an existing alarmId
+	 * replace all data for alarm from a new alarmId
 	 * @param newId
 	 */
 	public void replaceAlarm(int newId) {
-		mAlarmId = newId;
-		settingFromDatabase();
+		if (newId != mAlarmId) {
+			mAlarmId = newId;
+			settingFromDatabase();
+			mDataKeeper.keepCurrentData();
+		}
+	}
+	
+	public AlarmBasicInfo getCurrentAlarmInfo() {
+		List<Integer> days = new ArrayList<Integer>();
+		for (int i = 0; i < 7; i++) {
+			if (mDaysViews[i].isChecked()) {
+				days.add(i);
+			}
+		}
+		AlarmBasicInfo info = new AlarmBasicInfo(mAlarmId, mNameTextView
+				.getText().toString(), Integer.parseInt(mHourTextView.getText()
+				.toString()), Integer.parseInt(mMinuteTextView.getText()
+				.toString()), ModelUtil.getDaysString(days));
+		return info;
 	}
 	
 	
@@ -381,7 +390,6 @@ public class AlarmSettingViewManager {
 
 			@Override
 			public void onClick(View v) {
-				mIsChanged = true;
 				changeEditTimeState(0);
 			}
 		});
@@ -390,7 +398,6 @@ public class AlarmSettingViewManager {
 
 			@Override
 			public void onClick(View v) {
-				mIsChanged = true;
 				changeEditTimeState(2);
 			}
 		});
@@ -399,7 +406,6 @@ public class AlarmSettingViewManager {
 
 			@Override
 			public void onClick(View v) {
-				mIsChanged = true;
 				boolean oneSelected = false;
 				for (ToggleView t : mDaysViews) {
 					if (t != v && t.isChecked()) {
@@ -485,7 +491,6 @@ public class AlarmSettingViewManager {
 			@Override
 			public void onClick(View v) {
 				if (mShakeWayToggleView.isChecked()) {
-					mIsChanged = true;
 					mSoundWayToggleView.toggle();
 					enableWakeMusic(mSoundWayToggleView.isSelected());
 				}
@@ -497,7 +502,6 @@ public class AlarmSettingViewManager {
 			@Override
 			public void onClick(View v) {
 				if (mSoundWayToggleView.isChecked()) {
-					mIsChanged = true;
 					mShakeWayToggleView.toggle();
 					shake();
 				}
@@ -508,7 +512,6 @@ public class AlarmSettingViewManager {
 
 			@Override
 			public void onClick(View v) {
-				mIsChanged = true;
 			}
 		});
 
@@ -524,7 +527,6 @@ public class AlarmSettingViewManager {
 
 			@Override
 			public void onClick(View v) {
-				mIsChanged = true;
 			}
 		});
 
@@ -772,4 +774,94 @@ public class AlarmSettingViewManager {
 		}
 	}
 
+	
+	
+	private class AlarmDataKeeper {
+		String name;
+		int hour;
+		int minute;
+		boolean repeated;
+		List<Integer> days = new ArrayList<Integer>();
+		String wakeWay;
+		String wakeUrl;
+		String encourageWords;
+		
+		void keepCurrentData() {
+			name = mNameTextView.getText().toString();
+			hour = Integer.parseInt(mHourTextView.getText().toString());
+			minute = Integer.parseInt(mMinuteTextView.getText().toString());
+			
+			repeated = mRepeatCheckBox.isChecked();
+			days.clear();
+			for (int i = 0; i < 7; i++) {
+				if (mDaysViews[i].isChecked()) {
+					days.add(i);
+				}
+			}
+			
+			if (mSoundWayToggleView.isSelected()) {
+				if (mShakeWayToggleView.isSelected()) {
+					wakeWay = ModelVariable.ALARM_WAKE_WAY_SOUND_SHAKE;
+				} else {
+					wakeWay = ModelVariable.ALARM_WAKE_WAY_SOUND;
+				}
+			} else {
+				wakeWay = ModelVariable.ALARM_WAKE_WAY_SHAKE;
+			}
+			
+			wakeUrl = mWakeMusicTextView.getText().toString();
+			encourageWords = mEncourageWordsTextView.getText().toString();
+		}
+		
+		/**
+		 * @return true if there is change
+		 */
+		boolean isChangedCompareCurrentWithDataKeeped() {
+			if (!mNameTextView.getText().toString().equals(name)) {
+				return true;
+			}
+			if (Integer.parseInt(mHourTextView.getText().toString()) != hour) {
+				return true;
+			}
+			if (Integer.parseInt(mMinuteTextView.getText().toString()) != minute) {
+				return true;
+			}
+			if (mRepeatCheckBox.isChecked() != repeated) {
+				return true;
+			}
+			
+			List<Integer> days1 = new ArrayList<Integer>();
+			for (int i = 0; i < 7; i++) {
+				if (mDaysViews[i].isChecked()) {
+					days1.add(i);
+				}
+			}
+			if (!days1.equals(days)) {
+				return true;
+			}
+			
+			String wakeWay1;
+			if (mSoundWayToggleView.isSelected()) {
+				if (mShakeWayToggleView.isSelected()) {
+					wakeWay1 = ModelVariable.ALARM_WAKE_WAY_SOUND_SHAKE;
+				} else {
+					wakeWay1 = ModelVariable.ALARM_WAKE_WAY_SOUND;
+				}
+			} else {
+				wakeWay1 = ModelVariable.ALARM_WAKE_WAY_SHAKE;
+			}
+			if (!wakeWay1.equals(wakeWay)) {
+				return true;
+			}
+			
+			if (!mWakeMusicTextView.getText().toString().equals(wakeUrl)) {
+				return true;
+			}
+			if (!mEncourageWordsTextView.getText().toString().equals(encourageWords)) {
+				return true;
+			}
+			
+			return false;
+		}
+	}
 }

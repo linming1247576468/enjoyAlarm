@@ -22,15 +22,22 @@ public class ModelUtil {
 	private static boolean debug = false;
 
 	public static class AlarmBasicInfo {
-		int id;
-		String name;
-		String time;
-		String days;
-
-		public AlarmBasicInfo(int id, String name, String time, String days) {
+		public int id;
+		public String name;
+		public int hour;
+		public int minute;
+		public String days;
+		
+		
+		/**
+		 *@param days
+		 *				0126, 346 and so on: 0 represents Monday, and 6 represents Sunday
+		 */
+		public AlarmBasicInfo(int id, String name, int hour, int minute, String days) {
 			this.id = id;
 			this.name = name;
-			this.time = time;
+			this.hour = hour;
+			this.minute = minute;
 			this.days = days;
 		}
 	}
@@ -47,7 +54,9 @@ public class ModelUtil {
 				null);
 		while (cursor.moveToNext()) {
 			resultList.add(new AlarmBasicInfo(cursor.getInt(0), cursor
-					.getString(1), cursor.getString(2), cursor.getString(3)));
+					.getString(1), ModelUtil.getHourFromTime(cursor
+					.getString(2)), ModelUtil.getMinuteFromTime(cursor
+					.getString(2)), cursor.getString(3)));
 			if (debug) {
 				Log.i("getAlarmBasicInfo", "id:" + cursor.getInt(0) + ", name:"
 						+ cursor.getString(1));
@@ -236,6 +245,15 @@ public class ModelUtil {
 		return result;
 	}
 
+	
+	
+	public static String getDaysString(List<Integer> days) {
+		StringBuilder dayString = new StringBuilder();
+		for (Integer day : days) {
+			dayString.append(day);
+		}
+		return dayString.toString();
+	}
 	
 	public static int getHourFromTime(String time) {
 		return Integer.parseInt(time.substring(0, time.indexOf(':')));

@@ -7,6 +7,7 @@ public class ModelVariable {
 	static final String PREFERENCE_NEXT_ID = "next_id";
 	
 	//alarm table
+	final static String TEMP_ALARM_TABLE_NAME = "temp_alarm_table";
 	final static String ALARM_TABLE_NAME = "alarm_table";
 	final static String ALARM_COLUMN1_ID = "id";
 	final static String ALARM_COLUMN2_NAME = "name";

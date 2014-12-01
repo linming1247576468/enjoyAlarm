@@ -70,8 +70,8 @@ public class AnimToExitState extends State {
 		bitmapComponent.draw(canvas, factor);
 	}
 
-	private void changeToExitStateToHandle() {
-		mControlInterface.exitApp();
+	private void changeToExit() {
+		mControlInterface.handleScrollToExitFinished();
 	}
 
 	private class AnimThread extends Thread {
@@ -88,7 +88,7 @@ public class AnimToExitState extends State {
 					mControlInterface.refreshDraw();
 
 					if (mPositionX < -limit) {
-						changeToExitStateToHandle();
+						changeToExit();
 						break;
 					}
 
@@ -106,7 +106,7 @@ public class AnimToExitState extends State {
 					mControlInterface.refreshDraw();
 
 					if (mPositionX > limit) {
-						changeToExitStateToHandle();
+						changeToExit();
 						break;
 					}
 

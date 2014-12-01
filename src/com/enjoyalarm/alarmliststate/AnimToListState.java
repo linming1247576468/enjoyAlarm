@@ -45,7 +45,9 @@ public class AnimToListState extends State {
 			if (Math.abs(mPositionY) / mViewHeight < StatePeriod.LIST_FACTOR3) {
 				mThreadFlag = false;
 				mControlInterface.changeState(new ListingState(
-						mControlInterface, mBitmap, mPositionY));
+						mControlInterface, mBitmap, mPositionY,
+						new Component[] { mTopBitmapComponent,
+								mBottomBitmapComponent }));
 			}
 		}
 

@@ -39,13 +39,13 @@ public class AnimFromListState extends State {
 		new AnimThread().start();
 	}
 	
-
 	@Override
 	public void handleTouchEvent(MotionEvent event) {
 		if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
 			mThreadFlag = false;
-			mControlInterface.changeState(new ListingState(mControlInterface,mBitmap,
-					mPositionY));
+			mControlInterface.changeState(new ListingState(mControlInterface,
+					mBitmap, mPositionY, new Component[] { mTopBitmapComponent,
+							mBottomBitmapComponent }));
 		}
 	}
 
@@ -64,8 +64,8 @@ public class AnimFromListState extends State {
 		bitmapComponent.draw(canvas, factor);
 	}
 	
-	private void changeToRecoverStateToHandle() {
-		mControlInterface.recoverToSettingView();
+	private void changeToSetting() {
+		mControlInterface.handleScrollToSettingFinished();
 	}
 
 	
@@ -83,7 +83,7 @@ public class AnimFromListState extends State {
 					mControlInterface.refreshDraw();
 
 					if (mPositionY < limit) {
-						changeToRecoverStateToHandle();
+						changeToSetting();
 						break;
 					}
 
@@ -101,7 +101,7 @@ public class AnimFromListState extends State {
 					mControlInterface.refreshDraw();
 
 					if (mPositionY > -limit) {
-						changeToRecoverStateToHandle();
+						changeToSetting();
 						break;
 					}
 

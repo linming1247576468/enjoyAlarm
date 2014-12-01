@@ -47,7 +47,7 @@ public class ExitingState extends State {
 	 * @param initPositionX must be relative
 	 */
 	public ExitingState(ViewControlInterface controlInterface,
-			float initPositionX, Component... components) {
+			float initPositionX, Component[] components) {
 		super(controlInterface);
 
 		mX = -1;

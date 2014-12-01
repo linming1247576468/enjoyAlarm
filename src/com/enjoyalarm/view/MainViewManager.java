@@ -9,9 +9,12 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
 
+import com.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
 import com.enjoyalarm.view.AlarmListView.OnAlarmItemClickListener;
 import com.enjoyalarm.view.AlarmListView.OnScrollToExitFinishedListerner;
+import com.enjoyalarm.view.AlarmListView.OnScrollToListFinishedListener;
 import com.enjoyalarm.view.AlarmListView.OnScrollToSettingFinishedListener;
+import com.scut.enjoyalarm.R;
 
 public class MainViewManager {
 
@@ -159,9 +162,31 @@ public class MainViewManager {
 			
 			@Override
 			public void onScrollToExitFinished(View alarmListView) {
-				String toastString = ViewUtil.getRemainTimeForToast(mActivity, mAlarmSettingViewManager.getRemainTime());
-				Toast.makeText(mActivity, toastString, Toast.LENGTH_SHORT).show();
-				mActivity.finish();
+				if (mNowAlarmId == -1 || mAlarmSettingViewManager.getIsChanged()) {
+					mAlarmSettingViewManager.saveAndStartAlarm();
+					String toastString = ViewUtil.getRemainTimeForToast(mActivity, mAlarmSettingViewManager.getRemainTime());
+					Toast.makeText(mActivity, toastString, Toast.LENGTH_SHORT).show();
+					mActivity.finish();
+				}
+			}
+		});
+
+		mAlarmListView.setOnScrollToListFinishedListener(new OnScrollToListFinishedListener() {
+
+			@Override
+			public void onScrollToListFinished(View alarmListView) {
+				if (mNowAlarmId == -1) {
+					mAlarmSettingViewManager.saveTemp();
+					
+				} else if (mAlarmSettingViewManager.getIsChanged()) {
+					String toastString = mActivity.getResources().getString(R.string.has_save);
+					Toast.makeText(mActivity, toastString, Toast.LENGTH_SHORT).show();
+					mAlarmSettingViewManager.saveAndStartAlarm();
+				}
+				AlarmBasicInfo info = mAlarmSettingViewManager.getCurrentAlarmInfo();
+				mAlarmListView.updateAlarmBasicInfo(
+						mAlarmListView.getCurrentAlarmIndex(),
+						info.name, info.hour, info.minute, info.days);
 			}
 		});
 	}

@@ -13,13 +13,17 @@ public interface ViewControlInterface {
 
 	public void refreshDraw();
 
-	public void exitApp();
+	public void handleScrollToExitFinished();
 
+	public void handleScrollToSettingFinished();
+	
+	public void handleScrollToListFinished();
+	
+	public void handleClickAlarmItem(int index);
+	
+	
+	
 	public float getDensity();
-
-	public void recoverToSettingView();
-
-	public void clickAlarmItem(int alarmId);
 
 	public Context getContext();
 
@@ -30,4 +34,6 @@ public interface ViewControlInterface {
 	public List<AlarmBasicInfo> getAlarmsInfo();
 	
 	public int getCurrentAlarmIndex();
+	
+	public void setCurrentAlarmIndex(int index);
 }

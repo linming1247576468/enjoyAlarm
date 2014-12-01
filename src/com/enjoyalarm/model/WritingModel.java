@@ -195,9 +195,16 @@ public class WritingModel {
 	}
 
 	/**
-	 * update the existing alarm
+	 * update the existing alarm	notice:temp alarm must pass -1 here
 	 */
 	public void update(int alarmId) {
+		mId = alarmId;
+		String tableName;
+		if (mId == -1) {
+			tableName = ModelVariable.TEMP_ALARM_TABLE_NAME;
+		} else {
+			tableName = ModelVariable.ALARM_TABLE_NAME;
+		}
 		SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(ModelVariable.ALARM_COLUMN2_NAME, mName);
@@ -240,9 +247,8 @@ public class WritingModel {
 		if (mSendText != null) {
 			values.put(ModelVariable.ALARM_COLUMN16_SEND_TEXT, mSendText);
 		}
-		database.update(ModelVariable.ALARM_TABLE_NAME, values,
-				ModelVariable.ALARM_COLUMN1_ID + "=?",
-				new String[] { String.valueOf(alarmId) });
+		database.update(tableName, values, ModelVariable.ALARM_COLUMN1_ID
+				+ "=?", new String[] { String.valueOf(alarmId) });
 		database.close();
 	}
 }
