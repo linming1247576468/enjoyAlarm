@@ -1,8 +1,11 @@
 package com.enjoyalarm.view;
 
+import java.util.List;
+
 import android.content.Context;
 
 import com.enjoyalarm.alarmliststate.State;
+import com.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
 
 public interface ViewControlInterface {
 
@@ -23,4 +26,8 @@ public interface ViewControlInterface {
 	public float getViewWidth();
 
 	public float getViewHeight();
+	
+	public List<AlarmBasicInfo> getAlarmsInfo();
+	
+	public int getCurrentAlarmIndex();
 }

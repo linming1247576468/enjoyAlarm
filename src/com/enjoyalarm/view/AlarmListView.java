@@ -1,5 +1,7 @@
 package com.enjoyalarm.view;
 
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,6 +13,8 @@ import com.enjoyalarm.alarmliststate.ExitingState;
 import com.enjoyalarm.alarmliststate.InitState;
 import com.enjoyalarm.alarmliststate.ListingState;
 import com.enjoyalarm.alarmliststate.State;
+import com.enjoyalarm.model.ModelUtil;
+import com.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
 
 public class AlarmListView extends View implements ViewControlInterface {
 
@@ -22,6 +26,7 @@ public class AlarmListView extends View implements ViewControlInterface {
 	private OnScrollToSettingFinishedListener mScrollToSettingFinishedListener;
 	private OnScrollToExitFinishedListerner mScrollToExitFinishedListerner;
 	private Handler mHandler;
+	private List<AlarmBasicInfo> mAlarmsBasicInfo;
 	
 
 	public AlarmListView(Context context) {
@@ -143,6 +148,20 @@ public class AlarmListView extends View implements ViewControlInterface {
 		return getHeight();
 	}
 	
+	@Override
+	public List<AlarmBasicInfo> getAlarmsInfo() {
+		if (mAlarmsBasicInfo == null) {
+			mAlarmsBasicInfo = ModelUtil.getAlarmsBasicInfo(getContext());
+			
+		}
+		return mAlarmsBasicInfo;
+	}
+
+	@Override
+	public int getCurrentAlarmIndex() {
+		return 0;
+	}
+	
 	
 	
 	@Override
@@ -151,4 +170,5 @@ public class AlarmListView extends View implements ViewControlInterface {
 
 		mState.handleDraw(canvas);
 	}
+
 }

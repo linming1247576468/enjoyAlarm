@@ -3,6 +3,10 @@ package com.enjoyalarm.alarmliststate;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.MotionEvent;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.OvershootInterpolator;
 
 import com.enjoyalarm.drawutil.Component;
 import com.enjoyalarm.view.ViewControlInterface;

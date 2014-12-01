@@ -21,13 +21,13 @@ public class ModelUtil {
 
 	private static boolean debug = false;
 
-	static class BasicInfoUnit {
+	public static class AlarmBasicInfo {
 		int id;
 		String name;
 		String time;
 		String days;
 
-		public BasicInfoUnit(int id, String name, String time, String days) {
+		public AlarmBasicInfo(int id, String name, String time, String days) {
 			this.id = id;
 			this.name = name;
 			this.time = time;
@@ -35,8 +35,8 @@ public class ModelUtil {
 		}
 	}
 
-	public static List<BasicInfoUnit> getAlarmsBasicInfo(Context context) {
-		List<BasicInfoUnit> resultList = new ArrayList<BasicInfoUnit>();
+	public static List<AlarmBasicInfo> getAlarmsBasicInfo(Context context) {
+		List<AlarmBasicInfo> resultList = new ArrayList<AlarmBasicInfo>();
 		DatabaseHelper helper = new DatabaseHelper(context);
 		SQLiteDatabase db = helper.getReadableDatabase();
 		Cursor cursor = db.query(ModelVariable.ALARM_TABLE_NAME, new String[] {
@@ -46,7 +46,7 @@ public class ModelUtil {
 				ModelVariable.ALARM_COLUMN4_DAYS, }, null, null, null, null,
 				null);
 		while (cursor.moveToNext()) {
-			resultList.add(new BasicInfoUnit(cursor.getInt(0), cursor
+			resultList.add(new AlarmBasicInfo(cursor.getInt(0), cursor
 					.getString(1), cursor.getString(2), cursor.getString(3)));
 			if (debug) {
 				Log.i("getAlarmBasicInfo", "id:" + cursor.getInt(0) + ", name:"
