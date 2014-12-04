@@ -22,6 +22,26 @@
     <string name="dialog_yes">确定</string>
     <string name="dialog_no">取消</string>
     <string name="has_save">已保存</string>
+    <string name="today">今天</string>
+    <string name="tomorrow">明天</string>
+    <string-array name="this_week">
+        <item>本周一</item>
+        <item>本周二</item>
+        <item>本周三</item>
+        <item>本周四</item>
+        <item>本周五</item>
+        <item>本周六</item>
+        <item>本周七</item>
+    </string-array>
+    <string-array name="next_week">
+        <item>下周一</item>
+        <item>下周二</item>
+        <item>下周三</item>
+        <item>下周四</item>
+        <item>下周五</item>
+        <item>下周六</item>
+        <item>下周七</item>
+    </string-array>
     <string-array name="exit_words1">
         <item>保</item>
         <item>存</item>

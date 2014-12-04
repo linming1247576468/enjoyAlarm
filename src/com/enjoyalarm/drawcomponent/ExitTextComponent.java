@@ -1,4 +1,4 @@
-package com.enjoyalarm.drawutil;
+package com.enjoyalarm.drawcomponent;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

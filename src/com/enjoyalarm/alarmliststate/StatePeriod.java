@@ -12,10 +12,12 @@ public class StatePeriod {
 	 */
 	public static final float EXIT_LIMIT = 0.2f;
 	public static final float EXIT_FACTOR1 = 0.3f;//开始渐隐
+	
 	public static final Period1 EXIT_LBITMAP_ALPHA_PERIOD1 = new Period1(0f, EXIT_FACTOR1, 1f, 1f);
 	public static final Period1 EXIT_LBITMAP_ALPHA_PERIOD2 = new Period1(EXIT_FACTOR1, 1f, 1f, 0f);
 	public static final Period1 EXIT_LBITMAP_SCALE_PERIOD1 = new Period1(0f, 1f, 1f, 1f);
 	public static final Period2 EXIT_LBITMAP_TRANS_PREIOD1 = new Period2(0f, 1f, 0.5f, 1.5f, 0.5f, 0.5f);
+	
 	public static final Period1 EXIT_LTEXT_ALPHA_PERIOD1 = new Period1(0f, EXIT_FACTOR1, 1f, 1f);
 	public static final Period1 EXIT_LTEXT_ALPHA_PERIOD2 = new Period1(EXIT_FACTOR1, 1f, 1f, 0f);
 	public static final Period1 EXIT_LTEXT_SCALE_PERIOD1 = new Period1(0f, EXIT_FACTOR1, 1f, 1f);
@@ -23,16 +25,21 @@ public class StatePeriod {
 	public static final Period2 EXIT_LTEXT_TRANS_PREIOD1 = new Period2(0f, EXIT_FACTOR1, 0.05f, 0.25f, 0.5f, 0.5f);
 	public static final Period2 EXIT_LTEXT_TRANS_PREIOD2 = new Period2(EXIT_FACTOR1, 1f, 0.25f, 0.2f, 0.5f, 0.5f);
 	
+	
+	
 	 //listing
 	/**
 	 *  LIST_LIMIT: when within the limit, then it should recover instead of list
 	 */
 	public static final float LIST_LIMIT = 0.1f;
-	public static final float LIST_FACTOR1 = 0.2f;//开始阶段的上下滑动
-	public static final float LIST_FACTOR2 = 0.55f;//滑动到一定阶段不再滑动，必须放手才会反方向滑动
-	public static final float LIST_FACTOR3 = 0.65f;//停止一小会
-	public static final float LIST_FACTOR4 = 0.8f;//反方向滑动一会后停止滑动
-	public static final Period1 LIST_TBITMAP_ALPHA_PERIOD1 = new Period1(0f, 1f, 1f, 1f);
+	public static final float LIST_FACTOR1 = 0.2f;//开始阶段的上下滑动:end
+	public static final float LIST_FACTOR2 = 0.55f;//滑动到一定阶段不再滑动，必须放手才会反方向滑动:end
+	public static final float LIST_FACTOR3 = 0.65f;//停止一小会:end
+	public static final float LIST_FACTOR4 = 0.8f;//反方向滑动一会后停止滑动:end
+	
+	public static final Period1 LIST_TBITMAP_ALPHA_PERIOD1 = new Period1(0f, LIST_FACTOR3, 1f, 1f);
+	public static final Period1 LIST_TBITMAP_ALPHA_PERIOD2 = new Period1(LIST_FACTOR3, LIST_FACTOR4, 1f, 0f);
+	public static final Period1 LIST_TBITMAP_ALPHA_PERIOD3 = new Period1(LIST_FACTOR4, 1f, 0f, 0f);
 	public static final Period1 LIST_TBITMAP_SCALE_PERIOD1 = new Period1(0f, LIST_FACTOR1, 1f, 1f);
 	public static final Period1 LIST_TBITMAP_SCALE_PERIOD2 = new Period1(LIST_FACTOR1, LIST_FACTOR2, 1f, 0.6f);
 	public static final Period1 LIST_TBITMAP_SCALE_PERIOD3 = new Period1(LIST_FACTOR2, 1f, 0.6f, 0.6f);
@@ -41,6 +48,24 @@ public class StatePeriod {
 	public static final Period2 LIST_TBITMAP_TRANS_PERIOD3 = new Period2(LIST_FACTOR2, LIST_FACTOR3, 0.5f, 0.5f, 0.65f, 0.65f);
 	public static final Period2 LIST_TBITMAP_TRANS_PERIOD4 = new Period2(LIST_FACTOR3, LIST_FACTOR4, 0.5f, 0.5f, 0.65f, 0.5f);
 	public static final Period2 LIST_TBITMAP_TRANS_PERIOD5 = new Period2(LIST_FACTOR4, 1f, 0.5f, 0.5f, 0.5f, 0.5f);
+	
+	public static final Period1 LIST_LITEM_ALPHA_PERIOD1 = new Period1(0f, 1f, 1f, 1f);
+	public static final Period1 LIST_LITEM_SCALE_PERIOD1 = new Period1(0f, 1f, 0.6f, 0.6f);
+	public static final Period2 LIST_LITEM_TRANS_PERIOD1 = new Period2(0f, LIST_FACTOR3, -0.3f, -0.3f, 0.5f, 0.5f);
+	public static final Period2 LIST_LITEM_TRANS_PERIOD2 = new Period2(LIST_FACTOR3, LIST_FACTOR4, -0.3f, -0.2f, 0.5f, 0.5f);
+	public static final Period2 LIST_LITEM_TRANS_PERIOD3 = new Period2(LIST_FACTOR4, 1f, -0.2f, -0.2f, 0.5f, 0.5f);
+	
+	public static final Period1 LIST_CTITEM_ALPHA_PERIOD1 = new Period1(0f, LIST_FACTOR3, 0f, 0f);
+	public static final Period1 LIST_CTITEM_ALPHA_PERIOD2 = new Period1(LIST_FACTOR3, LIST_FACTOR4, 0f, 1f);
+	public static final Period1 LIST_CTITEM_ALPHA_PERIOD3 = new Period1(LIST_FACTOR4, 1f, 1f, 1f);
+	public static final Period1 LIST_CTITEM_SCALE_PERIOD1 = new Period1(0f, 1f, 0.6f, 0.6f);
+	public static final Period2 LIST_CTITEM_TRANS_PERIOD1 = new Period2(0f, LIST_FACTOR3, 0.5f, 0.5f, 0.65f, 0.65f);
+	public static final Period2 LIST_CTITEM_TRANS_PERIOD2 = new Period2(LIST_FACTOR3, LIST_FACTOR4, 0.5f, 0.5f, 0.65f, 0.5f);
+	public static final Period2 LIST_CTITEM_TRANS_PERIOD3 = new Period2(LIST_FACTOR4, 1f, 0.5f, 0.5f, 0.5f, 0.5f);
+	
+	
+	
+	
 	
 	
 	

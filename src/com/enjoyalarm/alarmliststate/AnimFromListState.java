@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.MotionEvent;
 
-import com.enjoyalarm.drawutil.Component;
+import com.enjoyalarm.drawcomponent.Component;
 import com.enjoyalarm.view.ViewControlInterface;
 
 public class AnimFromListState extends State {

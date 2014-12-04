@@ -3,12 +3,8 @@ package com.enjoyalarm.alarmliststate;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.MotionEvent;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AnticipateOvershootInterpolator;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.OvershootInterpolator;
 
-import com.enjoyalarm.drawutil.Component;
+import com.enjoyalarm.drawcomponent.Component;
 import com.enjoyalarm.view.ViewControlInterface;
 
 public class AnimFromExitState extends State {
@@ -33,7 +29,7 @@ public class AnimFromExitState extends State {
 		mPositionX = initPositionX;
 		mDirection = initDirection;
 		mViewWidth = controlInterface.getViewWidth();
-
+		
 		mLeftTextComponent = components[0];
 		mRightTextComponent = components[1];
 		mLeftBitmapComponent = components[2];

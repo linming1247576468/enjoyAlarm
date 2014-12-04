@@ -55,7 +55,8 @@ public class AlarmSettingViewManager {
 	private boolean mClearWhenClickInput;
 	private Handler mHandler;
 	private int mWhatMessage;
-	private AlarmDataKeeper mDataKeeper;
+	private AlarmDataRecorder mDataRecorder;
+	private AlarmDataComparator mDataComparator;
 	
 
 	
@@ -65,11 +66,12 @@ public class AlarmSettingViewManager {
 	public AlarmSettingViewManager(Activity activity, int alarmId) {
 		mActivity = activity;
 		mAlarmId = alarmId;
-		mDataKeeper = new AlarmDataKeeper();
+		mDataRecorder = new AlarmDataRecorder();
+		mDataComparator = new AlarmDataComparator();
 
 		init();
 		startUpdatingRemainTime();
-		mDataKeeper.keepCurrentData();
+		mDataComparator.recordCurrentData();
 	}
 
 	public View getMainView() {
@@ -96,7 +98,7 @@ public class AlarmSettingViewManager {
 		// calculate time
 		Time time = new Time();
 		time.setToNow();
-		int nowDay = (time.weekDay + 6) % 7;
+		int nowDay = (time.weekDay + 6) % 7;//let Monday be first
 		int nextDay = -1;
 		for (int day : days) {
 			if (((day == nowDay) && ((hour > time.hour) || (hour == time.hour && minute >= time.minute)))
@@ -113,7 +115,7 @@ public class AlarmSettingViewManager {
 	}
 
 	public boolean getIsChanged() {
-		return mDataKeeper.isChangedCompareCurrentWithDataKeeped();
+		return mDataComparator.isChangedCompareCurrentWithDataKeeped();
 	}
 
 	/**
@@ -121,28 +123,28 @@ public class AlarmSettingViewManager {
 	 * instead of save() which will make a new id for this temp alarm
 	 */
 	public void saveTemp() {
-		mDataKeeper.keepCurrentData();
+		mDataRecorder.recordCurrentData();
 		WritingModel model = new WritingModel(mActivity);
-		model.setName(mDataKeeper.name);
-		model.setTime(mDataKeeper.hour, mDataKeeper.minute);
-		model.setDays(mDataKeeper.days);
-		model.setRepeated(mDataKeeper.repeated);
-		model.setWakeWay(mDataKeeper.wakeWay);
-		model.setWakeMusicUri(mDataKeeper.wakeUrl);
-		model.setText(mDataKeeper.encourageWords);
+		model.setName(mDataRecorder.name);
+		model.setTime(mDataRecorder.hour, mDataRecorder.minute);
+		model.setDays(mDataRecorder.days);
+		model.setRepeated(mDataRecorder.repeated);
+		model.setWakeWay(mDataRecorder.wakeWay);
+		model.setWakeMusicUri(mDataRecorder.wakeUrl);
+		model.setText(mDataRecorder.encourageWords);
 		model.update(-1);
 	}
 	
 	public void save() {
-		mDataKeeper.keepCurrentData();
+		mDataRecorder.recordCurrentData();
 		WritingModel model = new WritingModel(mActivity);
-		model.setName(mDataKeeper.name);
-		model.setTime(mDataKeeper.hour, mDataKeeper.minute);
-		model.setDays(mDataKeeper.days);
-		model.setRepeated(mDataKeeper.repeated);
-		model.setWakeWay(mDataKeeper.wakeWay);
-		model.setWakeMusicUri(mDataKeeper.wakeUrl);
-		model.setText(mDataKeeper.encourageWords);
+		model.setName(mDataRecorder.name);
+		model.setTime(mDataRecorder.hour, mDataRecorder.minute);
+		model.setDays(mDataRecorder.days);
+		model.setRepeated(mDataRecorder.repeated);
+		model.setWakeWay(mDataRecorder.wakeWay);
+		model.setWakeMusicUri(mDataRecorder.wakeUrl);
+		model.setText(mDataRecorder.encourageWords);
 
 		// save
 		if (mAlarmId == -1) {
@@ -190,7 +192,7 @@ public class AlarmSettingViewManager {
 		if (newId != mAlarmId) {
 			mAlarmId = newId;
 			settingFromDatabase();
-			mDataKeeper.keepCurrentData();
+			mDataComparator.recordCurrentData();
 		}
 	}
 	
@@ -776,7 +778,7 @@ public class AlarmSettingViewManager {
 
 	
 	
-	private class AlarmDataKeeper {
+	private class AlarmDataRecorder {
 		String name;
 		int hour;
 		int minute;
@@ -786,7 +788,7 @@ public class AlarmSettingViewManager {
 		String wakeUrl;
 		String encourageWords;
 		
-		void keepCurrentData() {
+		void recordCurrentData() {
 			name = mNameTextView.getText().toString();
 			hour = Integer.parseInt(mHourTextView.getText().toString());
 			minute = Integer.parseInt(mMinuteTextView.getText().toString());
@@ -812,6 +814,9 @@ public class AlarmSettingViewManager {
 			wakeUrl = mWakeMusicTextView.getText().toString();
 			encourageWords = mEncourageWordsTextView.getText().toString();
 		}
+	}
+	
+	private class AlarmDataComparator extends AlarmDataRecorder {
 		
 		/**
 		 * @return true if there is change

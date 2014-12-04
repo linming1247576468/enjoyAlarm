@@ -1,4 +1,4 @@
-package com.enjoyalarm.drawutil;
+package com.enjoyalarm.drawcomponent;
 
 /**
  * 管理2个变量

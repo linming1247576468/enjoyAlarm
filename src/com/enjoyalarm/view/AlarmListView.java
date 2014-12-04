@@ -79,7 +79,7 @@ public class AlarmListView extends View implements ViewControlInterface {
 		mAlarmsBasicInfo = new ArrayList<AlarmBasicInfo>();
 		mAlarmsBasicInfo.add(new AlarmBasicInfo(-1, "unset", 0, 0, "0"));
 		mAlarmsBasicInfo.addAll(1, ModelUtil.getAlarmsBasicInfo(getContext()));
-		mAlarmsBasicInfo.add(new AlarmBasicInfo(-2, "help", 0, 0, null));
+		mAlarmsBasicInfo.add(new AlarmBasicInfo(-2, "help", 0, 0, "6"));
 		mCurrentAlarmIndex = 0;
 	}
 	
@@ -189,6 +189,11 @@ public class AlarmListView extends View implements ViewControlInterface {
 	@Override
 	public float getDensity() {
 		return getResources().getDisplayMetrics().density;
+	}
+	
+	@Override
+	public Context getViewContext() {
+		return getContext();
 	}
 	
 	@Override

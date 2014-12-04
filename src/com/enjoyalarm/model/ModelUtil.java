@@ -40,6 +40,12 @@ public class ModelUtil {
 			this.minute = minute;
 			this.days = days;
 		}
+		
+		@Override
+		public String toString() {
+			return "id: " + id + "  name: " + name + "  hour: " + hour + "  minute: " + minute
+					+ "  days: " + days;
+		}
 	}
 
 	public static List<AlarmBasicInfo> getAlarmsBasicInfo(Context context) {

@@ -5,9 +5,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.MotionEvent;
 
-import com.enjoyalarm.drawutil.BitmapComponent;
-import com.enjoyalarm.drawutil.Component;
-import com.enjoyalarm.drawutil.ExitTextComponent;
+import com.enjoyalarm.drawcomponent.BitmapComponent;
+import com.enjoyalarm.drawcomponent.Component;
+import com.enjoyalarm.drawcomponent.ExitTextComponent;
 import com.enjoyalarm.view.ViewControlInterface;
 import com.scut.enjoyalarm.R;
 
@@ -68,9 +68,9 @@ public class ExitingState extends State {
 	}
 	
 	private void initComponents() {
-		String[] chars1 = mControlInterface.getContext().getResources()
+		String[] chars1 = mControlInterface.getViewContext().getResources()
 				.getStringArray(R.array.exit_words1);
-		String[] chars2 = mControlInterface.getContext().getResources()
+		String[] chars2 = mControlInterface.getViewContext().getResources()
 				.getStringArray(R.array.exit_words2);
 		mLeftTextComponent = new ExitTextComponent(chars1,
 				48 * mControlInterface.getDensity(), Color.WHITE, mViewWidth,

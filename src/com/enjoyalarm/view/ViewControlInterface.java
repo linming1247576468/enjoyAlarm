@@ -25,7 +25,7 @@ public interface ViewControlInterface {
 	
 	public float getDensity();
 
-	public Context getContext();
+	public Context getViewContext();
 
 	public float getViewWidth();
 

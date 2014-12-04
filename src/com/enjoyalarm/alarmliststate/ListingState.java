@@ -5,8 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.MotionEvent;
 
-import com.enjoyalarm.drawutil.BitmapComponent;
-import com.enjoyalarm.drawutil.Component;
+import com.enjoyalarm.drawcomponent.BitmapComponent;
+import com.enjoyalarm.drawcomponent.Component;
 import com.enjoyalarm.view.ViewControlInterface;
 
 public class ListingState extends State {
@@ -70,6 +70,7 @@ public class ListingState extends State {
 				mViewHeight, mViewWidth, mViewHeight);
 
 		mTopBitmapComponent.addAlphaEntry(StatePeriod.LIST_TBITMAP_ALPHA_PERIOD1);
+		mTopBitmapComponent.addAlphaEntry(StatePeriod.LIST_TBITMAP_ALPHA_PERIOD2);
 		mTopBitmapComponent.addScaleEntry(StatePeriod.LIST_TBITMAP_SCALE_PERIOD1);
 		mTopBitmapComponent.addScaleEntry(StatePeriod.LIST_TBITMAP_SCALE_PERIOD2);
 		mTopBitmapComponent.addScaleEntry(StatePeriod.LIST_TBITMAP_SCALE_PERIOD3);
@@ -80,6 +81,7 @@ public class ListingState extends State {
 		mTopBitmapComponent.addTranslationEntry(StatePeriod.LIST_TBITMAP_TRANS_PERIOD5);
 
 		mBottomBitmapComponent.addAlphaEntry(StatePeriod.LIST_TBITMAP_ALPHA_PERIOD1);
+		mBottomBitmapComponent.addAlphaEntry(StatePeriod.LIST_TBITMAP_ALPHA_PERIOD2);
 		mBottomBitmapComponent.addScaleEntry(StatePeriod.LIST_TBITMAP_SCALE_PERIOD1);
 		mBottomBitmapComponent.addScaleEntry(StatePeriod.LIST_TBITMAP_SCALE_PERIOD2);
 		mBottomBitmapComponent.addScaleEntry(StatePeriod.LIST_TBITMAP_SCALE_PERIOD3);

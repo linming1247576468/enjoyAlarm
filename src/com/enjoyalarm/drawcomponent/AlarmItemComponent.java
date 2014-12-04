@@ -1,8 +1,13 @@
-package com.enjoyalarm.drawutil;
+package com.enjoyalarm.drawcomponent;
 
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.text.format.Time;
+
+import com.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
+import com.scut.enjoyalarm.R;
 
 
 /**
@@ -28,10 +33,11 @@ public class AlarmItemComponent extends Component {
 	private float mAlpha;
 	private XYEntity mXyEntity;
 	private Paint mPaint;
+	
 
 	public AlarmItemComponent(int id, String name, String showDay,
 			String showTime, int backgroundColor, int textColor, float baseTextSize, float width,
-			float height, float viewWidth, float viewHeight) {
+			float height, float viewWidth, float viewHeight, Resources resources) {
 
 		mId = id;
 		mName = name;
@@ -55,6 +61,33 @@ public class AlarmItemComponent extends Component {
 		mAlpha = 1f;
 	}
 
+	public AlarmItemComponent(AlarmBasicInfo alarmBasicInfo,
+			int backgroundColor, int textColor, float baseTextSize,
+			float width, float height, float viewWidth, float viewHeight, Resources resources) {
+
+		mId = alarmBasicInfo.id;
+		mName = alarmBasicInfo.name;
+		mShowDay = getShowDay(alarmBasicInfo.hour, alarmBasicInfo.minute,
+				alarmBasicInfo.days, resources);
+		mShowTime = getShowTime(alarmBasicInfo.hour, alarmBasicInfo.minute);
+		mBgColor = backgroundColor;
+		mTextColor = textColor;
+		mBaseTextSize = baseTextSize;
+		mWidth = width;
+		mHeight = height;
+		mViewWidth = viewWidth;
+		mViewHeight = viewHeight;
+		mDrawName = true;
+		mDrawDay = true;
+		mDrawTime = true;
+
+		mPaint = new Paint();
+		mPaint.setTextAlign(Align.CENTER);
+		mXyEntity = new XYEntity(0.5f, 0.5f);
+		mScale = 1f;
+		mAlpha = 1f;
+	}
+	
 	public void setDrawName(boolean drawName) {
 		mDrawName = drawName;
 	}
@@ -79,8 +112,11 @@ public class AlarmItemComponent extends Component {
 		XYEntity tempEntity = getTranslation(nowFactor);
 		mXyEntity = tempEntity == null ? mXyEntity : tempEntity;
 		
+		System.out.println(mName + "  "+mScale+ "  "+ mAlpha + "  "+ mXyEntity.x + "  "+ mXyEntity.y);
+		
 		//draw item bg
 		mPaint.setColor(mBgColor);
+		mPaint.setAlpha((int) (255 * mAlpha));
 		float gapX = mWidth * mScale * 0.5f;
 		float gapY = mHeight * mScale * 0.5f;
 		float x = mXyEntity.x * mViewWidth;
@@ -90,6 +126,7 @@ public class AlarmItemComponent extends Component {
 		//draw name
 		if (mDrawName) {
 			mPaint.setColor(mTextColor);
+			mPaint.setAlpha((int) (255 * mAlpha));
 			mPaint.setTextSize(mBaseTextSize * 1.2f);
 			canvas.drawText(mName, x, y - gapY * 1.2f, mPaint);
 		}
@@ -108,9 +145,52 @@ public class AlarmItemComponent extends Component {
 		
 	}
 	
-	
 	public int getId() {
 		return mId;
 	}
 
+	
+	
+	private String getShowTime(int hour, int minute) {
+		String hourString = String.valueOf(hour);
+		hourString = hourString.length() == 1 ? "0" + hourString : hourString;
+		String minuteString = String.valueOf(minute);
+		minuteString = minuteString.length() == 1 ? "0" + minuteString : minuteString;
+		return hourString + ":" + minuteString;
+	}
+	
+	private String getShowDay(int hour, int minute, String days, Resources resources) {
+		char[] dayChars = days.toCharArray();
+		Time time = new Time();
+		time.setToNow();
+		int nowDay = (time.weekDay + 6) % 7;//let Monday be first
+		int nextDay = -1;
+		for (char c : dayChars) {
+			int day = c - 48;
+			if (((day == nowDay) && ((hour > time.hour) || (hour == time.hour && minute >= time.minute)))
+					|| (day > nowDay)) {
+				nextDay = day;
+				break;
+			}
+		}
+		if (nextDay == -1) {// the closely next day is in next week
+			nextDay = dayChars[0] - 48;
+		}
+		
+		String showDay;
+		if (nextDay == nowDay) {
+			showDay = resources.getString(R.string.today);
+			
+		} else if (nextDay == nowDay + 1) {
+			showDay = resources.getString(R.string.tomorrow);
+			
+		} else if (nextDay > nowDay) {
+			showDay = resources.getStringArray(R.array.this_week)[nextDay];
+			
+		} else {
+			showDay = resources.getStringArray(R.array.next_week)[nextDay];
+		}
+		
+		return showDay;
+	}
 }

@@ -1,4 +1,4 @@
-package com.enjoyalarm.drawutil;
+package com.enjoyalarm.drawcomponent;
 
 import java.util.ArrayList;
 import java.util.List;
