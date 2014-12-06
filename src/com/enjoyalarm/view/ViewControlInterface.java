@@ -33,6 +33,8 @@ public interface ViewControlInterface {
 	
 	public List<AlarmBasicInfo> getAlarmsInfo();
 	
+	public List<Integer> getAlarmsColor();
+	
 	public int getCurrentAlarmIndex();
 	
 	public void setCurrentAlarmIndex(int index);

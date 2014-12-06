@@ -112,10 +112,9 @@ public class AlarmItemComponent extends Component {
 		XYEntity tempEntity = getTranslation(nowFactor);
 		mXyEntity = tempEntity == null ? mXyEntity : tempEntity;
 		
-		System.out.println(mName + "  "+mScale+ "  "+ mAlpha + "  "+ mXyEntity.x + "  "+ mXyEntity.y);
 		
 		//draw item bg
-		mPaint.setColor(mBgColor);
+		mPaint.setColor(mBgColor);//the color has alpha data
 		mPaint.setAlpha((int) (255 * mAlpha));
 		float gapX = mWidth * mScale * 0.5f;
 		float gapY = mHeight * mScale * 0.5f;
@@ -125,22 +124,22 @@ public class AlarmItemComponent extends Component {
 		
 		//draw name
 		if (mDrawName) {
-			mPaint.setColor(mTextColor);
+			mPaint.setColor(mTextColor);//the color has alpha data
 			mPaint.setAlpha((int) (255 * mAlpha));
-			mPaint.setTextSize(mBaseTextSize * 1.2f);
+			mPaint.setTextSize(mBaseTextSize);
 			canvas.drawText(mName, x, y - gapY * 1.2f, mPaint);
 		}
 		
 		//draw day
 		if (mDrawDay) {
-			mPaint.setTextSize(mBaseTextSize);
-			canvas.drawText(mShowDay, x, y - gapX * 0.5f, mPaint);
+			mPaint.setTextSize(mBaseTextSize * 0.8f);
+			canvas.drawText(mShowDay, x, y - mBaseTextSize, mPaint);
 		}
 		
 		//draw time
 		if (mDrawTime) {
-			mPaint.setTextSize(mBaseTextSize * 1.1f);
-			canvas.drawText(mShowTime, x, y, mPaint);
+			mPaint.setTextSize(mBaseTextSize * 1.5f);
+			canvas.drawText(mShowTime, x, y + mBaseTextSize * 0.8f, mPaint);
 		}
 		
 	}
@@ -165,6 +164,7 @@ public class AlarmItemComponent extends Component {
 		time.setToNow();
 		int nowDay = (time.weekDay + 6) % 7;//let Monday be first
 		int nextDay = -1;
+		boolean nextWeek = false;
 		for (char c : dayChars) {
 			int day = c - 48;
 			if (((day == nowDay) && ((hour > time.hour) || (hour == time.hour && minute >= time.minute)))
@@ -175,20 +175,21 @@ public class AlarmItemComponent extends Component {
 		}
 		if (nextDay == -1) {// the closely next day is in next week
 			nextDay = dayChars[0] - 48;
+			nextWeek = true;
 		}
 		
 		String showDay;
-		if (nextDay == nowDay) {
+		if (nextWeek) {
+			showDay = resources.getStringArray(R.array.next_week)[nextDay];
+			
+		} else if (nextDay == nowDay) {
 			showDay = resources.getString(R.string.today);
 			
 		} else if (nextDay == nowDay + 1) {
 			showDay = resources.getString(R.string.tomorrow);
 			
-		} else if (nextDay > nowDay) {
-			showDay = resources.getStringArray(R.array.this_week)[nextDay];
-			
 		} else {
-			showDay = resources.getStringArray(R.array.next_week)[nextDay];
+			showDay = resources.getStringArray(R.array.this_week)[nextDay];
 		}
 		
 		return showDay;

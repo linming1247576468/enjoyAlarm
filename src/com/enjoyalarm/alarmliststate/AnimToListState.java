@@ -96,7 +96,9 @@ public class AnimToListState extends State {
 	
 	private void initMoreComponents() {
 		Resources resources = mControlInterface.getViewContext().getResources();
+		float density = mControlInterface.getDensity();
 		List<AlarmBasicInfo> alarmsInfo = mControlInterface.getAlarmsInfo();
+		List<Integer> alarmsColor = mControlInterface.getAlarmsColor();
 		for (AlarmBasicInfo info: alarmsInfo) {
 			System.out.println(info);
 		}
@@ -104,8 +106,8 @@ public class AnimToListState extends State {
 		System.out.println(currentIndex);
 		if (currentIndex > 0) {
 			mLeftItemComponent = new AlarmItemComponent(
-					alarmsInfo.get(currentIndex - 1), Color.BLUE, Color.WHITE,
-					50, mViewWidth, mViewHeight, mViewWidth, mViewHeight,
+					alarmsInfo.get(currentIndex - 1), alarmsColor.get(currentIndex - 1), Color.WHITE,
+					30 * density, mViewWidth, mViewHeight, mViewWidth, mViewHeight,
 					resources);
 			
 			mLeftItemComponent.addAlphaEntry(StatePeriod.LIST_LITEM_ALPHA_PERIOD1);
@@ -115,16 +117,16 @@ public class AnimToListState extends State {
 			mLeftItemComponent.addTranslationEntry(StatePeriod.LIST_LITEM_TRANS_PERIOD3);
 		}
 		mCenterTopItemComponent = new AlarmItemComponent(
-				alarmsInfo.get(currentIndex), Color.BLUE, Color.WHITE,
-				50, mViewWidth, mViewHeight, mViewWidth, mViewHeight,
+				alarmsInfo.get(currentIndex), alarmsColor.get(currentIndex), Color.WHITE,
+				30 * density, mViewWidth, mViewHeight, mViewWidth, mViewHeight,
 				resources);
 		mCenterBottomItemComponent = new AlarmItemComponent(
-				alarmsInfo.get(currentIndex), Color.BLUE, Color.WHITE,
-				50, mViewWidth, mViewHeight, mViewWidth, mViewHeight,
+				alarmsInfo.get(currentIndex), alarmsColor.get(currentIndex), Color.WHITE,
+				30 * density, mViewWidth, mViewHeight, mViewWidth, mViewHeight,
 				resources);
 		mRightItemComponent = new AlarmItemComponent(
-				alarmsInfo.get(currentIndex + 1), Color.BLUE, Color.WHITE,
-				50, mViewWidth, mViewHeight, mViewWidth, mViewHeight,
+				alarmsInfo.get(currentIndex + 1), alarmsColor.get(currentIndex + 1), Color.WHITE,
+				30 * density, mViewWidth, mViewHeight, mViewWidth, mViewHeight,
 				resources);
 		
 		
@@ -152,53 +154,49 @@ public class AnimToListState extends State {
 	}
 	
 	private void changeToListStateToHandle() {
-		
+		mControlInterface.handleScrollToListFinished();
+		mControlInterface.changeState(new ListState(mControlInterface));
 	}
 
 	private class AnimThread extends Thread {
 		@Override
 		public void run() {
 			float velocity = Math.abs(mPositionY) / 64;
-			float gap = mViewHeight * 0.002f;
+			float acceGap = mViewHeight * 0.002f;
 			float limit = mViewHeight * StatePeriod.LIST_FACTOR4;
+			float accelerateLimit = mViewHeight * StatePeriod.LIST_FACTOR2;
+			boolean accelerate = true;
 			
-			if (mDirection == 0) {// to top
-				while (mThreadFlag) {
+			while (mThreadFlag) {
+				if (mDirection == 0) {// to top
 					mPositionY -= velocity;
-					velocity += gap; // accelerate
-					mControlInterface.refreshDraw();
-					
-					if (mPositionY < -limit) {
-						changeToListStateToHandle();
-						break;
-					}
-
-					try {
-						sleep(25);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-
-			} else {// to bottom
-				while (mThreadFlag) {
+				} else {// to bottom
 					mPositionY += velocity;
-					velocity += gap; // accelerate
-					mControlInterface.refreshDraw();
-					
-					if (mPositionY > limit) {
-						changeToListStateToHandle();
-						break;
-					}
-
-					try {
-						sleep(25);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
 				}
 
+				if (accelerate) {
+					if (Math.abs(mPositionY) < accelerateLimit) {
+						velocity += acceGap; // accelerate
+					} else {
+						accelerate = false;
+						velocity = Math.abs(mPositionY) / 32;
+					}
+				}
+				
+				mControlInterface.refreshDraw();
+
+				if (Math.abs(mPositionY) > limit) {
+					changeToListStateToHandle();
+					break;
+				}
+
+				try {
+					sleep(25);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
+
 		}
 	}
 

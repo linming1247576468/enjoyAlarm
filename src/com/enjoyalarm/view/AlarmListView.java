@@ -2,10 +2,12 @@ package com.enjoyalarm.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +36,7 @@ public class AlarmListView extends View implements ViewControlInterface {
 	 * the first item is the new setting one(alarmId=-1), and the last one is help-about one(alarmId=-2)
 	 */
 	private List<AlarmBasicInfo> mAlarmsBasicInfo;
+	private List<Integer> mAlarmsColor;
 	private int mCurrentAlarmIndex;
 	
 
@@ -81,6 +84,18 @@ public class AlarmListView extends View implements ViewControlInterface {
 		mAlarmsBasicInfo.addAll(1, ModelUtil.getAlarmsBasicInfo(getContext()));
 		mAlarmsBasicInfo.add(new AlarmBasicInfo(-2, "help", 0, 0, "6"));
 		mCurrentAlarmIndex = 0;
+		
+		mAlarmsColor = new ArrayList<Integer>();
+		int[] colors = new int[]{Color.BLUE, Color.GREEN, Color.RED, Color.GRAY};
+		int size = colors.length;
+		Random random = new Random();
+		int index = random.nextInt(size);
+		int temp = colors[0];
+		colors[0] = colors[index];
+		colors[index] = temp;
+		for (int i = 0; i < mAlarmsBasicInfo.size(); i++) {
+			mAlarmsColor.add(colors[i % size]);
+		}
 	}
 	
 	public AlarmListView(Context context) {
@@ -224,6 +239,11 @@ public class AlarmListView extends View implements ViewControlInterface {
 		mCurrentAlarmIndex = index;
 	}
 	
+	@Override
+	public List<Integer> getAlarmsColor() {
+		return mAlarmsColor;
+	}
+	
 	
 	
 	
@@ -233,6 +253,5 @@ public class AlarmListView extends View implements ViewControlInterface {
 
 		mState.handleDraw(canvas);
 	}
-
 
 }

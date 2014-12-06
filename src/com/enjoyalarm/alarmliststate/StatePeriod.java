@@ -35,7 +35,7 @@ public class StatePeriod {
 	public static final float LIST_FACTOR1 = 0.2f;//开始阶段的上下滑动:end
 	public static final float LIST_FACTOR2 = 0.55f;//滑动到一定阶段不再滑动，必须放手才会反方向滑动:end
 	public static final float LIST_FACTOR3 = 0.65f;//停止一小会:end
-	public static final float LIST_FACTOR4 = 0.8f;//反方向滑动一会后停止滑动:end
+	public static final float LIST_FACTOR4 = 0.9f;//反方向滑动一会后停止滑动:end
 	
 	public static final Period1 LIST_TBITMAP_ALPHA_PERIOD1 = new Period1(0f, LIST_FACTOR3, 1f, 1f);
 	public static final Period1 LIST_TBITMAP_ALPHA_PERIOD2 = new Period1(LIST_FACTOR3, LIST_FACTOR4, 1f, 0f);
