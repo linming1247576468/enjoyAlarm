@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
 import com.enjoyalarm.view.AlarmListView.OnAlarmItemClickListener;
 import com.enjoyalarm.view.AlarmListView.OnScrollToExitFinishedListerner;
-import com.enjoyalarm.view.AlarmListView.OnScrollToListFinishedListener;
+import com.enjoyalarm.view.AlarmListView.OnScrollToListStartedListener;
 import com.enjoyalarm.view.AlarmListView.OnScrollToSettingFinishedListener;
 import com.scut.enjoyalarm.R;
 
@@ -171,10 +171,10 @@ public class MainViewManager {
 			}
 		});
 
-		mAlarmListView.setOnScrollToListFinishedListener(new OnScrollToListFinishedListener() {
+		mAlarmListView.setOnScrollToListStartedListener(new OnScrollToListStartedListener() {
 
 			@Override
-			public void onScrollToListFinished(View alarmListView) {
+			public void onScrollToListStarted(View alarmListView) {
 				if (mNowAlarmId == -1) {
 					mAlarmSettingViewManager.saveTemp();
 					

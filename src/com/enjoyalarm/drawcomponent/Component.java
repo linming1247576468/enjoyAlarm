@@ -67,6 +67,19 @@ public abstract class Component {
 				period.eValue2));
 	}
 
+	public void removeAllALphaEntry() {
+		mAlphaEntryList.clear();
+	}
+	
+	public void removeAllScaleEntry() {
+		mScaleEntryList.clear();
+	}
+	
+	public void removeAllTransEntry() {
+		mTranslationEntryList.clear();
+	}
+	
+	
 	public float getScale(float nowFactor, float defaultValue) {
 		for (Entry1 entry : mScaleEntryList) {
 			if (nowFactor >= entry.startFactor && nowFactor < entry.endFactor) {
@@ -91,6 +104,7 @@ public abstract class Component {
 	}
 
 
+	
 	/**
 	 * 返回在相对坐标下的比例; 若没有设置当前点，则返回null
 	 */

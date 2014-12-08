@@ -36,6 +36,8 @@ public class AnimToListState extends State {
 	public AnimToListState(ViewControlInterface controlInterface,
 			Bitmap foregroundBitmap, float initPositionY, int initDirection, Component[] components) {
 		super(controlInterface);
+		
+		controlInterface.handleScrollToListStarted();
 
 		mBitmap = foregroundBitmap;
 		mPositionY = initPositionY;
@@ -104,12 +106,14 @@ public class AnimToListState extends State {
 		}
 		int currentIndex = mControlInterface.getCurrentAlarmIndex();
 		System.out.println(currentIndex);
+		float itemScale = StatePeriod.LIST_ITEM_SCALE;
 		if (currentIndex > 0) {
 			mLeftItemComponent = new AlarmItemComponent(
-					alarmsInfo.get(currentIndex - 1), alarmsColor.get(currentIndex - 1), Color.WHITE,
-					30 * density, mViewWidth, mViewHeight, mViewWidth, mViewHeight,
-					resources);
-			
+					alarmsInfo.get(currentIndex - 1),
+					alarmsColor.get(currentIndex - 1), Color.WHITE,
+					30 * density, mViewWidth * itemScale, mViewHeight * itemScale, 
+					mViewWidth, mViewHeight, resources);
+
 			mLeftItemComponent.addAlphaEntry(StatePeriod.LIST_LITEM_ALPHA_PERIOD1);
 			mLeftItemComponent.addScaleEntry(StatePeriod.LIST_LITEM_SCALE_PERIOD1);
 			mLeftItemComponent.addTranslationEntry(StatePeriod.LIST_LITEM_TRANS_PERIOD1);
@@ -117,18 +121,18 @@ public class AnimToListState extends State {
 			mLeftItemComponent.addTranslationEntry(StatePeriod.LIST_LITEM_TRANS_PERIOD3);
 		}
 		mCenterTopItemComponent = new AlarmItemComponent(
-				alarmsInfo.get(currentIndex), alarmsColor.get(currentIndex), Color.WHITE,
-				30 * density, mViewWidth, mViewHeight, mViewWidth, mViewHeight,
-				resources);
+				alarmsInfo.get(currentIndex), alarmsColor.get(currentIndex),
+				Color.WHITE, 30 * density, mViewWidth * itemScale, mViewHeight
+						* itemScale, mViewWidth, mViewHeight, resources);
 		mCenterBottomItemComponent = new AlarmItemComponent(
-				alarmsInfo.get(currentIndex), alarmsColor.get(currentIndex), Color.WHITE,
-				30 * density, mViewWidth, mViewHeight, mViewWidth, mViewHeight,
-				resources);
+				alarmsInfo.get(currentIndex), alarmsColor.get(currentIndex),
+				Color.WHITE, 30 * density, mViewWidth * itemScale, mViewHeight
+						* itemScale, mViewWidth, mViewHeight, resources);
 		mRightItemComponent = new AlarmItemComponent(
-				alarmsInfo.get(currentIndex + 1), alarmsColor.get(currentIndex + 1), Color.WHITE,
-				30 * density, mViewWidth, mViewHeight, mViewWidth, mViewHeight,
-				resources);
-		
+				alarmsInfo.get(currentIndex + 1),
+				alarmsColor.get(currentIndex + 1), Color.WHITE, 30 * density,
+				mViewWidth * itemScale, mViewHeight * itemScale, mViewWidth,
+				mViewHeight, resources);
 		
 		mRightItemComponent.addAlphaEntry(StatePeriod.LIST_LITEM_ALPHA_PERIOD1);
 		mRightItemComponent.addScaleEntry(StatePeriod.LIST_LITEM_SCALE_PERIOD1);
@@ -154,7 +158,6 @@ public class AnimToListState extends State {
 	}
 	
 	private void changeToListStateToHandle() {
-		mControlInterface.handleScrollToListFinished();
 		mControlInterface.changeState(new ListState(mControlInterface));
 	}
 

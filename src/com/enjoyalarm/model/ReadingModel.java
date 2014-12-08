@@ -31,8 +31,14 @@ public class ReadingModel {
 	private boolean mRepeat;
 
 	private void readingData() {
+		String tableName;
+		if (mId == -1) {
+			tableName = ModelVariable.TEMP_ALARM_TABLE_NAME;
+		} else {
+			tableName = ModelVariable.ALARM_TABLE_NAME;
+		}
 		SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
-		Cursor cursor = database.query(ModelVariable.ALARM_TABLE_NAME,
+		Cursor cursor = database.query(tableName,
 				new String[] { "*" }, ModelVariable.ALARM_COLUMN1_ID + "=?",
 				new String[] { String.valueOf(mId) }, null, null, null);
 		if (cursor.moveToFirst()) {

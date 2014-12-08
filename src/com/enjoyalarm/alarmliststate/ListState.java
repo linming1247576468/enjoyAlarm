@@ -12,6 +12,11 @@ public class ListState extends State {
 	private AlarmListDrawer mAlarmListDrawer;
 	private float mViewWidth;
 	private float mViewHeight;
+	private ClickMode mClickMode;
+	
+	enum ClickMode {
+		NONE, CLICK, DELETE, SCROLL
+	}
 
 	public ListState(ViewControlInterface controlInterface) {
 		super(controlInterface);
@@ -26,44 +31,190 @@ public class ListState extends State {
 				mViewHeight);
 		mAlarmListDrawer.initItems(mControlInterface.getAlarmsInfo(),
 				mControlInterface.getAlarmsColor(), Color.WHITE,
-				30 * mControlInterface.getDensity(), mViewWidth * 0.6f,
-				mViewHeight * 0.6f, mControlInterface.getViewContext().getResources());
+				30 * mControlInterface.getDensity(), mViewWidth * StatePeriod.LIST_ITEM_SCALE,
+				mViewHeight * StatePeriod.LIST_ITEM_SCALE, mControlInterface.getViewContext().getResources());
 		mAlarmListDrawer.setCurrentIndex(mControlInterface.getCurrentAlarmIndex());
+		
+		mTouchGap = 1 * mControlInterface.getDensity();
 	}
 
 	
 	private float mX = -1;
+	private float mY = -1;
+	private float mTouchGap;//used to judge whether user has moved or not
 	private float mGapXFactor;
+	private float mThreadGapXFactor;//used to animation
+	private int mClickIndex;
+	private boolean mThreadFlag;
+	
+	
 	@Override
 	public void handleTouchEvent(MotionEvent event) {
 		float x = event.getX();
+		float y = event.getY();
 		switch(event.getActionMasked()) {
 		case MotionEvent.ACTION_DOWN: {
+			mThreadFlag = false;
 			mX = x;
+			mY = y;
+			mClickIndex = mAlarmListDrawer.getClickItemIndex(x, y);
+			if (mClickIndex == -1) {
+				mClickMode = ClickMode.SCROLL;
+			} else {
+				mClickMode = ClickMode.NONE;
+			}
 			break;
 		}
 		
 		case MotionEvent.ACTION_MOVE: {
 			if (mX == -1) {
+				mThreadFlag = false;
 				mX = x;
+				mY = y;
+				mClickIndex = mAlarmListDrawer.getClickItemIndex(x, y);
+				if (mClickIndex == -1) {
+					mClickMode = ClickMode.SCROLL;
+				} else {
+					mClickMode = ClickMode.NONE;
+				}
 			} else {
-				mGapXFactor = 1.5f * (x - mX) / mViewWidth;
-				mControlInterface.refreshDraw();
-				mX = x;
+				
+				switch(mClickMode) {
+				case NONE: {
+					if (Math.abs(x - mX) < mTouchGap && Math.abs(y - mY) < mTouchGap) {//click
+						mClickMode = ClickMode.CLICK;
+						mAlarmListDrawer.setIfDrawClickEffect(mClickIndex, true);
+						mControlInterface.refreshDraw();
+						
+					} else if (Math.abs(x - mX) >= Math.abs(y - mY)){//move horizon
+						mClickMode = ClickMode.SCROLL;
+						
+					} else {//move vertical
+						mClickMode = ClickMode.DELETE;
+					}
+					handleTouchEvent(event);
+					break;
+				}
+				
+				case CLICK: {
+					float moveX = Math.abs(x - mX);
+					float moveY = Math.abs(y - mY);
+					if(moveX > mTouchGap || moveY > mTouchGap) {
+						if (moveX >= moveY){//move horizon
+							mClickMode = ClickMode.SCROLL;
+							mAlarmListDrawer.setIfDrawClickEffect(mClickIndex, false);
+							mControlInterface.refreshDraw();
+							
+						} else {//move vertical
+							mClickMode = ClickMode.DELETE;
+							mAlarmListDrawer.setIfDrawClickEffect(mClickIndex, false);
+							mControlInterface.refreshDraw();
+						}
+						handleTouchEvent(event);
+						
+					} 
+					break;
+				}
+				
+				case DELETE: {
+					mX = x;
+					mY = y;
+					//mControlInterface.refreshDraw();
+					break;
+				}
+				
+				case SCROLL: {
+					if (Math.abs(x - mX) >= Math.abs(y - mY)) {
+						mGapXFactor = 1.4f * (x - mX) / mViewWidth;
+						mControlInterface.refreshDraw();
+					}
+					mX = x;
+					mY = y;
+					
+					break;
+				}
+				}
+				
 			}
 			break;
 		}
 		
-		case MotionEvent.ACTION_POINTER_UP: {
+		case MotionEvent.ACTION_UP: {
+			mThreadGapXFactor = mGapXFactor;
+			mGapXFactor = 0f;
+			mAlarmListDrawer.setIfDrawClickEffect(mClickIndex, false);
+			mControlInterface.refreshDraw();
+			
+			switch(mClickMode) {
+			case CLICK: {
+				mControlInterface.changeState(new AnimClickState(
+						mControlInterface, mAlarmListDrawer.getItems(),
+						mClickIndex, mAlarmListDrawer.getNowFactor()));
+				break;
+			}
+			
+			case SCROLL: {
+				if (Math.abs(x - mX) >= Math.abs(y - mY)) {
+					mThreadFlag = true;
+					new AnimThread().start();
+				}
+				break;
+			}
+			
+			}
+			
 			mX = -1;
+			mY = -1;
 			break;
 		}
 		}
 	}
 
+	
+	
 	@Override
 	public void handleDraw(Canvas canvas) {
-		mAlarmListDrawer.draw(canvas, mGapXFactor);
+		if (mThreadFlag) {
+			mAlarmListDrawer.draw(canvas, mThreadGapXFactor);
+		} else {
+			mAlarmListDrawer.draw(canvas, mGapXFactor);
+		}
+		
 	}
 
+	
+	private class AnimThread extends Thread {
+		
+		@Override
+		public void run() {
+			float gap = mThreadGapXFactor * 0.1f;
+			boolean positive = mThreadGapXFactor > 0 ? true : false;
+			while (mThreadFlag) {
+				mThreadGapXFactor -= gap;
+				if (positive) {
+					if (mThreadGapXFactor < 0) {
+						mThreadGapXFactor = 0f;
+						mThreadFlag = false;
+						break;
+					}
+				} else {
+					if (mThreadGapXFactor > 0) {
+						mThreadGapXFactor = 0f;
+						mThreadFlag = false;
+						break;
+					}
+				}
+				mControlInterface.refreshDraw();
+				
+				if (!mThreadFlag) {
+					break;
+				}
+				try {
+					sleep(25);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

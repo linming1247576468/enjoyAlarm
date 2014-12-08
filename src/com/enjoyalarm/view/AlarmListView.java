@@ -30,7 +30,7 @@ public class AlarmListView extends View implements ViewControlInterface {
 	private OnAlarmItemClickListener mItemClickListener;
 	private OnScrollToSettingFinishedListener mScrollToSettingFinishedListener;
 	private OnScrollToExitFinishedListerner mScrollToExitFinishedListerner;
-	private OnScrollToListFinishedListener mScrollToListFinishedListener;
+	private OnScrollToListStartedListener mScrollToListStartedListener;
 	private Handler mHandler;
 	/**
 	 * the first item is the new setting one(alarmId=-1), and the last one is help-about one(alarmId=-2)
@@ -64,8 +64,6 @@ public class AlarmListView extends View implements ViewControlInterface {
 				}
 				
 				case WHAT_LIST: {
-					mScrollToListFinishedListener
-							.onScrollToListFinished(AlarmListView.this);
 					break;
 				}
 				
@@ -131,6 +129,7 @@ public class AlarmListView extends View implements ViewControlInterface {
 		info.hour = hour;
 		info.minute = minute;
 		info.days = days;
+		System.out.println("update data");
 	}
 	
 	public void setOnAlarmItemClickListener(OnAlarmItemClickListener listener) {
@@ -147,9 +146,9 @@ public class AlarmListView extends View implements ViewControlInterface {
 		mScrollToExitFinishedListerner = listerner;
 	}
 
-	public void setOnScrollToListFinishedListener(
-			OnScrollToListFinishedListener listener) {
-		mScrollToListFinishedListener = listener;
+	public void setOnScrollToListStartedListener(
+			OnScrollToListStartedListener listener) {
+		mScrollToListStartedListener = listener;
 	}
 	
 	public interface OnAlarmItemClickListener {
@@ -164,8 +163,8 @@ public class AlarmListView extends View implements ViewControlInterface {
 		public void onScrollToExitFinished(View alarmListView);
 	}
 
-	public interface OnScrollToListFinishedListener {
-		public void onScrollToListFinished(View alarmListView);
+	public interface OnScrollToListStartedListener {
+		public void onScrollToListStarted(View alarmListView);
 	}
 	
 	
@@ -192,13 +191,16 @@ public class AlarmListView extends View implements ViewControlInterface {
 	}
 
 	@Override
-	public void handleClickAlarmItem(int alarmId) {
-		mHandler.obtainMessage(WHAT_CLICK, alarmId, 0).sendToTarget();;
+	public void handleClickAlarmItem(int index) {
+		mCurrentAlarmIndex = index;
+		mHandler.obtainMessage(WHAT_CLICK, mAlarmsBasicInfo.get(index).id, 0).sendToTarget();
 	}
 
 	@Override
-	public void handleScrollToListFinished() {
-		mHandler.sendEmptyMessage(WHAT_LIST);
+	public void handleScrollToListStarted() {
+		//mHandler.sendEmptyMessage(WHAT_LIST);
+		//it should be called immediately
+		mScrollToListStartedListener.onScrollToListStarted(AlarmListView.this);
 	}
 	
 	@Override

@@ -17,7 +17,7 @@ public interface ViewControlInterface {
 
 	public void handleScrollToSettingFinished();
 	
-	public void handleScrollToListFinished();
+	public void handleScrollToListStarted();
 	
 	public void handleClickAlarmItem(int index);
 	

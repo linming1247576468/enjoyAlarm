@@ -27,7 +27,7 @@ public class StatePeriod {
 	
 	
 	
-	 //listing
+	 //anim to list
 	/**
 	 *  LIST_LIMIT: when within the limit, then it should recover instead of list
 	 */
@@ -36,13 +36,14 @@ public class StatePeriod {
 	public static final float LIST_FACTOR2 = 0.55f;//滑动到一定阶段不再滑动，必须放手才会反方向滑动:end
 	public static final float LIST_FACTOR3 = 0.65f;//停止一小会:end
 	public static final float LIST_FACTOR4 = 0.9f;//反方向滑动一会后停止滑动:end
+	public static final float LIST_ITEM_SCALE = 0.6f;
 	
 	public static final Period1 LIST_TBITMAP_ALPHA_PERIOD1 = new Period1(0f, LIST_FACTOR3, 1f, 1f);
 	public static final Period1 LIST_TBITMAP_ALPHA_PERIOD2 = new Period1(LIST_FACTOR3, LIST_FACTOR4, 1f, 0f);
 	public static final Period1 LIST_TBITMAP_ALPHA_PERIOD3 = new Period1(LIST_FACTOR4, 1f, 0f, 0f);
 	public static final Period1 LIST_TBITMAP_SCALE_PERIOD1 = new Period1(0f, LIST_FACTOR1, 1f, 1f);
-	public static final Period1 LIST_TBITMAP_SCALE_PERIOD2 = new Period1(LIST_FACTOR1, LIST_FACTOR2, 1f, 0.6f);
-	public static final Period1 LIST_TBITMAP_SCALE_PERIOD3 = new Period1(LIST_FACTOR2, 1f, 0.6f, 0.6f);
+	public static final Period1 LIST_TBITMAP_SCALE_PERIOD2 = new Period1(LIST_FACTOR1, LIST_FACTOR2, 1f, LIST_ITEM_SCALE);
+	public static final Period1 LIST_TBITMAP_SCALE_PERIOD3 = new Period1(LIST_FACTOR2, 1f, LIST_ITEM_SCALE, LIST_ITEM_SCALE);
 	public static final Period2 LIST_TBITMAP_TRANS_PERIOD1 = new Period2(0f, LIST_FACTOR1, 0.5f, 0.5f, 0.5f, 0.6f);
 	public static final Period2 LIST_TBITMAP_TRANS_PERIOD2 = new Period2(LIST_FACTOR1, LIST_FACTOR2, 0.5f, 0.5f, 0.6f, 0.65f);
 	public static final Period2 LIST_TBITMAP_TRANS_PERIOD3 = new Period2(LIST_FACTOR2, LIST_FACTOR3, 0.5f, 0.5f, 0.65f, 0.65f);
@@ -50,7 +51,7 @@ public class StatePeriod {
 	public static final Period2 LIST_TBITMAP_TRANS_PERIOD5 = new Period2(LIST_FACTOR4, 1f, 0.5f, 0.5f, 0.5f, 0.5f);
 	
 	public static final Period1 LIST_LITEM_ALPHA_PERIOD1 = new Period1(0f, 1f, 1f, 1f);
-	public static final Period1 LIST_LITEM_SCALE_PERIOD1 = new Period1(0f, 1f, 0.6f, 0.6f);
+	public static final Period1 LIST_LITEM_SCALE_PERIOD1 = new Period1(0f, 1f, 1f, 1f);
 	public static final Period2 LIST_LITEM_TRANS_PERIOD1 = new Period2(0f, LIST_FACTOR3, -0.3f, -0.3f, 0.5f, 0.5f);
 	public static final Period2 LIST_LITEM_TRANS_PERIOD2 = new Period2(LIST_FACTOR3, LIST_FACTOR4, -0.3f, -0.2f, 0.5f, 0.5f);
 	public static final Period2 LIST_LITEM_TRANS_PERIOD3 = new Period2(LIST_FACTOR4, 1f, -0.2f, -0.2f, 0.5f, 0.5f);
@@ -58,11 +59,15 @@ public class StatePeriod {
 	public static final Period1 LIST_CTITEM_ALPHA_PERIOD1 = new Period1(0f, LIST_FACTOR3, 0f, 0f);
 	public static final Period1 LIST_CTITEM_ALPHA_PERIOD2 = new Period1(LIST_FACTOR3, LIST_FACTOR4, 0f, 1f);
 	public static final Period1 LIST_CTITEM_ALPHA_PERIOD3 = new Period1(LIST_FACTOR4, 1f, 1f, 1f);
-	public static final Period1 LIST_CTITEM_SCALE_PERIOD1 = new Period1(0f, 1f, 0.6f, 0.6f);
+	public static final Period1 LIST_CTITEM_SCALE_PERIOD1 = new Period1(0f, 1f, 1f, 1f);
 	public static final Period2 LIST_CTITEM_TRANS_PERIOD1 = new Period2(0f, LIST_FACTOR3, 0.5f, 0.5f, 0.65f, 0.65f);
 	public static final Period2 LIST_CTITEM_TRANS_PERIOD2 = new Period2(LIST_FACTOR3, LIST_FACTOR4, 0.5f, 0.5f, 0.65f, 0.5f);
 	public static final Period2 LIST_CTITEM_TRANS_PERIOD3 = new Period2(LIST_FACTOR4, 1f, 0.5f, 0.5f, 0.5f, 0.5f);
 	
+	
+	//click anim
+	public static final Period1 CLICK_ALPHA_PERIOD1 = new Period1(0f, 1f, 1f, 0.6f);
+	public static final Period1 CLICK_SCALE_PERIOD1 = new Period1(0f, 1f, 1f, 1.67f);
 	
 	
 	

@@ -2,6 +2,7 @@ package com.enjoyalarm.drawcomponent;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.text.format.Time;
@@ -29,10 +30,12 @@ public class AlarmItemComponent extends Component {
 	private boolean mDrawName;
 	private boolean mDrawDay;
 	private boolean mDrawTime;
+	private boolean mDrawClickEffect;
 	private float mScale;
 	private float mAlpha;
 	private XYEntity mXyEntity;
 	private Paint mPaint;
+	
 	
 
 	public AlarmItemComponent(int id, String name, String showDay,
@@ -99,6 +102,10 @@ public class AlarmItemComponent extends Component {
 	public void setDrawTime(boolean drawTime) {
 		mDrawTime = drawTime;
 	}
+	
+	public void setDrawClickEffect(boolean drawClickEffect) {
+		mDrawClickEffect = drawClickEffect;
+	}
 
 	@Override
 	public void draw(Canvas canvas, float nowFactor) {
@@ -122,24 +129,31 @@ public class AlarmItemComponent extends Component {
 		float y = mXyEntity.y * mViewHeight;
 		canvas.drawRect(x - gapX, y - gapY, x + gapX, y + gapY, mPaint);
 		
+		//draw click effect
+		if (mDrawClickEffect) {
+			mPaint.setColor(Color.BLACK);
+			mPaint.setAlpha(60);
+			canvas.drawRect(x - gapX, y - gapY, x + gapX, y + gapY, mPaint);
+		}
+		
 		//draw name
 		if (mDrawName) {
 			mPaint.setColor(mTextColor);//the color has alpha data
 			mPaint.setAlpha((int) (255 * mAlpha));
-			mPaint.setTextSize(mBaseTextSize);
+			mPaint.setTextSize(mBaseTextSize * mScale);
 			canvas.drawText(mName, x, y - gapY * 1.2f, mPaint);
 		}
 		
 		//draw day
 		if (mDrawDay) {
-			mPaint.setTextSize(mBaseTextSize * 0.8f);
-			canvas.drawText(mShowDay, x, y - mBaseTextSize, mPaint);
+			mPaint.setTextSize(mBaseTextSize * 0.8f * mScale);
+			canvas.drawText(mShowDay, x, y - mBaseTextSize * mScale, mPaint);
 		}
 		
 		//draw time
 		if (mDrawTime) {
-			mPaint.setTextSize(mBaseTextSize * 1.5f);
-			canvas.drawText(mShowTime, x, y + mBaseTextSize * 0.8f, mPaint);
+			mPaint.setTextSize(mBaseTextSize * 1.5f * mScale);
+			canvas.drawText(mShowTime, x, y + mBaseTextSize * 0.8f * mScale, mPaint);
 		}
 		
 	}

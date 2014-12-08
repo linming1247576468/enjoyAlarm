@@ -12,10 +12,11 @@ import android.graphics.Color;
 public class AlarmListDrawer {
 
 	private List<AlarmItemComponent> mItems;
-	private float mItemGap;
 	private float mItemWidth;
+	private float mItemHeight;
 	private float mViewWidth;
 	private float mViewHeight;
+	private float mItemGapFactor;
 	private float mNowFactor;
 	private float mStartFactor;
 	private float mEndFactor;
@@ -23,7 +24,7 @@ public class AlarmListDrawer {
 	
 
 	public AlarmListDrawer(float itemGap, float viewWidth, float viewHeight) {
-		mItemGap = itemGap;
+		mItemGapFactor = itemGap / viewWidth;
 		mViewWidth = viewWidth;
 		mViewHeight = viewHeight;
 		mNowFactor = 0f;
@@ -33,6 +34,7 @@ public class AlarmListDrawer {
 			List<Integer> bgColors, int textColor, float baseTextSize,
 			float width, float height, Resources resources) {
 		mItemWidth = width;
+		mItemHeight = height;
 		mItems = new ArrayList<AlarmItemComponent>();
 		for (int i = 0; i < basicInfos.size(); i++) {
 			mItems.add(new AlarmItemComponent(basicInfos.get(i), bgColors
@@ -45,7 +47,7 @@ public class AlarmListDrawer {
 
 	private void setEntryForItems() {
 		int size = mItems.size();
-		float gapFactor = (mItemGap + mItemWidth) / mViewWidth;
+		float gapFactor = mItemGapFactor + mItemWidth / mViewWidth;
 		mStartFactor = 0f;// at list start
 		mEndFactor = (size - 1) * gapFactor;// at list end
 		for (int i = 0; i < size; i++) {
@@ -60,9 +62,51 @@ public class AlarmListDrawer {
 	}
 
 	public void setCurrentIndex(int index) {
-		mNowFactor = index * (mItemGap + mItemWidth) / mViewWidth;
+		mNowFactor = index * (mItemGapFactor + mItemWidth / mViewWidth );
 	}
 
+	public void setIfDrawClickEffect(int index, boolean ifDraw) {
+		if (index < 0) {
+			return;
+		}
+		mItems.get(index).setDrawClickEffect(ifDraw);
+	}
+	
+	/**
+	 * return -1 if no item matches
+	 */
+	public int getClickItemIndex(float x, float y) {
+		if (y < (mViewHeight - mItemHeight) / 2
+				|| y > mViewHeight - (mViewHeight - mItemHeight) / 2) {
+			return -1;
+		}
+		
+		float gapFactor = mItemGapFactor + mItemWidth / mViewWidth;
+		float xFactor = x / mViewWidth;
+		float listFactor = mNowFactor + (xFactor - 0.5f);
+		float extraFactor = listFactor % gapFactor;
+		if (extraFactor < mItemWidth / mViewWidth / 2) {
+			return (int)(listFactor / gapFactor);
+			
+		} else if (extraFactor < (mItemWidth / 2 / mViewWidth + mItemGapFactor)) {
+			return -1;
+			
+		} else {
+			return (int)(listFactor / gapFactor) + 1;
+		}
+		
+		
+	}
+	
+	public float getNowFactor() {
+		return mNowFactor;
+	}
+	
+	public List<AlarmItemComponent> getItems() {
+		return mItems;
+	}
+	
+	
 	
 	/**
 	 * @param changeFactor	positive in the x positive direction
