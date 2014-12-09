@@ -59,7 +59,6 @@ public class AlarmSettingViewManager {
 	private boolean mClearWhenClickInput;
 	private Handler mHandler;
 	private int mWhatMessage;
-	private AlarmDataRecorder mDataRecorder;
 	private AlarmDataComparator mDataComparator;
 	
 
@@ -70,7 +69,6 @@ public class AlarmSettingViewManager {
 	public AlarmSettingViewManager(Activity activity, int alarmId) {
 		mActivity = activity;
 		mAlarmId = alarmId;
-		mDataRecorder = new AlarmDataRecorder();
 		mDataComparator = new AlarmDataComparator();
 
 		init();
@@ -127,28 +125,28 @@ public class AlarmSettingViewManager {
 	 * instead of save() which will make a new id for this temp alarm
 	 */
 	public void saveTemp() {
-		mDataRecorder.recordCurrentData();
+		mDataComparator.recordCurrentData();
 		WritingModel model = new WritingModel(mActivity);
-		model.setName(mDataRecorder.name);
-		model.setTime(mDataRecorder.hour, mDataRecorder.minute);
-		model.setDays(mDataRecorder.days);
-		model.setRepeated(mDataRecorder.repeated);
-		model.setWakeWay(mDataRecorder.wakeWay);
-		model.setWakeMusicUri(mDataRecorder.wakeUrl);
-		model.setText(mDataRecorder.encourageWords);
+		model.setName(mDataComparator.name);
+		model.setTime(mDataComparator.hour, mDataComparator.minute);
+		model.setDays(mDataComparator.days);
+		model.setRepeated(mDataComparator.repeated);
+		model.setWakeWay(mDataComparator.wakeWay);
+		model.setWakeMusicUri(mDataComparator.wakeUrl);
+		model.setText(mDataComparator.encourageWords);
 		model.update(-1);
 	}
 	
 	public void save() {
-		mDataRecorder.recordCurrentData();
+		mDataComparator.recordCurrentData();
 		WritingModel model = new WritingModel(mActivity);
-		model.setName(mDataRecorder.name);
-		model.setTime(mDataRecorder.hour, mDataRecorder.minute);
-		model.setDays(mDataRecorder.days);
-		model.setRepeated(mDataRecorder.repeated);
-		model.setWakeWay(mDataRecorder.wakeWay);
-		model.setWakeMusicUri(mDataRecorder.wakeUrl);
-		model.setText(mDataRecorder.encourageWords);
+		model.setName(mDataComparator.name);
+		model.setTime(mDataComparator.hour, mDataComparator.minute);
+		model.setDays(mDataComparator.days);
+		model.setRepeated(mDataComparator.repeated);
+		model.setWakeWay(mDataComparator.wakeWay);
+		model.setWakeMusicUri(mDataComparator.wakeUrl);
+		model.setText(mDataComparator.encourageWords);
 
 		// save
 		if (mAlarmId == -1) {
