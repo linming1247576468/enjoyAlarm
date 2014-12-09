@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1.5"
-        android:background="#ffcccccc" >
+        android:background="#8ad5f0" >
 
         <TextView
             android:id="@+id/name_tv"
@@ -19,13 +19,14 @@
             android:gravity="center"
             android:text="@string/init_name" />
 
-        <Button
+        <ImageView
             android:id="@+id/rename_bt"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_gravity="end|center_vertical"
-            android:layout_margin="10dp"
-            android:background="@drawable/ic_launcher" />
+            android:layout_margin="5dp"
+            android:background="@drawable/rename_bg"
+            android:src="@drawable/pen" />
 
     </FrameLayout>
 
@@ -33,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6"
-        android:background="#ffeeeeff"
+        android:background="#d6adeb"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -41,7 +42,8 @@
             android:layout_height="0dp"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_margin="10dp"
-            android:layout_weight="4" >
+            android:layout_weight="3"
+            android:padding="10dp" >
 
             <TextView
                 android:id="@+id/hour_tv"
@@ -94,7 +96,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#ff227788"
+        android:background="#8bd777"
         android:orientation="horizontal" >
 
         <com.enjoyalarm.view.ToggleView
@@ -104,7 +106,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/monday"
-            app:CheckedDrawable="@drawable/day_circle" />
+            app:CheckedDrawable="@drawable/day_click" />
 
         <com.enjoyalarm.view.ToggleView
             android:id="@+id/tue_tgv"
@@ -113,7 +115,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/tuesday"
-            app:CheckedDrawable="@drawable/day_circle" />
+            app:CheckedDrawable="@drawable/day_click" />
 
         <com.enjoyalarm.view.ToggleView
             android:id="@+id/wed_tgv"
@@ -122,7 +124,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/wednesday"
-            app:CheckedDrawable="@drawable/day_circle" />
+            app:CheckedDrawable="@drawable/day_click" />
 
         <com.enjoyalarm.view.ToggleView
             android:id="@+id/thu_tgv"
@@ -131,7 +133,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/thursday"
-            app:CheckedDrawable="@drawable/day_circle" />
+            app:CheckedDrawable="@drawable/day_click" />
 
         <com.enjoyalarm.view.ToggleView
             android:id="@+id/fri_tgv"
@@ -140,7 +142,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/friday"
-            app:CheckedDrawable="@drawable/day_circle" />
+            app:CheckedDrawable="@drawable/day_click" />
 
         <com.enjoyalarm.view.ToggleView
             android:id="@+id/sat_tgv"
@@ -149,7 +151,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/saturday"
-            app:CheckedDrawable="@drawable/day_circle" />
+            app:CheckedDrawable="@drawable/day_click" />
 
         <com.enjoyalarm.view.ToggleView
             android:id="@+id/sun_tgv"
@@ -158,7 +160,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/sunday"
-            app:CheckedDrawable="@drawable/day_circle" />
+            app:CheckedDrawable="@drawable/day_click" />
     </LinearLayout>
 
     <FrameLayout
@@ -170,7 +172,8 @@
         <TableLayout
             android:id="@+id/input_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:background="#ffd060" >
 
             <TableRow
                 android:id="@+id/tableRow3"
@@ -180,9 +183,9 @@
 
                 <Button
                     android:id="@+id/input1"
+                    android:background="@drawable/input_button_bg"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:tag="@string/tag1"
                     android:text="@string/input1"
@@ -191,8 +194,8 @@
                 <Button
                     android:id="@+id/input2"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_button_bg"
                     android:layout_weight="1"
                     android:tag="@string/tag2"
                     android:text="@string/input2"
@@ -201,12 +204,13 @@
                 <Button
                     android:id="@+id/input3"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_button_bg"
                     android:layout_weight="1"
                     android:tag="@string/tag3"
                     android:text="@string/input3"
                     android:textSize="24sp" />
+
             </TableRow>
 
             <TableRow
@@ -218,8 +222,8 @@
                 <Button
                     android:id="@+id/input4"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_button_bg"
                     android:layout_weight="1"
                     android:tag="@string/tag4"
                     android:text="@string/input4"
@@ -228,8 +232,8 @@
                 <Button
                     android:id="@+id/input5"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_button_bg"
                     android:layout_weight="1"
                     android:tag="@string/tag5"
                     android:text="@string/input5"
@@ -238,12 +242,13 @@
                 <Button
                     android:id="@+id/input6"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_button_bg"
                     android:layout_weight="1"
                     android:tag="@string/tag6"
                     android:text="@string/input6"
                     android:textSize="24sp" />
+
             </TableRow>
 
             <TableRow
@@ -255,8 +260,8 @@
                 <Button
                     android:id="@+id/input7"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_button_bg"
                     android:layout_weight="1"
                     android:tag="@string/tag7"
                     android:text="@string/input7"
@@ -265,8 +270,8 @@
                 <Button
                     android:id="@+id/input8"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_button_bg"
                     android:layout_weight="1"
                     android:tag="@string/tag8"
                     android:text="@string/input8"
@@ -275,12 +280,13 @@
                 <Button
                     android:id="@+id/input9"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_button_bg"
                     android:layout_weight="1"
                     android:tag="@string/tag9"
                     android:text="@string/input9"
                     android:textSize="24sp" />
+
             </TableRow>
 
             <TableRow
@@ -292,9 +298,8 @@
                 <Button
                     android:id="@+id/input_back"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:layout_marginRight="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_button_bg"
                     android:layout_weight="1"
                     android:tag="@string/tag_back"
                     android:text="@string/input_back"
@@ -303,10 +308,8 @@
                 <Button
                     android:id="@+id/input0"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginRight="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_button_bg"
                     android:layout_weight="1"
                     android:tag="@string/tag0"
                     android:text="@string/input0"
@@ -315,13 +318,13 @@
                 <Button
                     android:id="@+id/input_done"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:layout_marginLeft="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_button_bg"
                     android:layout_weight="1"
                     android:tag="@string/tag_done"
                     android:text="@string/input_done"
                     android:textSize="24sp" />
+
             </TableRow>
         </TableLayout>
 
@@ -329,13 +332,14 @@
             android:id="@+id/media_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="4dp" >
+            android:background="#939eef"
+            android:orientation="vertical" >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1" >
+                android:layout_weight="0.8"
+                android:background="#ffbd21" >
 
                 <com.enjoyalarm.view.ToggleView
                     android:id="@+id/sound_way_tgv"
@@ -344,7 +348,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/sound_way"
-                    android:textSize="26dp" />
+                    android:textSize="22dp"
+                    app:CheckedDrawable="@drawable/wake_way_click" />
 
                 <com.enjoyalarm.view.ToggleView
                     android:id="@+id/shake_way_tgv"
@@ -353,7 +358,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/shake_way"
-                    android:textSize="26dp" />
+                    android:textSize="22dp"
+                    app:CheckedDrawable="@drawable/wake_way_click" />
 
                 <TextView
                     android:id="@+id/wake_music_tv"
@@ -370,8 +376,8 @@
                 android:id="@+id/encourage_words_tv"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_margin="10dp"
                 android:layout_weight="1"
+                android:background="#ff9494"
                 android:gravity="center"
                 android:text="@string/init_encourage_words"
                 android:textSize="24dp" />
@@ -381,7 +387,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="+" />
+                android:text="+"
+                android:visibility="gone" />
 
             <View
                 android:id="@+id/empth_view"

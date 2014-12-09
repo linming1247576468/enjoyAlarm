@@ -14,16 +14,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.enjoyalarm.GetTextActivity;
 import com.enjoyalarm.model.ModelUtil;
+import com.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
 import com.enjoyalarm.model.ModelVariable;
 import com.enjoyalarm.model.ReadingModel;
 import com.enjoyalarm.model.WritingModel;
-import com.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
 import com.enjoyalarm.view.ViewUtil.TimeEntry;
 import com.scut.enjoyalarm.R;
 
@@ -44,7 +48,7 @@ public class AlarmSettingViewManager {
 	private TextView mRemainTextView;
 	private TextView mWakeMusicTextView;
 	private TextView mEncourageWordsTextView;
-	private Button mRenameButton;
+	private View mRenameView;
 	private Button mAddMediaButton;
 	private CheckBox mRepeatCheckBox;
 	private ToggleView mSoundWayToggleView;
@@ -190,6 +194,9 @@ public class AlarmSettingViewManager {
 	 */
 	public void replaceAlarm(int newId) {
 		if (newId != mAlarmId) {
+			if (mEditHourOrMinute != 0) {
+				changeEditTimeState(4);
+			}
 			mAlarmId = newId;
 			settingFromDatabase();
 			mDataComparator.recordCurrentData();
@@ -258,7 +265,7 @@ public class AlarmSettingViewManager {
 				.findViewById(R.id.wake_music_tv);
 		mEncourageWordsTextView = (TextView) mMainView
 				.findViewById(R.id.encourage_words_tv);
-		mRenameButton = (Button) mMainView.findViewById(R.id.rename_bt);
+		mRenameView = mMainView.findViewById(R.id.rename_bt);
 		mAddMediaButton = (Button) mMainView.findViewById(R.id.media_add_bt);
 		mRepeatCheckBox = (CheckBox) mMainView.findViewById(R.id.repeat_cb);
 		mSoundWayToggleView = (ToggleView) mMainView
@@ -285,7 +292,9 @@ public class AlarmSettingViewManager {
 	}
 
 	private void setViewAttrs() {
-		mInputLayout.setVisibility(View.GONE);
+		mInputLayout.setVisibility(View.INVISIBLE);
+		mMediaLayout.setVisibility(View.VISIBLE);
+		mNameTextView.setTextSize(ViewVariable.NAME_TEXT_SIZE);
 		mHourTextView.setTextSize(ViewVariable.UNEDIT_TIME_TEXT_SIZE);
 		mMinuteTextView.setTextSize(ViewVariable.UNEDIT_TIME_TEXT_SIZE);
 	}
@@ -304,7 +313,7 @@ public class AlarmSettingViewManager {
 		case 0: {
 			mEditHourOrMinute = 1;
 			mClearWhenClickInput = true;
-			mHourTextView.setBackgroundResource(R.drawable.time_circle_full);
+			mHourTextView.setBackgroundResource(R.drawable.time_click_full);
 			mMinuteTextView.setBackgroundDrawable(null);
 			break;
 		}
@@ -312,7 +321,7 @@ public class AlarmSettingViewManager {
 		case 1: {
 			mEditHourOrMinute = 1;
 			mClearWhenClickInput = false;
-			mHourTextView.setBackgroundResource(R.drawable.time_circle);
+			mHourTextView.setBackgroundResource(R.drawable.time_click);
 			mMinuteTextView.setBackgroundDrawable(null);
 			break;
 		}
@@ -321,7 +330,7 @@ public class AlarmSettingViewManager {
 			mEditHourOrMinute = 2;
 			mClearWhenClickInput = true;
 			mHourTextView.setBackgroundDrawable(null);
-			mMinuteTextView.setBackgroundResource(R.drawable.time_circle_full);
+			mMinuteTextView.setBackgroundResource(R.drawable.time_click_full);
 			break;
 		}
 
@@ -329,7 +338,7 @@ public class AlarmSettingViewManager {
 			mEditHourOrMinute = 2;
 			mClearWhenClickInput = false;
 			mHourTextView.setBackgroundDrawable(null);
-			mMinuteTextView.setBackgroundResource(R.drawable.time_circle);
+			mMinuteTextView.setBackgroundResource(R.drawable.time_click);
 			break;
 		}
 
@@ -380,7 +389,7 @@ public class AlarmSettingViewManager {
 	}
 
 	private void setViewListeners() {
-		mRenameButton.setOnClickListener(new OnClickListener() {
+		mRenameView.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -493,8 +502,8 @@ public class AlarmSettingViewManager {
 			@Override
 			public void onClick(View v) {
 				if (mShakeWayToggleView.isChecked()) {
+					enableWakeMusic(mSoundWayToggleView.isChecked());
 					mSoundWayToggleView.toggle();
-					enableWakeMusic(mSoundWayToggleView.isSelected());
 				}
 			}
 		});
@@ -504,8 +513,10 @@ public class AlarmSettingViewManager {
 			@Override
 			public void onClick(View v) {
 				if (mSoundWayToggleView.isChecked()) {
+					if (!mShakeWayToggleView.isChecked()) {
+						shake();
+					}
 					mShakeWayToggleView.toggle();
-					shake();
 				}
 			}
 		});
@@ -720,20 +731,58 @@ public class AlarmSettingViewManager {
 
 	private void enableWakeMusic(boolean enable) {
 		if (enable) {
-
+			
 		} else {
 
 		}
 	}
 
 	private void changeToMediaMode() {
-		mMediaLayout.setVisibility(View.VISIBLE);
-		mInputLayout.setVisibility(View.GONE);
+		TranslateAnimation in_animation = (TranslateAnimation)AnimationUtils.loadAnimation(mActivity, R.anim.input_layout_in);
+		TranslateAnimation out_animation = (TranslateAnimation)AnimationUtils.loadAnimation(mActivity, R.anim.input_layout_out);
+		in_animation.setAnimationListener(new AnimationListener() {
+			
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+			
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+			
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				mMediaLayout.setVisibility(View.VISIBLE);
+				mInputLayout.setVisibility(View.INVISIBLE);
+			}
+		});
+		
+		mInputLayout.startAnimation(out_animation);
+		mMediaLayout.startAnimation(in_animation);
 	}
 
 	private void changeToInputMode() {
-		mMediaLayout.setVisibility(View.GONE);
-		mInputLayout.setVisibility(View.VISIBLE);
+		TranslateAnimation in_animation = (TranslateAnimation)AnimationUtils.loadAnimation(mActivity, R.anim.input_layout_in);
+		TranslateAnimation out_animation = (TranslateAnimation)AnimationUtils.loadAnimation(mActivity, R.anim.input_layout_out);
+		in_animation.setAnimationListener(new AnimationListener() {
+			
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+			
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+			
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				mMediaLayout.setVisibility(View.INVISIBLE);
+				mInputLayout.setVisibility(View.VISIBLE);
+			}
+		});
+		
+		mMediaLayout.startAnimation(out_animation);
+		mInputLayout.startAnimation(in_animation);
 	}
 
 	private void shake() {

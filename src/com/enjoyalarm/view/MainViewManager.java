@@ -166,8 +166,8 @@ public class MainViewManager {
 					mAlarmSettingViewManager.saveAndStartAlarm();
 					String toastString = ViewUtil.getRemainTimeForToast(mActivity, mAlarmSettingViewManager.getRemainTime());
 					Toast.makeText(mActivity, toastString, Toast.LENGTH_SHORT).show();
-					mActivity.finish();
 				}
+				mActivity.finish();
 			}
 		});
 

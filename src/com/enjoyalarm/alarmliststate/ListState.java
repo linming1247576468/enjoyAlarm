@@ -35,7 +35,7 @@ public class ListState extends State {
 				mViewHeight * StatePeriod.LIST_ITEM_SCALE, mControlInterface.getViewContext().getResources());
 		mAlarmListDrawer.setCurrentIndex(mControlInterface.getCurrentAlarmIndex());
 		
-		mTouchGap = 1 * mControlInterface.getDensity();
+		mTouchGap = 5 * mControlInterface.getDensity();
 	}
 
 	
@@ -83,8 +83,6 @@ public class ListState extends State {
 				case NONE: {
 					if (Math.abs(x - mX) < mTouchGap && Math.abs(y - mY) < mTouchGap) {//click
 						mClickMode = ClickMode.CLICK;
-						mAlarmListDrawer.setIfDrawClickEffect(mClickIndex, true);
-						mControlInterface.refreshDraw();
 						
 					} else if (Math.abs(x - mX) >= Math.abs(y - mY)){//move horizon
 						mClickMode = ClickMode.SCROLL;
@@ -102,13 +100,9 @@ public class ListState extends State {
 					if(moveX > mTouchGap || moveY > mTouchGap) {
 						if (moveX >= moveY){//move horizon
 							mClickMode = ClickMode.SCROLL;
-							mAlarmListDrawer.setIfDrawClickEffect(mClickIndex, false);
-							mControlInterface.refreshDraw();
 							
 						} else {//move vertical
 							mClickMode = ClickMode.DELETE;
-							mAlarmListDrawer.setIfDrawClickEffect(mClickIndex, false);
-							mControlInterface.refreshDraw();
 						}
 						handleTouchEvent(event);
 						
@@ -142,8 +136,6 @@ public class ListState extends State {
 		case MotionEvent.ACTION_UP: {
 			mThreadGapXFactor = mGapXFactor;
 			mGapXFactor = 0f;
-			mAlarmListDrawer.setIfDrawClickEffect(mClickIndex, false);
-			mControlInterface.refreshDraw();
 			
 			switch(mClickMode) {
 			case CLICK: {
@@ -187,28 +179,25 @@ public class ListState extends State {
 		
 		@Override
 		public void run() {
-			float gap = mThreadGapXFactor * 0.1f;
-			boolean positive = mThreadGapXFactor > 0 ? true : false;
+			float gap = mThreadGapXFactor * 0.005f;
+			float gapGap = mThreadGapXFactor * 0.004f;
+			float limit = Math.abs(mThreadGapXFactor) * 0.1f;
+			
 			while (mThreadFlag) {
 				mThreadGapXFactor -= gap;
-				if (positive) {
-					if (mThreadGapXFactor < 0) {
-						mThreadGapXFactor = 0f;
-						mThreadFlag = false;
-						break;
-					}
-				} else {
-					if (mThreadGapXFactor > 0) {
-						mThreadGapXFactor = 0f;
-						mThreadFlag = false;
-						break;
-					}
+				gap += gapGap;
+				if (Math.abs(mThreadGapXFactor) < limit) {
+					mThreadGapXFactor = 0f;
+					mThreadFlag = false;
+					break;
 				}
+				
 				mControlInterface.refreshDraw();
 				
 				if (!mThreadFlag) {
 					break;
 				}
+				
 				try {
 					sleep(25);
 				} catch (InterruptedException e) {

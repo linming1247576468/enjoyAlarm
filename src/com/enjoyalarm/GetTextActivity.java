@@ -45,7 +45,7 @@ public class GetTextActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				String result = mGetTextEditText.getText().toString();
+				String result = mGetTextEditText.getText().toString().trim();
 				Intent intent = getIntent();
 				intent.putExtra(AlarmSettingViewManager.GET_TEXT_EXTRA_RESULT, result);
 				setResult(RESULT_OK, intent);
