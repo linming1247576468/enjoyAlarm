@@ -21,6 +21,7 @@ public interface ViewControlInterface {
 	
 	public void handleClickAlarmItem(int index);
 	
+	public void handleDeleteAlarmItem(int index);
 	
 	
 	public float getDensity();

@@ -28,8 +28,10 @@ public class AnimClickState extends State {
 		mClickItem = mItems.get(clickIndex);
 		mItems.remove(clickIndex);
 		
-		mClickItem.addAlphaEntry(StatePeriod.CLICK_ALPHA_PERIOD1);
-		mClickItem.addScaleEntry(StatePeriod.CLICK_SCALE_PERIOD1);
+		mClickItem.removeAllALphaEntry();
+		mClickItem.removeAllScaleEntry();
+		mClickItem.addAlphaEntry(StatePeriod.CLICK_ITEM_ALPHA_PERIOD1);
+		mClickItem.addScaleEntry(StatePeriod.CLICK_ITEM_SCALE_PERIOD1);
 		XYEntity xy = mClickItem.getTranslation(constFactor);
 		mClickItem.removeAllTransEntry();
 		mClickItem.addTranslationEntry(0f, 1f, xy.x, xy.y, 0.5f, 0.5f);

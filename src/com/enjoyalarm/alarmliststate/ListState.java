@@ -9,7 +9,7 @@ import com.enjoyalarm.view.ViewControlInterface;
 
 public class ListState extends State {
 
-	private AlarmListDrawer mAlarmListDrawer;
+	public static AlarmListDrawer mAlarmListDrawer;
 	private float mViewWidth;
 	private float mViewHeight;
 	private ClickMode mClickMode;
@@ -18,13 +18,17 @@ public class ListState extends State {
 		NONE, CLICK, DELETE, SCROLL
 	}
 
-	public ListState(ViewControlInterface controlInterface) {
+	/**
+	 * 
+	 * @param nowFactor		-1 for not setting
+	 */
+	public ListState(ViewControlInterface controlInterface, float nowFactor) {
 		super(controlInterface);
 
-		init();
+		init(nowFactor);
 	}
 
-	private void init() {
+	private void init(float nowFactor) {
 		mViewWidth = mControlInterface.getViewWidth();
 		mViewHeight = mControlInterface.getViewHeight();
 		mAlarmListDrawer = new AlarmListDrawer(mViewWidth * 0.1f, mViewWidth,
@@ -33,7 +37,12 @@ public class ListState extends State {
 				mControlInterface.getAlarmsColor(), Color.WHITE,
 				30 * mControlInterface.getDensity(), mViewWidth * StatePeriod.LIST_ITEM_SCALE,
 				mViewHeight * StatePeriod.LIST_ITEM_SCALE, mControlInterface.getViewContext().getResources());
-		mAlarmListDrawer.setCurrentIndex(mControlInterface.getCurrentAlarmIndex());
+		
+		if (nowFactor == -1) {
+			mAlarmListDrawer.setCurrentIndex(mControlInterface.getCurrentAlarmIndex());
+		} else {
+			mAlarmListDrawer.setNowFactor(nowFactor);
+		}
 		
 		mTouchGap = 5 * mControlInterface.getDensity();
 	}
@@ -111,9 +120,9 @@ public class ListState extends State {
 				}
 				
 				case DELETE: {
-					mX = x;
-					mY = y;
-					//mControlInterface.refreshDraw();
+					mControlInterface.changeState(new DeleteState(
+							mControlInterface, mAlarmListDrawer.getItems(),
+							mClickIndex, mAlarmListDrawer.getNowFactor()));
 					break;
 				}
 				

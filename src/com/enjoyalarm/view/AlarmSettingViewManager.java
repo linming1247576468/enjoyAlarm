@@ -23,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.enjoyalarm.GetTextActivity;
+import com.enjoyalarm.HelpActivity;
 import com.enjoyalarm.model.ModelUtil;
 import com.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
 import com.enjoyalarm.model.ModelVariable;
@@ -198,6 +199,7 @@ public class AlarmSettingViewManager {
 			mAlarmId = newId;
 			settingFromDatabase();
 			mDataComparator.recordCurrentData();
+
 		}
 	}
 	
@@ -555,16 +557,20 @@ public class AlarmSettingViewManager {
 	private void settingFromSuggestion() {
 		// set name
 		List<String> names = ModelUtil.getAlarmNames(mActivity);
-		int noNameAlarmsNumber = 0;
+		int maxNumber = 0;
 		String initNameString = mActivity.getResources().getString(R.string.init_name);
 		String regString = initNameString.replace("##", "\\d+");
+		int numIndex = initNameString.indexOf('#');
 		for (String name : names) {
 			if (name.matches(regString)) {
-				noNameAlarmsNumber++;
+				int nowNum = Integer.parseInt(name.substring(numIndex));
+				if (nowNum > maxNumber) {
+					maxNumber = nowNum;
+				}
 			}
 		}
 		mNameTextView.setText(initNameString.replace("##",
-				String.valueOf(noNameAlarmsNumber + 1)));
+				String.valueOf(maxNumber + 1)));
 
 		// set time
 		Time time = new Time();

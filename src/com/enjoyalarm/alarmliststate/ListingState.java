@@ -15,7 +15,7 @@ public class ListingState extends State {
 	private Component mBottomBitmapComponent;
 	private Bitmap mBitmap;
 	private float mY;
-	private float mPositionY;// 赋值时必须映射为相对坐标,不能直接用MotionEvent的值（屏幕坐标）
+	private float mPositionY;
 	private float mViewWidth;
 	private float mViewHeight;
 	private int mDirection;// move mDirection:0.to Top 1.to Bottom

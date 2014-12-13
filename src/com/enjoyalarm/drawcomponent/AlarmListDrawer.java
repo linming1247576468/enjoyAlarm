@@ -73,7 +73,7 @@ public class AlarmListDrawer {
 	}
 	
 	/**
-	 * return -1 if no item matches
+	 * return -1 if no item matches or click at the help item(at last)
 	 */
 	public int getClickItemIndex(float x, float y) {
 		if (y < (mViewHeight - mItemHeight) / 2
@@ -85,17 +85,32 @@ public class AlarmListDrawer {
 		float xFactor = x / mViewWidth;
 		float listFactor = mNowFactor + (xFactor - 0.5f);
 		float extraFactor = listFactor % gapFactor;
-		if (extraFactor < mItemWidth / mViewWidth / 2) {
-			return (int)(listFactor / gapFactor);
+		if (extraFactor < -mItemWidth / mViewWidth / 2) {
+			return -1;
+			
+		} else if (extraFactor < mItemWidth / mViewWidth / 2) {
+			int index = (int)(listFactor / gapFactor);
+			if (index >= mItems.size() - 1) {
+				return -1;
+			}
+			return index;
 			
 		} else if (extraFactor < (mItemWidth / 2 / mViewWidth + mItemGapFactor)) {
 			return -1;
 			
 		} else {
-			return (int)(listFactor / gapFactor) + 1;
+			int index = (int)(listFactor / gapFactor) + 1;
+			if (index >= mItems.size() - 1) {
+				return -1;
+			}
+			return index;
 		}
 		
 		
+	}
+	
+	public void setNowFactor(float nowFactor) {
+		mNowFactor = nowFactor;
 	}
 	
 	public float getNowFactor() {
@@ -106,6 +121,9 @@ public class AlarmListDrawer {
 		return mItems;
 	}
 	
+	public float getGapPlusWidthFactor() {
+		return mItemGapFactor + mItemWidth / mViewWidth;
+	}
 	
 	
 	/**

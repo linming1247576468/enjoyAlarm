@@ -66,10 +66,11 @@ public class StatePeriod {
 	
 	
 	//click anim
-	public static final Period1 CLICK_ALPHA_PERIOD1 = new Period1(0f, 1f, 1f, 0.6f);
-	public static final Period1 CLICK_SCALE_PERIOD1 = new Period1(0f, 1f, 1f, 1.67f);
+	public static final Period1 CLICK_ITEM_ALPHA_PERIOD1 = new Period1(0f, 1f, 1f, 0.6f);
+	public static final Period1 CLICK_ITEM_SCALE_PERIOD1 = new Period1(0f, 1f, 1f, 1.67f);
 	
-	
+	//delete
+	public static final float DELETE_LIMIT = 0.2f;
 	
 	
 	

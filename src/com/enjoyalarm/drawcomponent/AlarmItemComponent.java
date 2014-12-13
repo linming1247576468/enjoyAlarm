@@ -35,8 +35,23 @@ public class AlarmItemComponent extends Component {
 	private float mAlpha;
 	private XYEntity mXyEntity;
 	private Paint mPaint;
+	private String mUnsaveWord;
+	private String mHelpWord;
+	private Resources mResources;
 	
 	
+	
+	private void dealWithUnAlarmItem() {
+		if (mId == -1) {//temp alarm
+			mUnsaveWord = mResources.getString(R.string.not_save);
+			
+		} else if (mId == -2) {//help
+			mHelpWord = mResources.getString(R.string.help);
+			setDrawDay(false);
+			setDrawName(false);
+			setDrawTime(false);
+		}
+	}
 
 	public AlarmItemComponent(int id, String name, String showDay,
 			String showTime, int backgroundColor, int textColor, float baseTextSize, float width,
@@ -53,6 +68,7 @@ public class AlarmItemComponent extends Component {
 		mHeight = height;
 		mViewWidth = viewWidth;
 		mViewHeight = viewHeight;
+		mResources = resources;
 		mDrawName = true;
 		mDrawDay = true;
 		mDrawTime = true;
@@ -62,6 +78,8 @@ public class AlarmItemComponent extends Component {
 		mXyEntity = new XYEntity(0.5f, 0.5f);
 		mScale = 1f;
 		mAlpha = 1f;
+		
+		dealWithUnAlarmItem();
 	}
 
 	public AlarmItemComponent(AlarmBasicInfo alarmBasicInfo,
@@ -80,6 +98,7 @@ public class AlarmItemComponent extends Component {
 		mHeight = height;
 		mViewWidth = viewWidth;
 		mViewHeight = viewHeight;
+		mResources = resources;
 		mDrawName = true;
 		mDrawDay = true;
 		mDrawTime = true;
@@ -89,6 +108,8 @@ public class AlarmItemComponent extends Component {
 		mXyEntity = new XYEntity(0.5f, 0.5f);
 		mScale = 1f;
 		mAlpha = 1f;
+		
+		dealWithUnAlarmItem();
 	}
 	
 	public void setDrawName(boolean drawName) {
@@ -146,14 +167,31 @@ public class AlarmItemComponent extends Component {
 		
 		//draw day
 		if (mDrawDay) {
+			mPaint.setColor(mTextColor);//the color has alpha data
+			mPaint.setAlpha((int) (255 * mAlpha));
 			mPaint.setTextSize(mBaseTextSize * 0.8f * mScale);
 			canvas.drawText(mShowDay, x, y - mBaseTextSize * mScale, mPaint);
 		}
 		
 		//draw time
 		if (mDrawTime) {
+			mPaint.setColor(mTextColor);//the color has alpha data
+			mPaint.setAlpha((int) (255 * mAlpha));
 			mPaint.setTextSize(mBaseTextSize * 1.5f * mScale);
 			canvas.drawText(mShowTime, x, y + mBaseTextSize * 0.8f * mScale, mPaint);
+		}
+		
+		if (mId == -1) {//draw unsave word
+			mPaint.setColor(Color.GRAY);
+			mPaint.setAlpha((int) (255 * mAlpha * 0.7f));
+			mPaint.setTextSize(mBaseTextSize * mScale);
+			canvas.drawText(mUnsaveWord, x, y - mBaseTextSize * mScale * 3, mPaint);
+			
+		} else if (mId == -2) {//draw help word
+			mPaint.setColor(mTextColor);
+			mPaint.setAlpha((int) (255 * mAlpha));
+			mPaint.setTextSize(mBaseTextSize * mScale);
+			canvas.drawText(mHelpWord, x, y, mPaint);
 		}
 		
 	}
@@ -173,6 +211,9 @@ public class AlarmItemComponent extends Component {
 	}
 	
 	private String getShowDay(int hour, int minute, String days, Resources resources) {
+		if (days == null) {
+			return null;
+		}
 		char[] dayChars = days.toCharArray();
 		Time time = new Time();
 		time.setToNow();

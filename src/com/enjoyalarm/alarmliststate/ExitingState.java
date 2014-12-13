@@ -19,7 +19,7 @@ public class ExitingState extends State {
 	private Component mRightBitmapComponent;
 	private Bitmap mBitmap;
 	private float mX;
-	private float mPositionX;//赋值时必须映射为相对坐标,不能直接用MotionEvent的值（屏幕坐标）
+	private float mPositionX;
 	private float mViewWidth;
 	private float mViewHeight;
 	private int mDirection;// move mDirection:0.to left 1.to right

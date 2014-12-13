@@ -9,6 +9,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
 
+import com.enjoyalarm.HelpActivity;
 import com.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
 import com.enjoyalarm.view.AlarmListView.OnAlarmItemClickListener;
 import com.enjoyalarm.view.AlarmListView.OnScrollToExitFinishedListerner;
@@ -134,20 +135,20 @@ public class MainViewManager {
 		});
 		
 		mAlarmListView.setOnAlarmItemClickListener(new OnAlarmItemClickListener() {
-			
+
 			@Override
 			public void onAlarmItemClick(View alarmListView, int alarmId) {
 				if (alarmId != mNowAlarmId) {
 					mAlarmSettingViewManager.replaceAlarm(alarmId);
 					mNowAlarmId = alarmId;
 				}
-				
-				//let the alarmSettingView be the facing view
+
+				// let the alarmSettingView be the facing view
 				mAlarmSettingView.setVisibility(View.VISIBLE);
 				mIsSettingViewVisiable = true;
 			}
 		});
-		
+
 		mAlarmListView.setOnScrollToSettingFinishedListener(new OnScrollToSettingFinishedListener() {
 			
 			@Override
@@ -175,6 +176,7 @@ public class MainViewManager {
 
 			@Override
 			public void onScrollToListStarted(View alarmListView) {
+				
 				if (mNowAlarmId == -1) {
 					mAlarmSettingViewManager.saveTemp();
 					

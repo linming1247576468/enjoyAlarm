@@ -41,7 +41,7 @@ public class AlarmListView extends View implements ViewControlInterface {
 	
 
 	
-
+	
 	private void init() {
 		mState = new InitState(this);
 		mHandler = new Handler() {
@@ -78,9 +78,9 @@ public class AlarmListView extends View implements ViewControlInterface {
 		};
 	
 		mAlarmsBasicInfo = new ArrayList<AlarmBasicInfo>();
-		mAlarmsBasicInfo.add(new AlarmBasicInfo(-1, "unset", 0, 0, "0"));
+		mAlarmsBasicInfo.add(new AlarmBasicInfo(-1, null, 0, 0, null));
 		mAlarmsBasicInfo.addAll(1, ModelUtil.getAlarmsBasicInfo(getContext()));
-		mAlarmsBasicInfo.add(new AlarmBasicInfo(-2, "help", 0, 0, "6"));
+		mAlarmsBasicInfo.add(new AlarmBasicInfo(-2, null, 0, 0, null));
 		mCurrentAlarmIndex = 0;
 		
 		mAlarmsColor = new ArrayList<Integer>();
@@ -244,6 +244,15 @@ public class AlarmListView extends View implements ViewControlInterface {
 	@Override
 	public List<Integer> getAlarmsColor() {
 		return mAlarmsColor;
+	}
+	
+	@Override
+	public void handleDeleteAlarmItem(int index) {
+		ModelUtil.deleteAlarm(getContext(), mAlarmsBasicInfo.get(index).id);
+		
+		mAlarmsBasicInfo.remove(index);
+		mAlarmsColor.remove(index);
+		mCurrentAlarmIndex = -1;//whichever you click,all info should be replaced
 	}
 	
 	

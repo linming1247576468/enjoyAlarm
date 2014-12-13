@@ -158,7 +158,7 @@ public class AnimToListState extends State {
 	}
 	
 	private void changeToListStateToHandle() {
-		mControlInterface.changeState(new ListState(mControlInterface));
+		mControlInterface.changeState(new ListState(mControlInterface, -1));
 	}
 
 	private class AnimThread extends Thread {
