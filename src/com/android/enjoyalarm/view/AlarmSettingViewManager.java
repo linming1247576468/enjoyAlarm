@@ -26,6 +26,7 @@ import com.android.enjoyalarm.ActivityVariable;
 import com.android.enjoyalarm.GetTextActivity;
 import com.android.enjoyalarm.MusicSelectActivity;
 import com.android.enjoyalarm.R;
+import com.android.enjoyalarm.alarm.AlarmUtils;
 import com.android.enjoyalarm.model.ModelUtil;
 import com.android.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
 import com.android.enjoyalarm.model.ModelVariable;
@@ -48,6 +49,7 @@ public class AlarmSettingViewManager {
 	private TextView mRemainTextView;
 	private TextView mWakeMusicTextView;
 	private TextView mEncourageWordsTextView;
+	private View mRemainTimeLayerView;
 	private View mWakeMusicLayerView;
 	private View mRenameView;
 	private Button mAddMediaButton;
@@ -85,8 +87,7 @@ public class AlarmSettingViewManager {
 		// get data from views
 		String hourString = mHourTextView.getText().toString();
 		String minuteString = mMinuteTextView.getText().toString();
-		if (hourString.length() == 0 || minuteString.length() == 0) {// hadn't
-																		// completed
+		if (hourString.length() != 2 || minuteString.length() != 2) {
 			return null;
 		}
 		int hour = Integer.parseInt(hourString);
@@ -158,7 +159,10 @@ public class AlarmSettingViewManager {
 	}
 
 	public void startAlarm() {
-
+		TimeEntry time = getRemainTime();
+		long mills = System.currentTimeMillis() + time.day * 24 * 60 * 60
+				* 1000 + time.hour * 60 * 60 * 1000 + time.minute * 60 * 1000;
+		AlarmUtils.settingAlarm(mActivity, mAlarmId, mills);
 	}
 
 	public void saveAndStartAlarm() {
@@ -271,6 +275,7 @@ public class AlarmSettingViewManager {
 				.findViewById(R.id.wake_music_tv);
 		mEncourageWordsTextView = (TextView) mMainView
 				.findViewById(R.id.encourage_words_tv);
+		mRemainTimeLayerView = mMainView.findViewById(R.id.remain_time_layer);
 		mWakeMusicLayerView = mMainView.findViewById(R.id.wake_music_layer);
 		mRenameView = mMainView.findViewById(R.id.rename_bt);
 		mAddMediaButton = (Button) mMainView.findViewById(R.id.media_add_bt);
@@ -704,10 +709,11 @@ public class AlarmSettingViewManager {
 		List<Integer> days = model.getDays();
 		Time time = new Time();
 		time.setToNow();
+		int nowDay = (time.weekDay + 6) % 7;// Monday is considered first
 		int nextDay = -1;
 		for (int day : days) {
-			if (((day == time.weekDay) && ((hour > time.hour) || (hour == time.hour && minute > time.minute)))
-					|| (day > time.weekDay)) {
+			if (((day == nowDay) && ((hour > time.hour) || (hour == time.hour && minute > time.minute)))
+					|| (day > nowDay)) {
 				nextDay = day;
 				break;
 			}
@@ -716,7 +722,7 @@ public class AlarmSettingViewManager {
 			nextDay = days.get(0);
 		}
 		TimeEntry timeEntry = ViewUtil.getRemainTime(nextDay, hour, minute,
-				time.weekDay, time.hour, time.minute);
+				nowDay, time.hour, time.minute);
 		String remainTimeString;
 		if (timeEntry.day == 0) {
 			remainTimeString = mActivity.getResources()
@@ -843,9 +849,9 @@ public class AlarmSettingViewManager {
 
 	private void enableRemainTime(boolean enable) {
 		if (enable) {
-
+			mRemainTimeLayerView.setVisibility(View.INVISIBLE);
 		} else {
-
+			mRemainTimeLayerView.setVisibility(View.VISIBLE);
 		}
 	}
 

@@ -20,9 +20,10 @@ public class AlarmUtils {
 			int month, int day, int hour, int minute) {
 		// setting time
 		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
 		calendar.set(year, month, day, hour, minute);
-		
-		//setting alarm
+
+		// setting alarm
 		AlarmManager alarmManager = (AlarmManager) context
 				.getSystemService(Service.ALARM_SERVICE);
 		Intent intent = new Intent(context, AlarmWakeActivity.class);// launch
@@ -30,8 +31,8 @@ public class AlarmUtils {
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.putExtra(AlarmUtils.ALARM_ID_INTENT, alarmId);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context,
-				alarmId, intent, 0);// same request id will not set multi-alarm
-									// for same intent
+				alarmId, intent, PendingIntent.FLAG_CANCEL_CURRENT);// same request id will not set multi-alarm
+																	// for same intent
 		/**
 		 * in target 19, alarmManager.set() will set the alarm inexactly,use
 		 * alarmManager.setExcact() instead
@@ -46,7 +47,34 @@ public class AlarmUtils {
 		}
 
 	}
-	
+
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+	public static void settingAlarm(Context context, int alarmId, long RTCMills) {
+
+		// setting alarm
+		AlarmManager alarmManager = (AlarmManager) context
+				.getSystemService(Service.ALARM_SERVICE);
+		Intent intent = new Intent(context, AlarmWakeActivity.class);// launch
+																		// activity
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.putExtra(AlarmUtils.ALARM_ID_INTENT, alarmId);
+		PendingIntent pendingIntent = PendingIntent.getActivity(context,
+				alarmId, intent, 0);// same request id will not set multi-alarm
+																	// for same intent
+		/**
+		 * in target 19, alarmManager.set() will set the alarm inexactly,use
+		 * alarmManager.setExcact() instead
+		 */
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+			alarmManager.setExact(AlarmManager.RTC_WAKEUP, RTCMills,
+					pendingIntent);
+
+		} else {
+			alarmManager.set(AlarmManager.RTC_WAKEUP, RTCMills, pendingIntent);
+		}
+
+	}
+
 	public static void cancelAlarm(Context context, int alarmId) {
 		AlarmManager alarmManager = (AlarmManager) context
 				.getSystemService(Service.ALARM_SERVICE);
