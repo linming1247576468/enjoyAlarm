@@ -1,0 +1,69 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res/com.android.enjoyalarm"
+	android:id="@+id/music_select_layout"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical" >
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1" >
+
+		<com.android.enjoyalarm.view.ToggleView
+			android:id="@+id/music_select_tag_ringtone_tg"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:text="铃声"
+			app:CheckedDrawable="@drawable/music_select_tag_click"
+			app:UnCheckedDrawable="@drawable/music_select_tag_unclick" />
+
+		<com.android.enjoyalarm.view.ToggleView
+			android:id="@+id/music_select_tag_music_tg"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:text="音乐"
+			app:CheckedDrawable="@drawable/music_select_tag_click"
+			app:UnCheckedDrawable="@drawable/music_select_tag_unclick" />
+	</LinearLayout>
+
+	<android.support.v4.view.ViewPager
+		android:id="@+id/music_select_vp"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="8"
+		android:text="Button" />
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:background="#22f" >
+
+		<TextView
+			android:id="@+id/music_select_show_tv"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="5"
+			android:background="#56f"
+			android:ellipsize="end"
+			android:gravity="center"
+			android:padding="5dp"
+			android:singleLine="true"
+			android:text="TextView"
+			android:textColor="#fff" />
+
+		<Button
+			android:id="@+id/music_select_confirm_bt"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:background="@drawable/confirm_bt_bg"
+			android:text="确定" />
+	</LinearLayout>
+
+</LinearLayout>

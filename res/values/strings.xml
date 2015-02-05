@@ -26,6 +26,9 @@
 	<string name="has_save">已保存</string>
 	<string name="today">今天</string>
 	<string name="tomorrow">明天</string>
+	<string name="music_select_no_file">暂无文件</string>
+	<string name="music_select_ask_action">请选择一个音乐文件</string>
+	<string name="music_select_header_text">##个文件</string>
 
 	<string-array name="this_week">
 		<item>本周一</item>
@@ -90,5 +93,6 @@
 	<string name="action_settings">Settings</string>
 	<string name="title_activity_get_text">GetTextActivity</string>
 	<string name="title_activity_help">HelpActivity</string>
+	<string name="title_activity_music_select">MusicSelectActivity</string>
 
 </resources>

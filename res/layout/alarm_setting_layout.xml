@@ -1,402 +1,414 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/com.scut.enjoyalarm"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+	xmlns:app="http://schemas.android.com/apk/res/com.android.enjoyalarm"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical" >
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.5"
-        android:background="#8ad5f0" >
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1.5"
+		android:background="#8ad5f0" >
 
-        <TextView
-            android:id="@+id/name_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:text="@string/init_name" />
+		<TextView
+			android:id="@+id/name_tv"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_gravity="center_vertical|center_horizontal"
+			android:layout_margin="10dp"
+			android:gravity="center"
+			android:text="@string/init_name" />
 
-        <ImageView
-            android:id="@+id/rename_bt"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="end|center_vertical"
-            android:layout_margin="5dp"
-            android:background="@drawable/rename_bg"
-            android:src="@drawable/pen" />
+		<ImageView
+			android:id="@+id/rename_bt"
+			android:layout_width="40dp"
+			android:layout_height="match_parent"
+			android:layout_gravity="end|center_vertical"
+			android:layout_margin="5dp"
+			android:background="@drawable/rename_bg"
+			android:src="@drawable/pen" />
+	</FrameLayout>
 
-    </FrameLayout>
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="7"
+		android:background="#d6adeb"
+		android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6"
-        android:background="#d6adeb"
-        android:orientation="vertical" >
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="0dp"
+			android:layout_gravity="center_vertical|center_horizontal"
+			android:layout_margin="10dp"
+			android:layout_weight="3"
+			android:padding="10dp" >
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_margin="10dp"
-            android:layout_weight="3"
-            android:padding="10dp" >
+			<TextView
+				android:id="@+id/hour_tv"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:gravity="center"
+				android:text="07"
+				android:textSize="80sp" />
 
-            <TextView
-                android:id="@+id/hour_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="07"
-                android:textSize="80sp" />
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:gravity="center"
+				android:text=":"
+				android:textSize="80sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text=":"
-                android:textSize="80sp" />
+			<TextView
+				android:id="@+id/minute_tv"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:gravity="center"
+				android:text="15"
+				android:textSize="80sp" />
+		</LinearLayout>
 
-            <TextView
-                android:id="@+id/minute_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="15"
-                android:textSize="80sp" />
+		<FrameLayout
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_gravity="bottom"
+			android:layout_margin="10dp"
+			android:layout_weight="1" >
 
-        </LinearLayout>
+			<CheckBox
+				android:id="@+id/repeat_cb"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/repeat" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="bottom"
-            android:layout_margin="10dp"
-            android:layout_weight="1" >
+			<TextView
+				android:id="@+id/remain_time_tv"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="end|center_vertical"
+				android:text="@string/remain_time_dh" />
+		</FrameLayout>
+	</LinearLayout>
 
-            <CheckBox
-                android:id="@+id/repeat_cb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/repeat" />
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:background="#8bd777"
+		android:orientation="horizontal" >
 
-            <TextView
-                android:id="@+id/remain_time_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:text="@string/remain_time_dh" />
-        </FrameLayout>
-    </LinearLayout>
+		<com.android.enjoyalarm.view.ToggleView
+			android:id="@+id/mon_tgv"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:text="@string/monday"
+			app:CheckedDrawable="@drawable/day_click" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#8bd777"
-        android:orientation="horizontal" >
+		<com.android.enjoyalarm.view.ToggleView
+			android:id="@+id/tue_tgv"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:text="@string/tuesday"
+			app:CheckedDrawable="@drawable/day_click" />
 
-        <com.enjoyalarm.view.ToggleView
-            android:id="@+id/mon_tgv"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/monday"
-            app:CheckedDrawable="@drawable/day_click" />
+		<com.android.enjoyalarm.view.ToggleView
+			android:id="@+id/wed_tgv"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:text="@string/wednesday"
+			app:CheckedDrawable="@drawable/day_click" />
 
-        <com.enjoyalarm.view.ToggleView
-            android:id="@+id/tue_tgv"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/tuesday"
-            app:CheckedDrawable="@drawable/day_click" />
+		<com.android.enjoyalarm.view.ToggleView
+			android:id="@+id/thu_tgv"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:text="@string/thursday"
+			app:CheckedDrawable="@drawable/day_click" />
 
-        <com.enjoyalarm.view.ToggleView
-            android:id="@+id/wed_tgv"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/wednesday"
-            app:CheckedDrawable="@drawable/day_click" />
+		<com.android.enjoyalarm.view.ToggleView
+			android:id="@+id/fri_tgv"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:text="@string/friday"
+			app:CheckedDrawable="@drawable/day_click" />
 
-        <com.enjoyalarm.view.ToggleView
-            android:id="@+id/thu_tgv"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/thursday"
-            app:CheckedDrawable="@drawable/day_click" />
+		<com.android.enjoyalarm.view.ToggleView
+			android:id="@+id/sat_tgv"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:text="@string/saturday"
+			app:CheckedDrawable="@drawable/day_click" />
 
-        <com.enjoyalarm.view.ToggleView
-            android:id="@+id/fri_tgv"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/friday"
-            app:CheckedDrawable="@drawable/day_click" />
+		<com.android.enjoyalarm.view.ToggleView
+			android:id="@+id/sun_tgv"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:text="@string/sunday"
+			app:CheckedDrawable="@drawable/day_click" />
+	</LinearLayout>
 
-        <com.enjoyalarm.view.ToggleView
-            android:id="@+id/sat_tgv"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/saturday"
-            app:CheckedDrawable="@drawable/day_click" />
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="7"
+		android:background="#effeff" >
 
-        <com.enjoyalarm.view.ToggleView
-            android:id="@+id/sun_tgv"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/sunday"
-            app:CheckedDrawable="@drawable/day_click" />
-    </LinearLayout>
+		<TableLayout
+			android:id="@+id/input_layout"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="#ffd060" >
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7"
-        android:background="#effeff" >
+			<TableRow
+				android:id="@+id/tableRow3"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1" >
 
-        <TableLayout
-            android:id="@+id/input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#ffd060" >
+				<Button
+					android:id="@+id/input1"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:background="@drawable/input_button_bg"
+					android:tag="@string/tag1"
+					android:text="@string/input1"
+					android:textSize="24sp" />
 
-            <TableRow
-                android:id="@+id/tableRow3"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" >
+				<Button
+					android:id="@+id/input2"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:background="@drawable/input_button_bg"
+					android:tag="@string/tag2"
+					android:text="@string/input2"
+					android:textSize="24sp" />
 
-                <Button
-                    android:id="@+id/input1"
-                    android:background="@drawable/input_button_bg"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:tag="@string/tag1"
-                    android:text="@string/input1"
-                    android:textSize="24sp" />
+				<Button
+					android:id="@+id/input3"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:background="@drawable/input_button_bg"
+					android:tag="@string/tag3"
+					android:text="@string/input3"
+					android:textSize="24sp" />
+			</TableRow>
 
-                <Button
-                    android:id="@+id/input2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/input_button_bg"
-                    android:layout_weight="1"
-                    android:tag="@string/tag2"
-                    android:text="@string/input2"
-                    android:textSize="24sp" />
+			<TableRow
+				android:id="@+id/tableRow4"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1" >
 
-                <Button
-                    android:id="@+id/input3"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/input_button_bg"
-                    android:layout_weight="1"
-                    android:tag="@string/tag3"
-                    android:text="@string/input3"
-                    android:textSize="24sp" />
+				<Button
+					android:id="@+id/input4"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:background="@drawable/input_button_bg"
+					android:tag="@string/tag4"
+					android:text="@string/input4"
+					android:textSize="24sp" />
 
-            </TableRow>
+				<Button
+					android:id="@+id/input5"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:background="@drawable/input_button_bg"
+					android:tag="@string/tag5"
+					android:text="@string/input5"
+					android:textSize="24sp" />
 
-            <TableRow
-                android:id="@+id/tableRow4"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" >
+				<Button
+					android:id="@+id/input6"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:background="@drawable/input_button_bg"
+					android:tag="@string/tag6"
+					android:text="@string/input6"
+					android:textSize="24sp" />
+			</TableRow>
 
-                <Button
-                    android:id="@+id/input4"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/input_button_bg"
-                    android:layout_weight="1"
-                    android:tag="@string/tag4"
-                    android:text="@string/input4"
-                    android:textSize="24sp" />
+			<TableRow
+				android:id="@+id/tableRow5"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1" >
 
-                <Button
-                    android:id="@+id/input5"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/input_button_bg"
-                    android:layout_weight="1"
-                    android:tag="@string/tag5"
-                    android:text="@string/input5"
-                    android:textSize="24sp" />
+				<Button
+					android:id="@+id/input7"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:background="@drawable/input_button_bg"
+					android:tag="@string/tag7"
+					android:text="@string/input7"
+					android:textSize="24sp" />
 
-                <Button
-                    android:id="@+id/input6"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/input_button_bg"
-                    android:layout_weight="1"
-                    android:tag="@string/tag6"
-                    android:text="@string/input6"
-                    android:textSize="24sp" />
+				<Button
+					android:id="@+id/input8"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:background="@drawable/input_button_bg"
+					android:tag="@string/tag8"
+					android:text="@string/input8"
+					android:textSize="24sp" />
 
-            </TableRow>
+				<Button
+					android:id="@+id/input9"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:background="@drawable/input_button_bg"
+					android:tag="@string/tag9"
+					android:text="@string/input9"
+					android:textSize="24sp" />
+			</TableRow>
 
-            <TableRow
-                android:id="@+id/tableRow5"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" >
+			<TableRow
+				android:id="@+id/tableRow6"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1" >
 
-                <Button
-                    android:id="@+id/input7"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/input_button_bg"
-                    android:layout_weight="1"
-                    android:tag="@string/tag7"
-                    android:text="@string/input7"
-                    android:textSize="24sp" />
+				<Button
+					android:id="@+id/input_back"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:background="@drawable/input_button_bg"
+					android:tag="@string/tag_back"
+					android:text="@string/input_back"
+					android:textSize="24sp" />
 
-                <Button
-                    android:id="@+id/input8"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/input_button_bg"
-                    android:layout_weight="1"
-                    android:tag="@string/tag8"
-                    android:text="@string/input8"
-                    android:textSize="24sp" />
+				<Button
+					android:id="@+id/input0"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:background="@drawable/input_button_bg"
+					android:tag="@string/tag0"
+					android:text="@string/input0"
+					android:textSize="24sp" />
 
-                <Button
-                    android:id="@+id/input9"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/input_button_bg"
-                    android:layout_weight="1"
-                    android:tag="@string/tag9"
-                    android:text="@string/input9"
-                    android:textSize="24sp" />
+				<Button
+					android:id="@+id/input_done"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:background="@drawable/input_button_bg"
+					android:tag="@string/tag_done"
+					android:text="@string/input_done"
+					android:textSize="24sp" />
+			</TableRow>
+		</TableLayout>
 
-            </TableRow>
+		<LinearLayout
+			android:id="@+id/media_layout"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="#939eef"
+			android:orientation="vertical" >
 
-            <TableRow
-                android:id="@+id/tableRow6"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" >
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="0.8"
+				android:background="#ffbd21" >
 
-                <Button
-                    android:id="@+id/input_back"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/input_button_bg"
-                    android:layout_weight="1"
-                    android:tag="@string/tag_back"
-                    android:text="@string/input_back"
-                    android:textSize="24sp" />
+				<com.android.enjoyalarm.view.ToggleView
+					android:id="@+id/sound_way_tgv"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:gravity="center"
+					android:text="@string/sound_way"
+					android:textSize="20sp"
+					app:CheckedDrawable="@drawable/wake_way_click" />
 
-                <Button
-                    android:id="@+id/input0"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/input_button_bg"
-                    android:layout_weight="1"
-                    android:tag="@string/tag0"
-                    android:text="@string/input0"
-                    android:textSize="24sp" />
+				<com.android.enjoyalarm.view.ToggleView
+					android:id="@+id/shake_way_tgv"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:gravity="center"
+					android:text="@string/shake_way"
+					android:textSize="20sp"
+					app:CheckedDrawable="@drawable/wake_way_click" />
 
-                <Button
-                    android:id="@+id/input_done"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/input_button_bg"
-                    android:layout_weight="1"
-                    android:tag="@string/tag_done"
-                    android:text="@string/input_done"
-                    android:textSize="24sp" />
+				<FrameLayout
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_gravity="end|center_vertical"
+					android:layout_weight="3" >
 
-            </TableRow>
-        </TableLayout>
+					<TextView
+						android:id="@+id/wake_music_tv"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:background="@drawable/music_tv_bg"
+						android:ellipsize="end"
+						android:gravity="center"
+						android:padding="8dp"
+						android:singleLine="true"
+						android:text="TextView"
+						android:textSize="20sp" />
 
-        <LinearLayout
-            android:id="@+id/media_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#939eef"
-            android:orientation="vertical" >
+					<View
+						android:id="@+id/wake_music_layer"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:background="#2000" />
+				</FrameLayout>
+			</LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.8"
-                android:background="#ffbd21" >
+			<TextView
+				android:id="@+id/encourage_words_tv"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:background="@drawable/encourage_tv_bg"
+				android:ellipsize="marquee"
+				android:focusable="true"
+				android:gravity="center"
+				android:padding="10dp"
+				android:singleLine="true"
+				android:text="@string/init_encourage_words"
+				android:textSize="22sp" />
 
-                <com.enjoyalarm.view.ToggleView
-                    android:id="@+id/sound_way_tgv"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/sound_way"
-                    android:textSize="22dp"
-                    app:CheckedDrawable="@drawable/wake_way_click" />
+			<Button
+				android:id="@+id/media_add_bt"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:text="+"
+				android:visibility="gone" />
 
-                <com.enjoyalarm.view.ToggleView
-                    android:id="@+id/shake_way_tgv"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/shake_way"
-                    android:textSize="22dp"
-                    app:CheckedDrawable="@drawable/wake_way_click" />
-
-                <TextView
-                    android:id="@+id/wake_music_tv"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="TextView"
-                    android:textSize="24dp" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/encourage_words_tv"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="#ff9494"
-                android:gravity="center"
-                android:text="@string/init_encourage_words"
-                android:textSize="24dp" />
-
-            <Button
-                android:id="@+id/media_add_bt"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="+"
-                android:visibility="gone" />
-
-            <View
-                android:id="@+id/empth_view"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-        </LinearLayout>
-    </FrameLayout>
+			<View
+				android:id="@+id/empth_view"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1" />
+		</LinearLayout>
+	</FrameLayout>
 
 </LinearLayout>

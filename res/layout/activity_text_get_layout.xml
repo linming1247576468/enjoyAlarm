@@ -26,7 +26,10 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="right"
-			android:text="@string/dialog_yes" />
+			android:background="@drawable/confirm_bt_bg"
+			android:padding="8dp"
+			android:text="@string/dialog_yes"
+			android:textSize="22sp" />
 	</LinearLayout>
 
 </FrameLayout>
