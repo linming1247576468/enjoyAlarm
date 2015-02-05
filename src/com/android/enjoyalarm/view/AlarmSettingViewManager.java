@@ -838,7 +838,7 @@ public class AlarmSettingViewManager {
 	private void shake() {
 		Vibrator vibrator = (Vibrator) mActivity
 				.getSystemService(Service.VIBRATOR_SERVICE);
-		vibrator.vibrate(500);
+		vibrator.vibrate(200);
 	}
 
 	private void enableRemainTime(boolean enable) {
