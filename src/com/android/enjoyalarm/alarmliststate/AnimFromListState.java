@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.view.MotionEvent;
 
 import com.android.enjoyalarm.drawcomponent.Component;
-import com.android.enjoyalarm.view.ViewControlInterface;
+import com.android.enjoyalarm.view.ListViewControlInterface;
 
 public class AnimFromListState extends State {
 
@@ -23,7 +23,7 @@ public class AnimFromListState extends State {
 	 * init from ListingState only
 	 * components:topBitmap,bottomBitmap
 	 */
-	public AnimFromListState(ViewControlInterface controlInterface,Bitmap foregroundBitmap,
+	public AnimFromListState(ListViewControlInterface controlInterface,Bitmap foregroundBitmap,
 			float initPositionY, int initDirection, Component[] components) {
 		super(controlInterface);
 		

@@ -20,6 +20,9 @@ public class AlarmListDrawer {
 	private float mNowFactor;
 	private float mStartFactor;
 	private float mEndFactor;
+	private float mExpandStartFactor;
+	private float mExpandEndFactor;
+	private boolean mAllowExpand;
 	
 	
 
@@ -50,15 +53,33 @@ public class AlarmListDrawer {
 		float gapFactor = mItemGapFactor + mItemWidth / mViewWidth;
 		mStartFactor = 0f;// at list start
 		mEndFactor = (size - 1) * gapFactor;// at list end
-		for (int i = 0; i < size; i++) {
+		/*for (int i = 0; i < size; i++) {
 			AlarmItemComponent item = mItems.get(i);
 			item.addTranslationEntry(mStartFactor, mEndFactor, 0.5f + i
 					* gapFactor, 0.5f + i * gapFactor
 					- (mEndFactor - mStartFactor), 0.5f, 0.5f);
 			item.addTranslationEntry(mEndFactor, mEndFactor + 1f, 0.5f + i
 					* gapFactor - (mEndFactor - mStartFactor), 0.5f + i
-					* gapFactor - (mEndFactor - mStartFactor), 0.5f, 0.5f);
+					* gapFactor - (mEndFactor - mStartFactor), 0.5f, 0.5f);//consider [,)
+		}*/
+		mExpandStartFactor = mStartFactor - gapFactor;
+		mExpandEndFactor = mEndFactor  + gapFactor;
+		for (int i = 0; i < size; i++) {
+			AlarmItemComponent item = mItems.get(i);
+			item.addTranslationEntry(mExpandStartFactor, mExpandEndFactor, 0.5f + (i + 1)
+					* gapFactor, 0.5f + (i + 1) * gapFactor
+					- (mExpandEndFactor - mExpandStartFactor), 0.5f, 0.5f);
+			item.addTranslationEntry(mExpandEndFactor, mExpandEndFactor + 1f, 0.5f + (i + 1)
+					* gapFactor - (mExpandEndFactor - mExpandStartFactor), 0.5f + (i + 1)
+					* gapFactor - (mExpandEndFactor - mExpandStartFactor), 0.5f, 0.5f);//consider [,)
 		}
+	}
+	
+	/**
+	 * set whether to allow expand: allow first item be in the right of screen and last item in the left
+	 */
+	public void setAllowExpand(boolean expand) {
+		mAllowExpand = expand;
 	}
 
 	public void setCurrentIndex(int index) {
@@ -117,6 +138,14 @@ public class AlarmListDrawer {
 		return mNowFactor;
 	}
 	
+	public float getStartFactor() {
+		return mStartFactor;
+	}
+	
+	public float getEndFactor() {
+		return mEndFactor;
+	}
+	
 	public List<AlarmItemComponent> getItems() {
 		return mItems;
 	}
@@ -136,10 +165,18 @@ public class AlarmListDrawer {
 	public void draw(Canvas canvas, float changeFactor) {
 		canvas.drawColor(Color.BLACK);
 		mNowFactor -= changeFactor;
-		if (mNowFactor < mStartFactor) {
-			mNowFactor = mStartFactor;
-		} else if (mNowFactor > mEndFactor) {
-			mNowFactor = mEndFactor;
+		if (mAllowExpand) {
+			if (mNowFactor < mExpandStartFactor) {
+				mNowFactor = mExpandStartFactor;
+			} else if (mNowFactor > mExpandEndFactor) {
+				mNowFactor = mExpandEndFactor;
+			}
+		} else {
+			if (mNowFactor < mStartFactor) {
+				mNowFactor = mStartFactor;
+			} else if (mNowFactor > mEndFactor) {
+				mNowFactor = mEndFactor;
+			}
 		}
 		for (AlarmItemComponent component: mItems) {
 			component.draw(canvas, mNowFactor);

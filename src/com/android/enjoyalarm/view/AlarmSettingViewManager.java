@@ -222,7 +222,7 @@ public class AlarmSettingViewManager {
 		AlarmBasicInfo info = new AlarmBasicInfo(mAlarmId, mNameTextView
 				.getText().toString(), Integer.parseInt(mHourTextView.getText()
 				.toString()), Integer.parseInt(mMinuteTextView.getText()
-				.toString()), ModelUtil.getDaysString(days));
+				.toString()), ModelUtil.getDaysString(days), mRepeatCheckBox.isChecked());
 		return info;
 	}
 	
@@ -746,22 +746,9 @@ public class AlarmSettingViewManager {
 		}
 
 		// set wake buttons
-		String wakeWay = model.getWakeWay();
-		if (ModelVariable.ALARM_WAKE_WAY_SOUND.equals(wakeWay)) {// sound
-			mSoundWayToggleView.setChecked(true);
-			mShakeWayToggleView.setChecked(false);
-			enableWakeMusic(true);
-
-		} else if (ModelVariable.ALARM_WAKE_WAY_SHAKE.equals(wakeWay)) {// shake
-			mSoundWayToggleView.setChecked(false);
-			mShakeWayToggleView.setChecked(true);
-			enableWakeMusic(false);
-
-		} else {// both
-			mSoundWayToggleView.setChecked(true);
-			mShakeWayToggleView.setChecked(true);
-			enableWakeMusic(true);
-		}
+		mSoundWayToggleView.setChecked(model.isWakeWayMusic());
+		mShakeWayToggleView.setChecked(model.isWakeWayShake());
+		enableWakeMusic(model.isWakeWayMusic());
 
 		// set wake music
 		String musicUri = model.getWakeMusicUri();
@@ -906,8 +893,8 @@ public class AlarmSettingViewManager {
 				}
 			}
 			
-			if (mSoundWayToggleView.isSelected()) {
-				if (mShakeWayToggleView.isSelected()) {
+			if (mSoundWayToggleView.isChecked()) {
+				if (mShakeWayToggleView.isChecked()) {
 					wakeWay = ModelVariable.ALARM_WAKE_WAY_SOUND_SHAKE;
 				} else {
 					wakeWay = ModelVariable.ALARM_WAKE_WAY_SOUND;
@@ -951,8 +938,8 @@ public class AlarmSettingViewManager {
 			}
 			
 			String wakeWay1;
-			if (mSoundWayToggleView.isSelected()) {
-				if (mShakeWayToggleView.isSelected()) {
+			if (mSoundWayToggleView.isChecked()) {
+				if (mShakeWayToggleView.isChecked()) {
 					wakeWay1 = ModelVariable.ALARM_WAKE_WAY_SOUND_SHAKE;
 				} else {
 					wakeWay1 = ModelVariable.ALARM_WAKE_WAY_SOUND;

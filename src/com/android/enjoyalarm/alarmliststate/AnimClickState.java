@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.android.enjoyalarm.drawcomponent.AlarmItemComponent;
 import com.android.enjoyalarm.drawcomponent.Component.XYEntity;
-import com.android.enjoyalarm.view.ViewControlInterface;
+import com.android.enjoyalarm.view.ListViewControlInterface;
 
 import android.graphics.Canvas;
 import android.view.MotionEvent;
@@ -18,7 +18,7 @@ public class AnimClickState extends State {
 	private float mConstFactor;
 	
 	
-	public AnimClickState(ViewControlInterface controlInterface,
+	public AnimClickState(ListViewControlInterface controlInterface,
 			List<AlarmItemComponent> items, int clickIndex, float constFactor) {
 		super(controlInterface);
 		

@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 
 import com.android.enjoyalarm.drawcomponent.AlarmItemComponent;
 import com.android.enjoyalarm.drawcomponent.Component.XYEntity;
-import com.android.enjoyalarm.view.ViewControlInterface;
+import com.android.enjoyalarm.view.ListViewControlInterface;
 
 
 public class DeleteState extends State {
@@ -28,7 +28,7 @@ public class DeleteState extends State {
 	/**
 	 * init from ListState, so items contain item at clickIndex
 	 */
-	public DeleteState(ViewControlInterface controlInterface,
+	public DeleteState(ListViewControlInterface controlInterface,
 			List<AlarmItemComponent> items, int deleteIndex, float constFactor) {
 		super(controlInterface);
 		
@@ -56,7 +56,7 @@ public class DeleteState extends State {
 	/**
 	 * init from Anim*DeleteState,so items don't contain item at clickIndex
 	 */
-	public DeleteState(ViewControlInterface controlInterface, AlarmItemComponent deleteItem, 
+	public DeleteState(ListViewControlInterface controlInterface, AlarmItemComponent deleteItem, 
 			List<AlarmItemComponent> items, int deleteIndex, float constFactor, float positionY) {
 		super(controlInterface);
 		

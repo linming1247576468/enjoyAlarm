@@ -19,7 +19,7 @@
 	<string name="sunday">日</string>
 	<string name="sound_way">响铃</string>
 	<string name="shake_way">震动</string>
-	<string name="init_encourage_words">今天是个好日子！</string>
+	<string name="init_encourage_words">起床！加油!</string>
 	<string name="init_wake_music_words">请设置闹钟铃声</string>
 	<string name="dialog_yes">确定</string>
 	<string name="dialog_no">取消</string>
@@ -29,6 +29,10 @@
 	<string name="music_select_no_file">暂无文件</string>
 	<string name="music_select_ask_action">请选择一个音乐文件</string>
 	<string name="music_select_header_text">##个文件</string>
+	<string name="alarm_wake_again">闹钟将在##分钟后再响</string>
+	<string name="wake_up_drag_word">甩出去关掉闹钟</string>
+	<string name="notification_ticker">闹钟已停止</string>
+	<string name="notification_text">##的“**”已停止</string>
 
 	<string-array name="this_week">
 		<item>本周一</item>
@@ -37,7 +41,7 @@
 		<item>本周四</item>
 		<item>本周五</item>
 		<item>本周六</item>
-		<item>本周七</item>
+		<item>本周日</item>
 	</string-array>
 	<string-array name="next_week">
 		<item>下周一</item>
@@ -46,7 +50,16 @@
 		<item>下周四</item>
 		<item>下周五</item>
 		<item>下周六</item>
-		<item>下周七</item>
+		<item>下周日</item>
+	</string-array>
+	<string-array name="wake_show_day">
+		<item>周日</item>
+		<item>周一</item>
+		<item>周二</item>
+		<item>周三</item>
+		<item>周四</item>
+		<item>周五</item>
+		<item>周六</item>
 	</string-array>
 	<string-array name="exit_words1">
 		<item>保</item>
@@ -94,5 +107,6 @@
 	<string name="title_activity_get_text">GetTextActivity</string>
 	<string name="title_activity_help">HelpActivity</string>
 	<string name="title_activity_music_select">MusicSelectActivity</string>
+	<string name="title_activity_wake_test">WakeTestActivity</string>
 
 </resources>

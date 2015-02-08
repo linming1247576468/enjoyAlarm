@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.view.MotionEvent;
 
 import com.android.enjoyalarm.drawcomponent.AlarmListDrawer;
-import com.android.enjoyalarm.view.ViewControlInterface;
+import com.android.enjoyalarm.view.ListViewControlInterface;
 
 public class ListState extends State {
 
@@ -22,7 +22,7 @@ public class ListState extends State {
 	 * 
 	 * @param nowFactor		-1 for not setting
 	 */
-	public ListState(ViewControlInterface controlInterface, float nowFactor) {
+	public ListState(ListViewControlInterface controlInterface, float nowFactor) {
 		super(controlInterface);
 
 		init(nowFactor);

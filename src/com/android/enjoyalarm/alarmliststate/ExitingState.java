@@ -9,7 +9,7 @@ import com.android.enjoyalarm.R;
 import com.android.enjoyalarm.drawcomponent.BitmapComponent;
 import com.android.enjoyalarm.drawcomponent.Component;
 import com.android.enjoyalarm.drawcomponent.ExitTextComponent;
-import com.android.enjoyalarm.view.ViewControlInterface;
+import com.android.enjoyalarm.view.ListViewControlInterface;
 
 public class ExitingState extends State {
 
@@ -29,7 +29,7 @@ public class ExitingState extends State {
 	/**
 	 * @param initPositionX must be relative
 	 */
-	public ExitingState(ViewControlInterface controlInterface,
+	public ExitingState(ListViewControlInterface controlInterface,
 			Bitmap foregroundBitmap, float initPositionX) {
 		super(controlInterface);
 
@@ -46,7 +46,7 @@ public class ExitingState extends State {
 	 * @param components :leftText, rightText, leftBitmap, RightBitmap;
 	 * @param initPositionX must be relative
 	 */
-	public ExitingState(ViewControlInterface controlInterface,
+	public ExitingState(ListViewControlInterface controlInterface,
 			float initPositionX, Component[] components) {
 		super(controlInterface);
 

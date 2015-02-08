@@ -30,24 +30,26 @@ public class ModelUtil {
 		public int hour;
 		public int minute;
 		public String days;
+		public boolean repeated;
 		
 		
 		/**
 		 *@param days
 		 *				0126, 346 and so on: 0 represents Monday, and 6 represents Sunday
 		 */
-		public AlarmBasicInfo(int id, String name, int hour, int minute, String days) {
+		public AlarmBasicInfo(int id, String name, int hour, int minute, String days, boolean repeated) {
 			this.id = id;
 			this.name = name;
 			this.hour = hour;
 			this.minute = minute;
 			this.days = days;
+			this.repeated = repeated;
 		}
 		
 		@Override
 		public String toString() {
 			return "id: " + id + "  name: " + name + "  hour: " + hour + "  minute: " + minute
-					+ "  days: " + days;
+					+ "  days: " + days + "  repeated: " + repeated;
 		}
 	}
 
@@ -59,13 +61,15 @@ public class ModelUtil {
 				ModelVariable.ALARM_COLUMN1_ID,
 				ModelVariable.ALARM_COLUMN2_NAME,
 				ModelVariable.ALARM_COLUMN3_TIME,
-				ModelVariable.ALARM_COLUMN4_DAYS, }, null, null, null, null,
+				ModelVariable.ALARM_COLUMN4_DAYS, 
+				ModelVariable.ALARM_COLUMN5_IS_REPEAT}, null, null, null, null,
 				null);
 		while (cursor.moveToNext()) {
 			resultList.add(new AlarmBasicInfo(cursor.getInt(0), cursor
 					.getString(1), ModelUtil.getHourFromTime(cursor
 					.getString(2)), ModelUtil.getMinuteFromTime(cursor
-					.getString(2)), cursor.getString(3)));
+					.getString(2)), cursor.getString(3), 
+					ModelVariable.ALARM_YES.equals(cursor.getString(4))));
 			if (debug) {
 				Log.i("getAlarmBasicInfo", "id:" + cursor.getInt(0) + ", name:"
 						+ cursor.getString(1));
@@ -306,9 +310,7 @@ public class ModelUtil {
 		}
 	}
 	
-	public static String getCallingMusicName() {
-		return null;
-	}
+	
 
 	public static List<String> getAlarmNames(Context context) {
 		DatabaseHelper helper = new DatabaseHelper(context);
@@ -325,7 +327,16 @@ public class ModelUtil {
 		return result;
 	}
 
-	
+	public static void updateAlarmWithDays(Context context, int alarmId, List<Integer> days) { 
+		String data = getDaysString(days);
+		DatabaseHelper helper = new DatabaseHelper(context);
+		SQLiteDatabase db = helper.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(ModelVariable.ALARM_COLUMN4_DAYS, data);
+		db.update(ModelVariable.ALARM_TABLE_NAME, values, ModelVariable.ALARM_COLUMN1_ID+"=?", 
+				new String[]{String.valueOf(alarmId)});
+		db.close();
+	}
 	
 	public static String getDaysString(List<Integer> days) {
 		StringBuilder dayString = new StringBuilder();

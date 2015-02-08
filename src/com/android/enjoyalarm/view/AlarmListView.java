@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.android.enjoyalarm.alarm.AlarmUtils;
 import com.android.enjoyalarm.alarmliststate.ExitingState;
 import com.android.enjoyalarm.alarmliststate.InitState;
 import com.android.enjoyalarm.alarmliststate.ListingState;
@@ -19,7 +20,7 @@ import com.android.enjoyalarm.alarmliststate.State;
 import com.android.enjoyalarm.model.ModelUtil;
 import com.android.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
 
-public class AlarmListView extends View implements ViewControlInterface {
+public class AlarmListView extends View implements ListViewControlInterface {
 
 	private static final int WHAT_REFRESH = 0;
 	private static final int WHAT_EXIT = 1;
@@ -78,9 +79,9 @@ public class AlarmListView extends View implements ViewControlInterface {
 		};
 	
 		mAlarmsBasicInfo = new ArrayList<AlarmBasicInfo>();
-		mAlarmsBasicInfo.add(new AlarmBasicInfo(-1, null, 0, 0, null));
+		mAlarmsBasicInfo.add(new AlarmBasicInfo(-1, null, 0, 0, null,false));
 		mAlarmsBasicInfo.addAll(1, ModelUtil.getAlarmsBasicInfo(getContext()));
-		mAlarmsBasicInfo.add(new AlarmBasicInfo(-2, null, 0, 0, null));
+		mAlarmsBasicInfo.add(new AlarmBasicInfo(-2, null, 0, 0, null,false));
 		mCurrentAlarmIndex = 0;
 		
 		mAlarmsColor = new ArrayList<Integer>();
@@ -248,7 +249,9 @@ public class AlarmListView extends View implements ViewControlInterface {
 	
 	@Override
 	public void handleDeleteAlarmItem(int index) {
-		ModelUtil.deleteAlarm(getContext(), mAlarmsBasicInfo.get(index).id);
+		int id = mAlarmsBasicInfo.get(index).id;
+		AlarmUtils.cancelAlarm(getContext(), id);
+		ModelUtil.deleteAlarm(getContext(), id);
 		
 		mAlarmsBasicInfo.remove(index);
 		mAlarmsColor.remove(index);

@@ -1,15 +1,15 @@
 package com.android.enjoyalarm.alarmliststate;
 
-import com.android.enjoyalarm.view.ViewControlInterface;
+import com.android.enjoyalarm.view.ListViewControlInterface;
 
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
 public abstract class State {
 
-	protected ViewControlInterface mControlInterface;
+	protected ListViewControlInterface mControlInterface;
 	
-	public State(ViewControlInterface controlInterface) {
+	public State(ListViewControlInterface controlInterface) {
 		mControlInterface = controlInterface;
 	}
 	

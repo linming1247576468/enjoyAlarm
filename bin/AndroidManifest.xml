@@ -12,14 +12,15 @@
 	<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+"
 	<application
 		android:allowBackup="true"
 		android:icon="@drawable/ic_launcher"
 		android:label="@string/app_name"
 		android:theme="@style/AppTheme" >
 		<activity
-			android:name="com.android.enjoyalarm.MainActivity"
+			android:name=".MainActivity"
 			android:label="@string/app_name" >
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -28,23 +29,35 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name="com.android.enjoyalarm.AlarmWakeActivity"
+			android:name=".AlarmWakeActivity"
 			android:label="@string/title_activity_alarm_wake" >
 		</activity>
 		<activity
-			android:name="com.android.enjoyalarm.GetTextActivity"
+			android:name=".GetTextActivity"
 			android:label="@string/title_activity_get_text"
 			android:theme="@style/GetTextTheme"
 			android:windowSoftInputMode="stateVisible" >
 		</activity>
 		<activity
-			android:name="com.android.enjoyalarm.HelpActivity"
+			android:name=".HelpActivity"
 			android:label="@string/title_activity_help" >
 		</activity>
 		<activity
 			android:name=".MusicSelectActivity"
 			android:label="@string/title_activity_music_select" >
 		</activity>
+		<activity
+			android:name=".WakeTestActivity"
+			android:label="@string/title_activity_wake_test" >
+		</activity>
+
+		<receiver
+			android:name=".BootBroadcastReceiver"
+			android:enabled="true" >
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+			</intent-filter>
+		</receiver>
 	</application>
 
 </manifest>

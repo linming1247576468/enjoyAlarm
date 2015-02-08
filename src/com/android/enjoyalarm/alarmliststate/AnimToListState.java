@@ -11,7 +11,7 @@ import android.view.MotionEvent;
 import com.android.enjoyalarm.drawcomponent.AlarmItemComponent;
 import com.android.enjoyalarm.drawcomponent.Component;
 import com.android.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
-import com.android.enjoyalarm.view.ViewControlInterface;
+import com.android.enjoyalarm.view.ListViewControlInterface;
 
 public class AnimToListState extends State {
 
@@ -33,7 +33,7 @@ public class AnimToListState extends State {
 	 * init from ListingState only
 	 * components:topBitmap,bottomBitmap
 	 */
-	public AnimToListState(ViewControlInterface controlInterface,
+	public AnimToListState(ListViewControlInterface controlInterface,
 			Bitmap foregroundBitmap, float initPositionY, int initDirection, Component[] components) {
 		super(controlInterface);
 		

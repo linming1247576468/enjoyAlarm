@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.view.MotionEvent;
 
 import com.android.enjoyalarm.drawcomponent.Component;
-import com.android.enjoyalarm.view.ViewControlInterface;
+import com.android.enjoyalarm.view.ListViewControlInterface;
 
 public class AnimFromExitState extends State {
 
@@ -22,7 +22,7 @@ public class AnimFromExitState extends State {
 	 * init from ExitingState only
 	 * components:leftText,rightText,leftBitmap,rightBitmap
 	 */
-	public AnimFromExitState(ViewControlInterface controlInterface,
+	public AnimFromExitState(ListViewControlInterface controlInterface,
 			float initPositionX, int initDirection, Component[] components) {
 		super(controlInterface);
 

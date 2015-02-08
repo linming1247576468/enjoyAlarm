@@ -17,6 +17,13 @@ public class ViewUtil {
 		}
 	}
 
+	public static long getRemainTimeRTC(int targetWeekDay, int targetHour,
+			int targetMinute, int nowWeekDay, int nowHour, int nowMinute) {
+		TimeEntry time = getRemainTime(targetWeekDay, targetHour, targetMinute, nowWeekDay, nowHour, nowMinute);
+		return time.day * 24 * 60 * 60
+				* 1000 + time.hour * 60 * 60 * 1000 + time.minute * 60 * 1000;
+	}
+	
 	public static TimeEntry getRemainTime(int targetWeekDay, int targetHour,
 			int targetMinute, int nowWeekDay, int nowHour, int nowMinute) {
 		int totalMinute = ((((targetWeekDay + 7) * 24 + targetHour) * 60 + targetMinute) - ((nowWeekDay * 24 + nowHour) * 60 + nowMinute))

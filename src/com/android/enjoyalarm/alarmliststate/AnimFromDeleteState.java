@@ -3,7 +3,7 @@ package com.android.enjoyalarm.alarmliststate;
 import java.util.List;
 
 import com.android.enjoyalarm.drawcomponent.AlarmItemComponent;
-import com.android.enjoyalarm.view.ViewControlInterface;
+import com.android.enjoyalarm.view.ListViewControlInterface;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -23,12 +23,12 @@ public class AnimFromDeleteState extends State {
 	
 	
 	
-	public AnimFromDeleteState(ViewControlInterface controlInterface,
-			AlarmItemComponent deleteItem, List<AlarmItemComponent> items,
+	public AnimFromDeleteState(ListViewControlInterface controlInterface,
+			AlarmItemComponent deleteItem, List<AlarmItemComponent> otherItems,
 			int deleteIndex, float constFactor, float positionY, int direction) {
 		super(controlInterface);
 
-		mItems = items;
+		mItems = otherItems;
 		mDeleteItem = deleteItem;
 		mDeleteIndex = deleteIndex;
 		mConstFactor = constFactor;

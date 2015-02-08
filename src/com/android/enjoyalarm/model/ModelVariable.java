@@ -3,7 +3,7 @@ package com.android.enjoyalarm.model;
 public class ModelVariable {
 
 	//sharedPreference
-	static final String PREFERENCE_NAME = "enjoy_alarm_preference";
+	static final String PREFERENCE_NAME = "preference_model";
 	static final String PREFERENCE_NEXT_ID = "next_id";
 	
 	//alarm table

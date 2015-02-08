@@ -9,12 +9,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import com.android.enjoyalarm.ActivityVariable;
 import com.android.enjoyalarm.AlarmWakeActivity;
 
 public class AlarmUtils {
 
-	public final static String ALARM_ID_INTENT = "alarm_id_intent";
-
+	
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	public static void settingAlarm(Context context, int alarmId, int year,
 			int month, int day, int hour, int minute) {
@@ -29,7 +29,7 @@ public class AlarmUtils {
 		Intent intent = new Intent(context, AlarmWakeActivity.class);// launch
 																		// activity
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.putExtra(AlarmUtils.ALARM_ID_INTENT, alarmId);
+		intent.putExtra(ActivityVariable.INTENT_EXTRA_ALARM_ID, alarmId);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context,
 				alarmId, intent, PendingIntent.FLAG_CANCEL_CURRENT);// same request id will not set multi-alarm
 																	// for same intent
@@ -57,9 +57,9 @@ public class AlarmUtils {
 		Intent intent = new Intent(context, AlarmWakeActivity.class);// launch
 																		// activity
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.putExtra(AlarmUtils.ALARM_ID_INTENT, alarmId);
+		intent.putExtra(ActivityVariable.INTENT_EXTRA_ALARM_ID, alarmId);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context,
-				alarmId, intent, 0);// same request id will not set multi-alarm
+				alarmId, intent, PendingIntent.FLAG_CANCEL_CURRENT);// same request id will not set multi-alarm
 																	// for same intent
 		/**
 		 * in target 19, alarmManager.set() will set the alarm inexactly,use
@@ -80,7 +80,7 @@ public class AlarmUtils {
 				.getSystemService(Service.ALARM_SERVICE);
 		Intent intent = new Intent(context, AlarmWakeActivity.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context,
-				alarmId, intent, 0);
+				alarmId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		alarmManager.cancel(pendingIntent);
 	}
 }

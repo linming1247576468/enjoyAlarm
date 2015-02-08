@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 
 import com.android.enjoyalarm.drawcomponent.BitmapComponent;
 import com.android.enjoyalarm.drawcomponent.Component;
-import com.android.enjoyalarm.view.ViewControlInterface;
+import com.android.enjoyalarm.view.ListViewControlInterface;
 
 public class ListingState extends State {
 
@@ -27,7 +27,7 @@ public class ListingState extends State {
 	 * @param initPositionY
 	 *            must be relative
 	 */
-	public ListingState(ViewControlInterface controlInterface,
+	public ListingState(ListViewControlInterface controlInterface,
 			Bitmap foregroundBitmap, float initPositionY) {
 		super(controlInterface);
 
@@ -47,7 +47,7 @@ public class ListingState extends State {
 	 * @param initPositionY		must be relative
 	 * @param components	top,bottom
 	 */
-	public ListingState(ViewControlInterface controlInterface,
+	public ListingState(ListViewControlInterface controlInterface,
 			Bitmap foregroundBitmap, float initPositionY, Component[] components) {
 		super(controlInterface);
 

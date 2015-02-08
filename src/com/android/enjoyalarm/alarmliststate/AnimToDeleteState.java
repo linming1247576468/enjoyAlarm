@@ -3,7 +3,7 @@ package com.android.enjoyalarm.alarmliststate;
 import java.util.List;
 
 import com.android.enjoyalarm.drawcomponent.AlarmItemComponent;
-import com.android.enjoyalarm.view.ViewControlInterface;
+import com.android.enjoyalarm.view.ListViewControlInterface;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -28,12 +28,12 @@ public class AnimToDeleteState extends State {
 	
 	
 	
-	public AnimToDeleteState(ViewControlInterface controlInterface,
-			AlarmItemComponent deleteItem, List<AlarmItemComponent> items,
+	public AnimToDeleteState(ListViewControlInterface controlInterface,
+			AlarmItemComponent deleteItem, List<AlarmItemComponent> otherItems,
 			int deleteIndex, float constFactor, float positionY, int direction) {
 		super(controlInterface);
 
-		mItems = items;
+		mItems = otherItems;
 		mDeleteItem = deleteItem;
 		mDeleteIndex = deleteIndex;
 		mConstFactor = constFactor;
@@ -77,9 +77,12 @@ public class AnimToDeleteState extends State {
 					
 				} else {//right
 					if (mTempConstFactor > fLimit1) {
-						mTempConstFactor = fLimit1;
+						for (int j=i; j< mItems.size(); j++) {
+							mItems.get(j).draw(canvas, fLimit1);
+						}
 						deleteAlarm();
 						mAnimState = 2;
+						break;
 					}
 					mItems.get(i).draw(canvas, mTempConstFactor);
 				}
@@ -126,9 +129,17 @@ public class AnimToDeleteState extends State {
 			float fVelocity = mGapPlusWidthFactor / 20;
 			fLimit1 = mTempConstFactor + mGapPlusWidthFactor;
 			fLimit2 = mConstFactor - mGapPlusWidthFactor / 2;
+			if (mDeleteIndex == 1 && fLimit2 < 0) {//the first item can't be in the right of screen
+				fLimit2 = 0;
+			}
+			if (mDeleteIndex == mItems.size() -1) {//the last item can be in the left of screen, but must return to center
+				float end = ListState.mAlarmListDrawer.getEndFactor();
+				if (fLimit2+mGapPlusWidthFactor > end) {//in the left
+					fLimit2 = end - mGapPlusWidthFactor;
+				}
+			}
 			
 			Loop:while(mThreadFlag) {
-				System.out.println(mAnimState);
 				switch(mAnimState) {
 				case 0: {
 					if (mDirection == 0) {//to top

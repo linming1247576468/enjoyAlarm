@@ -7,7 +7,7 @@ import android.content.Context;
 import com.android.enjoyalarm.alarmliststate.State;
 import com.android.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
 
-public interface ViewControlInterface {
+public interface ListViewControlInterface {
 
 	public void changeState(State state);
 

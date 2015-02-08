@@ -125,6 +125,24 @@ public class ReadingModel {
 	public String getWakeWay() {
 		return mWakeWay;
 	}
+	
+	public boolean isWakeWayMusic() {
+		if (ModelVariable.ALARM_WAKE_WAY_SOUND.equals(mWakeWay)
+				|| ModelVariable.ALARM_WAKE_WAY_SOUND_SHAKE.equals(mWakeWay)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean isWakeWayShake() {
+		if (ModelVariable.ALARM_WAKE_WAY_SHAKE.equals(mWakeWay)
+				|| ModelVariable.ALARM_WAKE_WAY_SOUND_SHAKE.equals(mWakeWay)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public String getWakeMusicUri() {
 		return mWakeMusicUri;

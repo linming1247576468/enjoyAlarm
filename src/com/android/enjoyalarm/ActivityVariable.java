@@ -12,4 +12,12 @@ public class ActivityVariable {
 	public static final String MUSIC_SELECT_EXTRA_ORIGINAL_MUSIC_TITLE = "MUSIC_SELECT_EXTRA_ORIGINAL_MUSIC_TITLE";
 	public static final String MUSIC_SELECT_EXTRA_SELECT_MUSIC_TITLE = "MUSIC_SELECT_EXTRA_SELECT_MUSIC_TITLE";
 	public static final String MUSIC_SELECT_EXTRA_SELECT_MUSIC_URI = "MUSIC_SELECT_EXTRA_SELECT_MUSIC_URI";
+
+	//wake up
+	public final static String INTENT_EXTRA_ALARM_ID = "ALARM_ID";
+	
+	//preference
+	static final String PREFERENCE_NAME_WAKE_ACTIVITY = "PREFERENCE_WAKE";
+	static final String PREFERENCE_INT_ALARM_NOT_WAKE_NUM = "NOT_WAKE_NUM_";//to append alarm id
+	
 }
