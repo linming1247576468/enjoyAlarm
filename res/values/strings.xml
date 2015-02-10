@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="app_name">EnjoyAlarm</string>
+	<string name="app_name">卡片闹钟</string>
 	<string name="init_name">闹钟##</string>
 	<string name="not_save">未保存</string>
 	<string name="help">帮助</string>
@@ -26,6 +26,7 @@
 	<string name="has_save">已保存</string>
 	<string name="today">今天</string>
 	<string name="tomorrow">明天</string>
+	<string name="get_text_word">给自己一点激励！</string>
 	<string name="music_select_no_file">暂无文件</string>
 	<string name="music_select_ask_action">请选择一个音乐文件</string>
 	<string name="music_select_header_text">##个文件</string>
@@ -33,7 +34,17 @@
 	<string name="wake_up_drag_word">甩出去关掉闹钟</string>
 	<string name="notification_ticker">闹钟已停止</string>
 	<string name="notification_text">##的“**”已停止</string>
+	<string name="instuction_next_word">下一步</string>
+	<string name="instruction_finish_word">完成</string>
 
+	<string-array name="instruction_show_words">
+		<item>进入应用将创建一个新闹钟</item>
+		<item>点击修改时间</item>
+		<item>左右滑动启动闹钟并退出</item>
+		<item>上下滑动进入闹钟列表</item>
+		<item>按住闹钟上下拉动可删除闹钟</item>
+		<item>闹钟响时可把闹钟“甩出去”</item>
+	</string-array>
 	<string-array name="this_week">
 		<item>本周一</item>
 		<item>本周二</item>

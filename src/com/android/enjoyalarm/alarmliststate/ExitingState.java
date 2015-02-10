@@ -26,9 +26,75 @@ public class ExitingState extends State {
 	private float mExitingLimit;// when mPositionX is within the limit, then it
 								// should recover instead of exit
 
+	
+	
 	/**
-	 * @param initPositionX must be relative
+	 * just for instruction showing
 	 */
+	public ExitingState(ListViewControlInterface controlInterface,
+			Bitmap foregroundBitmap) {
+		super(controlInterface);
+		
+		mBitmap = foregroundBitmap;
+		initData();
+		initComponents();
+		
+		new Thread() {
+			public void run() {
+				mPositionX = 0;
+				float gap = mViewWidth * 0.01f;
+				float acceGap = gap * 0.5f;
+				float limit1 = mViewWidth * 0.35f;
+				float limit2 = - mViewWidth * 0.1f;
+				int type = 0;//0.to right 1.to left 2.to right recover
+				loop:while (true) {
+					switch(type) {
+					case 0: {
+						mPositionX += gap;
+						gap += acceGap;
+						if (mPositionX > limit1) {
+							mPositionX = limit1;
+							type = 1;
+							gap *= 0.2f;
+							acceGap = gap * 0.5f;
+						}
+						break;
+					}
+					
+					case 1: {
+						mPositionX -= gap;
+						gap += acceGap;
+						if (mPositionX < limit2) {
+							mPositionX = limit2;
+							type = 2;
+							gap = mViewWidth * 0.02f;
+						}
+						break;
+					}
+					
+					case 2: {
+						mPositionX += gap;
+						if (mPositionX > 0) {
+							mPositionX = 0;
+							mControlInterface.refreshDraw();
+							break loop;
+						}
+						break;
+					}
+					}
+					
+					mControlInterface.refreshDraw();
+					
+					try {
+						sleep(30);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}.start();
+	}
+	
 	public ExitingState(ListViewControlInterface controlInterface,
 			Bitmap foregroundBitmap, float initPositionX) {
 		super(controlInterface);
@@ -44,7 +110,7 @@ public class ExitingState extends State {
 	/**
 	 * init from other state for reusing resource 
 	 * @param components :leftText, rightText, leftBitmap, RightBitmap;
-	 * @param initPositionX must be relative
+	 * @param initPositionX
 	 */
 	public ExitingState(ListViewControlInterface controlInterface,
 			float initPositionX, Component[] components) {

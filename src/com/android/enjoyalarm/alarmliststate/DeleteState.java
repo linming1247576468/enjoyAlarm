@@ -26,6 +26,34 @@ public class DeleteState extends State {
 	
 	
 	/**
+	 * just for instruction showing
+	 */
+	public DeleteState(ListViewControlInterface controlInterface,
+			List<AlarmItemComponent> items) {
+		super(controlInterface);
+		
+		mItems = items;
+		mDeleteItem = mItems.get(0);
+		mItems.remove(0);
+		mDeleteIndex = 0;
+		mPositionY = -controlInterface.getViewHeight() / 6;
+		mConstFactor = 0;
+		init();
+		
+		XYEntity xy = mDeleteItem.getTranslation(mConstFactor);
+		mDeleteItem.removeAllALphaEntry();
+		mDeleteItem.removeAllScaleEntry();
+		mDeleteItem.removeAllTransEntry();
+		mDeleteItem.addAlphaEntry(-1f, -0.5f, 0f, 0f);
+		mDeleteItem.addAlphaEntry(-0.5f, 0f, 0f, 1f);
+		mDeleteItem.addAlphaEntry(0f, 0.5f, 1f, 0f);
+		mDeleteItem.addAlphaEntry(0.5f, 1f, 0f, 0f);
+		mDeleteItem.addScaleEntry(-1f, 1f, 1f, 1f);
+		mDeleteItem.addTranslationEntry(-1f, 1f, xy.x, xy.x, -0.5f, 1.5f);
+	}
+	
+	
+	/**
 	 * init from ListState, so items contain item at clickIndex
 	 */
 	public DeleteState(ListViewControlInterface controlInterface,
@@ -54,7 +82,7 @@ public class DeleteState extends State {
 	
 	
 	/**
-	 * init from Anim*DeleteState,so items don't contain item at clickIndex
+	 * init from Anim(to/form)DeleteState,so items don't contain item at clickIndex
 	 */
 	public DeleteState(ListViewControlInterface controlInterface, AlarmItemComponent deleteItem, 
 			List<AlarmItemComponent> items, int deleteIndex, float constFactor, float positionY) {
@@ -151,5 +179,5 @@ public class DeleteState extends State {
 		float factor = mPositionY / mViewHeight;
 		mDeleteItem.draw(canvas, factor);
 	}
-
+	
 }

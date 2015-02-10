@@ -23,10 +23,17 @@ public class ListingState extends State {
 								// should recover instead of list
 	private float mPositionYLimit;
 
+	
 	/**
-	 * @param initPositionY
-	 *            must be relative
+	 * just for instruction showing
 	 */
+	public State getAnimToListState() {
+		return new AnimToListState(
+				mControlInterface, mBitmap, -mViewHeight*0.2f, 0,
+				new Component[] { mTopBitmapComponent,
+						mBottomBitmapComponent });
+	}
+
 	public ListingState(ListViewControlInterface controlInterface,
 			Bitmap foregroundBitmap, float initPositionY) {
 		super(controlInterface);
@@ -44,7 +51,7 @@ public class ListingState extends State {
 
 	/**
 	 * 
-	 * @param initPositionY		must be relative
+	 * @param initPositionY	
 	 * @param components	top,bottom
 	 */
 	public ListingState(ListViewControlInterface controlInterface,

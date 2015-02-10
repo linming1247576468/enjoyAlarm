@@ -242,9 +242,9 @@ public class WakeUpShowView extends View {
 		mMovePointX += mDragSuccessGapX;
 		mMovePointY += mDragSuccessGapY;
 		if (mRotationDegree > 0) {
-			mRotationDegree += 1;
+			mRotationDegree += 2;
 		} else {
-			mRotationDegree -= 1;
+			mRotationDegree -= 2;
 		}
 		
 		if (Math.abs(mMovePointX - mPointX) > mHeight * 0.8f
@@ -406,7 +406,7 @@ public class WakeUpShowView extends View {
 			mPaint.setColor(Color.GREEN);
 			mPaint.setTextSize(mWordSize);
 			for (int i=0; i<mWord.size(); i++) {
-				canvas.drawText(mWord.get(i), mWidth/2, mHeight/2 + 95 * mDensity 
+				canvas.drawText(mWord.get(i), mWidth/2, mHeight/2 + 100 * mDensity 
 						+ i*mWordSize, mPaint);
 			}
 		}

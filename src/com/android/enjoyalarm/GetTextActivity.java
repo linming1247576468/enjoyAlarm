@@ -31,6 +31,11 @@ public class GetTextActivity extends Activity {
 		mGetTextLayout = findViewById(R.id.get_text_layout);
 		mLayerView = findViewById(R.id.layer);
 		mConfirmButton = (Button) findViewById(R.id.get_text_confirm_bt);
+		if (getIntent().getIntExtra(ActivityVariable.GET_TEXT_EXTRA_TYPE, 0) == 1) {//encourage word
+			findViewById(R.id.get_text_tv).setVisibility(View.VISIBLE);
+		} else {
+			findViewById(R.id.get_text_tv).setVisibility(View.GONE);
+		}
 		
 		//set something
 		String sourceData = getIntent().getStringExtra(ActivityVariable.GET_TEXT_EXTRA_SOURCE);

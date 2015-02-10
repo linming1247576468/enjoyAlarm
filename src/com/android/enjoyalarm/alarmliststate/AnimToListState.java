@@ -22,7 +22,7 @@ public class AnimToListState extends State {
 	private Component mCenterBottomItemComponent;
 	private Component mRightItemComponent;
 	private Bitmap mBitmap;
-	private float mPositionY;//赋值时必须映射为相对坐标
+	private float mPositionY;
 	private float mViewWidth;
 	private float mViewHeight;
 	private int mDirection;// move mDirection:0.to Top 1.to Bottom
@@ -101,11 +101,8 @@ public class AnimToListState extends State {
 		float density = mControlInterface.getDensity();
 		List<AlarmBasicInfo> alarmsInfo = mControlInterface.getAlarmsInfo();
 		List<Integer> alarmsColor = mControlInterface.getAlarmsColor();
-		for (AlarmBasicInfo info: alarmsInfo) {
-			System.out.println(info);
-		}
+		
 		int currentIndex = mControlInterface.getCurrentAlarmIndex();
-		System.out.println(currentIndex);
 		float itemScale = StatePeriod.LIST_ITEM_SCALE;
 		if (currentIndex > 0) {
 			mLeftItemComponent = new AlarmItemComponent(
@@ -158,7 +155,7 @@ public class AnimToListState extends State {
 	}
 	
 	private void changeToListStateToHandle() {
-		mControlInterface.changeState(new ListState(mControlInterface, -1));
+		mControlInterface.changeState(new ListState(mControlInterface, -2));
 	}
 
 	private class AnimThread extends Thread {

@@ -3,8 +3,11 @@ package com.android.enjoyalarm.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
@@ -12,10 +15,13 @@ import android.widget.Toast;
 import com.android.enjoyalarm.R;
 import com.android.enjoyalarm.model.ModelUtil;
 import com.android.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
+import com.android.enjoyalarm.view.AlarmListView.OnAlarmInstructionClickListener;
 import com.android.enjoyalarm.view.AlarmListView.OnAlarmItemClickListener;
 import com.android.enjoyalarm.view.AlarmListView.OnScrollToExitFinishedListerner;
 import com.android.enjoyalarm.view.AlarmListView.OnScrollToListStartedListener;
 import com.android.enjoyalarm.view.AlarmListView.OnScrollToSettingFinishedListener;
+import com.android.enjoyalarm.view.InstructionViewManager.OnNextListener;
+import com.android.enjoyalarm.view.WakeUpForInstrView.OnDragFinishedListener;
 
 public class MainViewManager {
 
@@ -26,6 +32,8 @@ public class MainViewManager {
 	private AlarmSettingViewManager mAlarmSettingViewManager;
 	private int mNowAlarmId;
 	private boolean mIsSettingViewVisiable = true;
+	private boolean mHasShowInstruction = false;
+	private boolean mReturnSettingFromInstr = true;
 	private float mTouchGap;
 	
 	
@@ -56,7 +64,131 @@ public class MainViewManager {
 		ModelUtil.checkTempAlarm(mActivity);
 	}
 	
+	public void setInstr(boolean show) {
+		if (show) {
+			if (!mHasShowInstruction) {
+				openInstr();
+				mHasShowInstruction = true;
+			}
+			
+		} else {
+			if (mHasShowInstruction) {
+				closeInstr();
+				mHasShowInstruction = false;
+			}
+		}
+	}
 	
+	
+	private void openInstr() {
+		mMainView.setIntercept(false);
+		final InstructionViewManager instrManager = new InstructionViewManager(mActivity);
+		final WakeUpForInstrView wakeUpView = new WakeUpForInstrView(mActivity);
+		instrManager.getMainView().setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//do nothing, just to consume all event from parent layout
+			}
+		});
+		mMainView.addView(instrManager.getMainView());
+		
+		//there are 6 texts
+		final String[] texts = mActivity.getResources().getStringArray(R.array.instruction_show_words);
+		//first instruction
+		instrManager.setShowText(texts[0]);
+		mAlarmSettingView.setVisibility(View.VISIBLE);
+		
+		//follow instructions
+		instrManager.setOnNextListener(new OnNextListener() {
+			
+			@Override
+			public void onNext(int nextIndex) {
+				
+				switch(nextIndex) {
+				case 1: {
+					instrManager.setShowText(texts[nextIndex]);
+					mAlarmSettingViewManager.settingForInstruction();
+					break;
+				}
+				
+				case 2: {
+					mAlarmSettingViewManager.settingFromInstruction();
+					instrManager.setShowText(texts[nextIndex]);
+					mIsSettingViewVisiable = false;
+					mAlarmSettingView.destroyDrawingCache();
+					mAlarmSettingView.buildDrawingCache();
+					mAlarmListView.animExitForInstruction(mAlarmSettingView.getDrawingCache());
+					mAlarmSettingView.setVisibility(View.INVISIBLE);
+					
+					break;
+				}
+				
+				case 3: {
+					instrManager.setShowText(texts[nextIndex]);
+					mAlarmListView.animListForInstruction(mAlarmSettingView.getDrawingCache());
+					
+					break;
+				}
+				
+				case 4: {
+					instrManager.setShowText(texts[nextIndex]);
+					mAlarmListView.showDeleteForInstruction();
+					
+					break;
+				}
+				
+				case 5: {
+					instrManager.setShowText(texts[nextIndex]);
+					instrManager.setFinishShowing();
+					
+					Rect frame = new Rect();
+					mActivity.getWindow().getDecorView()
+							.getWindowVisibleDisplayFrame(frame);
+					wakeUpView.setWidthAndHeight(frame.right - frame.left, frame.bottom - frame.top);
+					mMainView.addView(wakeUpView,2);
+					
+					break;
+				}
+				
+				case 6: {
+					final Handler handler = new Handler(){
+						public void handleMessage(android.os.Message msg) {
+							closeInstr();
+						}
+					};
+					wakeUpView.setOnDragFinishedListener(new OnDragFinishedListener() {
+						
+						@Override
+						public void onDragFinished(View view) {
+							handler.sendEmptyMessage(0);
+						}
+					});
+					wakeUpView.drag();
+					
+					break;
+				}
+				}
+			}
+		});
+		
+	}
+	
+	private void closeInstr() {
+		mMainView.setIntercept(true);
+		mMainView.removeViewAt(2);//remove wakeUpView
+		mMainView.removeViewAt(2);//remove instruction view
+		
+		if (mReturnSettingFromInstr) {
+			mIsSettingViewVisiable = true;
+			mAlarmSettingView.setVisibility(View.VISIBLE);
+			
+		} else {
+			mIsSettingViewVisiable = false;
+			mAlarmSettingView.setVisibility(View.INVISIBLE);
+			mAlarmListView.returnFromInstructionToList();
+		}
+	}
 	
 	private void init() {
 		mAlarmSettingView.setDrawingCacheEnabled(true);
@@ -194,6 +326,15 @@ public class MainViewManager {
 				mAlarmListView.updateAlarmBasicInfo(
 						mAlarmListView.getCurrentAlarmIndex(),
 						info.name, info.hour, info.minute, info.days);
+			}
+		});
+	
+		mAlarmListView.setOnAlarmInstructionClickListener(new OnAlarmInstructionClickListener() {
+			
+			@Override
+			public void onAlarmInstructionClick(View alarmListView) {
+				mReturnSettingFromInstr = false;
+				openInstr();
 			}
 		});
 	}

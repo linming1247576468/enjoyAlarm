@@ -61,10 +61,23 @@ public class AlarmSettingViewManager {
 	private int mEditHourOrMinute; // 0.none 1.hour 2.minute
 	private boolean mClearWhenClickInput;
 	private Handler mHandler;
-	private int mWhatMessage;
+	private static final int MSG_WHAT_UPDATE_TIME = 0;
 	private AlarmDataComparator mDataComparator;
 	
 
+	
+	public void settingForInstruction() {
+		mHourTextView.performClick();
+	}
+	
+	public void settingFromInstruction() {
+		mEditHourOrMinute = 0;
+		mClearWhenClickInput = false;
+		mHourTextView.setBackgroundDrawable(null);
+		mMinuteTextView.setBackgroundDrawable(null);
+		mMediaLayout.setVisibility(View.VISIBLE);
+		mInputLayout.setVisibility(View.INVISIBLE);
+	}
 	
 	/**
 	 * alarmId = -1 for setting a new alarm instead of reading from database
@@ -149,7 +162,7 @@ public class AlarmSettingViewManager {
 		model.setWakeWay(mDataComparator.wakeWay);
 		model.setWakeMusicUri(mDataComparator.wakeUri);
 		model.setText(mDataComparator.encourageWords);
-		System.out.println("## "+mDataComparator.wakeUri);
+		
 		// save
 		if (mAlarmId == -1) {
 			mAlarmId = model.createAndSave();
@@ -229,12 +242,12 @@ public class AlarmSettingViewManager {
 	
 	
 	private void startUpdatingRemainTime() {
-		mWhatMessage = 0;
 		mHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				if (msg.what == mWhatMessage) {
+				if (msg.what == MSG_WHAT_UPDATE_TIME) {
 					updateRemainTime();
+					
 				}
 			}
 		};
@@ -243,7 +256,7 @@ public class AlarmSettingViewManager {
 			@Override
 			public void run() {
 				while (true) {
-					mHandler.obtainMessage(mWhatMessage).sendToTarget();
+					mHandler.sendEmptyMessage(MSG_WHAT_UPDATE_TIME);
 					try {
 						Thread.sleep(15000);
 					} catch (InterruptedException e) {
@@ -399,6 +412,7 @@ public class AlarmSettingViewManager {
 		
 		Intent intent = new Intent(mActivity, GetTextActivity.class);
 		intent.putExtra(ActivityVariable.GET_TEXT_EXTRA_SOURCE, data);
+		intent.putExtra(ActivityVariable.GET_TEXT_EXTRA_TYPE, type);
 		mActivity.startActivityForResult(intent, ActivityVariable.GET_TEXT_REQUEST_CODE);
 	}
 

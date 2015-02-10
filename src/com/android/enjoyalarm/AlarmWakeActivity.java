@@ -92,15 +92,17 @@ public class AlarmWakeActivity extends Activity {
 	private void readData() {
 		mAlarmId = getIntent().getIntExtra(ActivityVariable.INTENT_EXTRA_ALARM_ID, -1);
 		mData = new ReadingModel(this, mAlarmId);
-		mMusicName = null;
-		if (mData.getWakeMusicUri() != null) {
-			mMusicName = ModelUtil.getMusicName(this, mData.getWakeMusicUri());
-		}
-		if (mMusicName == null) {
-			mMusicUri = RingtoneManager.getValidRingtoneUri(this);
-			mMusicName = ModelUtil.getMusicName(this, mMusicUri.toString());
-		} else {
-			mMusicUri = Uri.parse(mData.getWakeMusicUri());
+		if (mData.isWakeWayMusic()) {
+			mMusicName = null;
+			if (mData.getWakeMusicUri() != null) {
+				mMusicName = ModelUtil.getMusicName(this, mData.getWakeMusicUri());
+			}
+			if (mMusicName == null) {
+				mMusicUri = RingtoneManager.getValidRingtoneUri(this);
+				mMusicName = ModelUtil.getMusicName(this, mMusicUri.toString());
+			} else {
+				mMusicUri = Uri.parse(mData.getWakeMusicUri());
+			}
 		}
 		
 		if (getSharedPreferences(
@@ -145,7 +147,7 @@ public class AlarmWakeActivity extends Activity {
 		
 		if (mData.isWakeWayShake()) {
 			mVibrator = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
-			mVibrator.vibrate(new long[]{800, 400}, 0);
+			mVibrator.vibrate(new long[]{800, 600}, 0);
 		}
 	}
 	

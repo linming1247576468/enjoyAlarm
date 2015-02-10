@@ -21,6 +21,8 @@ public interface ListViewControlInterface {
 	
 	public void handleClickAlarmItem(int index);
 	
+	public void handleClickForInstr();
+	
 	public void handleDeleteAlarmItem(int index);
 	
 	

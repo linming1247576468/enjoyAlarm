@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#a000" >
+
+	<TextView
+		android:id="@+id/instr_show_view"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:layout_margin="20dp"
+		android:background="@drawable/instr_text_bg"
+		android:gravity="center"
+		android:padding="10dp"
+		android:text="TextView"
+		android:textColor="#3994f7"
+		android:textSize="30sp"
+		android:textStyle="bold" />
+
+	<Button
+		android:id="@+id/instr_next_bt"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom|right"
+		android:layout_margin="15dp"
+		android:background="@drawable/instr_bt_bg"
+		android:padding="10dp"
+		android:text="Button"
+		android:textColor="#fff"
+		android:textSize="24sp" />
+
+</FrameLayout>

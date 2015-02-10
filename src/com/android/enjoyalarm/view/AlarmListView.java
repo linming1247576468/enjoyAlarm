@@ -15,6 +15,7 @@ import android.view.View;
 import com.android.enjoyalarm.alarm.AlarmUtils;
 import com.android.enjoyalarm.alarmliststate.ExitingState;
 import com.android.enjoyalarm.alarmliststate.InitState;
+import com.android.enjoyalarm.alarmliststate.ListState;
 import com.android.enjoyalarm.alarmliststate.ListingState;
 import com.android.enjoyalarm.alarmliststate.State;
 import com.android.enjoyalarm.model.ModelUtil;
@@ -25,10 +26,12 @@ public class AlarmListView extends View implements ListViewControlInterface {
 	private static final int WHAT_REFRESH = 0;
 	private static final int WHAT_EXIT = 1;
 	private static final int WHAT_RECOVER = 2;
-	private static final int WHAT_LIST = 3;
+	private static final int WHAT_LIST = 3; 
 	private static final int WHAT_CLICK = 4;
+	private static final int WHAT_INSTR = 5;
 	private State mState;
 	private OnAlarmItemClickListener mItemClickListener;
+	private OnAlarmInstructionClickListener mInstrClickListener;
 	private OnScrollToSettingFinishedListener mScrollToSettingFinishedListener;
 	private OnScrollToExitFinishedListerner mScrollToExitFinishedListerner;
 	private OnScrollToListStartedListener mScrollToListStartedListener;
@@ -41,6 +44,26 @@ public class AlarmListView extends View implements ListViewControlInterface {
 	private int mCurrentAlarmIndex;
 	
 
+	
+	public void animExitForInstruction(Bitmap bitmap) {
+		mState = new ExitingState(this, bitmap);
+		invalidate();
+	}
+	
+	public void animListForInstruction(Bitmap bitmap) {
+		mState = new ListingState(this, bitmap, getViewHeight() * 0.05f).getAnimToListState();
+		invalidate();
+	}
+	
+	public void showDeleteForInstruction() {
+		mState = new ListState(this,0).getDeleteState();
+		invalidate();
+	}
+	
+	public void returnFromInstructionToList() {
+		mState = new ListState(this, -1);
+		invalidate();
+	}
 	
 	
 	private void init() {
@@ -69,8 +92,12 @@ public class AlarmListView extends View implements ListViewControlInterface {
 				}
 				
 				case WHAT_CLICK: {
-					
 					mItemClickListener.onAlarmItemClick(AlarmListView.this, msg.arg1);
+					break;
+				}
+				
+				case WHAT_INSTR: {
+					mInstrClickListener.onAlarmInstructionClick(AlarmListView.this);
 					break;
 				}
 				}
@@ -130,11 +157,14 @@ public class AlarmListView extends View implements ListViewControlInterface {
 		info.hour = hour;
 		info.minute = minute;
 		info.days = days;
-		System.out.println("update data");
 	}
 	
 	public void setOnAlarmItemClickListener(OnAlarmItemClickListener listener) {
 		mItemClickListener = listener;
+	}
+	
+	public void setOnAlarmInstructionClickListener(OnAlarmInstructionClickListener listener) {
+		mInstrClickListener = listener;
 	}
 
 	public void setOnScrollToSettingFinishedListener(
@@ -154,6 +184,10 @@ public class AlarmListView extends View implements ListViewControlInterface {
 	
 	public interface OnAlarmItemClickListener {
 		public void onAlarmItemClick(View alarmListView, int alarmId);
+	}
+	
+	public interface OnAlarmInstructionClickListener {
+		public void onAlarmInstructionClick(View alarmListView);
 	}
 
 	public interface OnScrollToSettingFinishedListener {
@@ -195,6 +229,11 @@ public class AlarmListView extends View implements ListViewControlInterface {
 	public void handleClickAlarmItem(int index) {
 		mCurrentAlarmIndex = index;
 		mHandler.obtainMessage(WHAT_CLICK, mAlarmsBasicInfo.get(index).id, 0).sendToTarget();
+	}
+	
+	@Override
+	public void handleClickForInstr() {
+		mHandler.sendEmptyMessage(WHAT_INSTR);
 	}
 
 	@Override
@@ -264,7 +303,7 @@ public class AlarmListView extends View implements ListViewControlInterface {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-
+		
 		mState.handleDraw(canvas);
 	}
 

@@ -18,9 +18,19 @@ public class ListState extends State {
 		NONE, CLICK, DELETE, SCROLL
 	}
 
+	
+	/**
+	 * just for instruction showing
+	 */
+	public State getDeleteState() {
+		return new DeleteState(
+				mControlInterface, mAlarmListDrawer.getItems());
+	}
+	
+	
 	/**
 	 * 
-	 * @param nowFactor		-1 for not setting
+	 * @param nowFactor		0:list at start  -1:list at end  -2:from last position after clicking
 	 */
 	public ListState(ListViewControlInterface controlInterface, float nowFactor) {
 		super(controlInterface);
@@ -38,8 +48,10 @@ public class ListState extends State {
 				30 * mControlInterface.getDensity(), mViewWidth * StatePeriod.LIST_ITEM_SCALE,
 				mViewHeight * StatePeriod.LIST_ITEM_SCALE, mControlInterface.getViewContext().getResources());
 		
-		if (nowFactor == -1) {
+		if (nowFactor == -2) {
 			mAlarmListDrawer.setCurrentIndex(mControlInterface.getCurrentAlarmIndex());
+		} else if (nowFactor == -1){
+			mAlarmListDrawer.setNowFactor(mAlarmListDrawer.getEndFactor());
 		} else {
 			mAlarmListDrawer.setNowFactor(nowFactor);
 		}
@@ -148,11 +160,9 @@ public class ListState extends State {
 			
 			switch(mClickMode) {
 			case CLICK: {
-				if (mClickIndex != mAlarmListDrawer.getItemSize() - 1) {
-					mControlInterface.changeState(new AnimClickState(
-							mControlInterface, mAlarmListDrawer.getItems(),
-							mClickIndex, mAlarmListDrawer.getNowFactor()));
-				}
+				mControlInterface.changeState(new AnimClickState(
+						mControlInterface, mAlarmListDrawer.getItems(),
+						mClickIndex, mAlarmListDrawer.getNowFactor()));
 				break;
 			}
 			
@@ -173,7 +183,10 @@ public class ListState extends State {
 		}
 	}
 
-	
+	@Override
+	public String toString() {
+		return "listState";
+	}
 	
 	@Override
 	public void handleDraw(Canvas canvas) {

@@ -14,6 +14,15 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mManager = new MainViewManager(this);
+		if (getSharedPreferences(
+				ActivityVariable.PREFERENCE_NAME_MAIN_ACTIVITY, 0).getInt(
+				ActivityVariable.PREFERENCE_BOOLEAN_FIRST_USE, 0) == 0) {
+			mManager.setInstr(true);
+			getSharedPreferences(
+					ActivityVariable.PREFERENCE_NAME_MAIN_ACTIVITY, 0).edit()
+					.putInt(ActivityVariable.PREFERENCE_BOOLEAN_FIRST_USE, 1)
+					.commit();
+		}
 		setContentView(mManager.getMainView());
 		
 	}

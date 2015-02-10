@@ -13,14 +13,19 @@ public class AnimClickState extends State {
 
 	private List<AlarmItemComponent> mItems;
 	private AlarmItemComponent mClickItem;
-	private int mClickIndex;
+	private int mClickIndex; 
 	private float mNowFactor;
 	private float mConstFactor;
+	private boolean mClickForInstr;
 	
 	
 	public AnimClickState(ListViewControlInterface controlInterface,
 			List<AlarmItemComponent> items, int clickIndex, float constFactor) {
 		super(controlInterface);
+		
+		if (clickIndex == items.size() - 1) {
+			mClickForInstr = true;
+		}
 		
 		mItems = items;
 		mClickIndex = clickIndex;
@@ -55,7 +60,11 @@ public class AnimClickState extends State {
 
 	
 	private void changeToSettingFromClick() {
-		mControlInterface.handleClickAlarmItem(mClickIndex);
+		if (mClickForInstr) {
+			mControlInterface.handleClickForInstr();
+		} else {
+			mControlInterface.handleClickAlarmItem(mClickIndex);
+		}
 	}
 	
 	
