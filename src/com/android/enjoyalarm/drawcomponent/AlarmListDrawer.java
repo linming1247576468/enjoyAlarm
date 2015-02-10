@@ -3,11 +3,11 @@ package com.android.enjoyalarm.drawcomponent;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.android.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
-
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
+
+import com.android.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
 
 public class AlarmListDrawer {
 

@@ -9,6 +9,7 @@ import android.text.format.Time;
 
 import com.android.enjoyalarm.R;
 import com.android.enjoyalarm.model.ModelUtil.AlarmBasicInfo;
+import com.android.enjoyalarm.view.ViewUtil;
 
 
 /**
@@ -199,6 +200,7 @@ public class AlarmItemComponent extends Component {
 	public int getId() {
 		return mId;
 	}
+	
 
 	
 	

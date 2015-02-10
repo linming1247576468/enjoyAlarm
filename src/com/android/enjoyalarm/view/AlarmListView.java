@@ -1,6 +1,8 @@
 package com.android.enjoyalarm.view;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -9,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Handler;
+import android.text.format.Time;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -66,6 +69,27 @@ public class AlarmListView extends View implements ListViewControlInterface {
 	}
 	
 	
+	private long getRemainTimeRTC(String days, int hour, int minute) {
+		char[] dayChars = days.toCharArray();
+		Time time = new Time();
+		time.setToNow();
+		int nowDay = (time.weekDay + 6) % 7;//let Monday be first
+		int nextDay = -1;
+		for (char c : dayChars) {
+			int day = c - 48;
+			if (((day == nowDay) && ((hour > time.hour) || (hour == time.hour && minute >= time.minute)))
+					|| (day > nowDay)) {
+				nextDay = day;
+				break;
+			}
+		}
+		if (nextDay == -1) {// the closely next day is in next week
+			nextDay = dayChars[0] - 48;
+		}
+		
+		return ViewUtil.getRemainTimeRTC(nextDay, hour, minute, nowDay, time.hour, time.minute);
+	}
+	
 	private void init() {
 		mState = new InitState(this);
 		mHandler = new Handler() {
@@ -106,8 +130,16 @@ public class AlarmListView extends View implements ListViewControlInterface {
 		};
 	
 		mAlarmsBasicInfo = new ArrayList<AlarmBasicInfo>();
-		mAlarmsBasicInfo.add(new AlarmBasicInfo(-1, null, 0, 0, null,false));
-		mAlarmsBasicInfo.addAll(1, ModelUtil.getAlarmsBasicInfo(getContext()));
+		mAlarmsBasicInfo.addAll(ModelUtil.getAlarmsBasicInfo(getContext()));
+		Collections.sort(mAlarmsBasicInfo, new Comparator<AlarmBasicInfo>() {
+
+			@Override
+			public int compare(AlarmBasicInfo lhs, AlarmBasicInfo rhs) {
+				return (int)(getRemainTimeRTC(lhs.days,lhs.hour,lhs.minute) - 
+						getRemainTimeRTC(rhs.days,rhs.hour,rhs.minute));
+			}
+		});
+		mAlarmsBasicInfo.add(0, new AlarmBasicInfo(-1, null, 0, 0, null,false));
 		mAlarmsBasicInfo.add(new AlarmBasicInfo(-2, null, 0, 0, null,false));
 		mCurrentAlarmIndex = 0;
 		
